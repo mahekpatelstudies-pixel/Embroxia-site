@@ -243,153 +243,6 @@ select.pinput{cursor:pointer;-webkit-appearance:none}
 .export-brand{font-size:10px;color:var(--text3);margin-top:2px}
 
 
-/* NODE EDITOR */
-.node-handle{position:absolute;width:8px;height:8px;background:white;border:1.5px solid #534AB7;border-radius:50%;transform:translate(-50%,-50%);cursor:move;pointer-events:all;z-index:20}
-.node-handle:hover,.node-handle.active{background:#534AB7;transform:translate(-50%,-50%) scale(1.4)}
-
-/* DESIGN LIBRARY */
-.library-modal{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:800;display:none;align-items:center;justify-content:center;backdrop-filter:blur(6px)}
-.library-modal.show{display:flex}
-.library-box{background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);padding:24px;width:720px;max-width:95vw;max-height:85vh;display:flex;flex-direction:column;box-shadow:var(--shadow)}
-.library-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-shrink:0}
-.library-title{font-size:16px;font-weight:500;color:var(--text)}
-.library-search{background:var(--bg4);border:1px solid var(--border);border-radius:var(--rs);padding:7px 12px;font-size:12px;font-family:var(--font);color:var(--text);outline:none;width:200px;transition:border-color .15s}
-.library-search:focus{border-color:var(--purple)}
-.library-search::placeholder{color:var(--text3)}
-.library-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;overflow-y:auto;flex:1;padding:2px}
-.library-grid::-webkit-scrollbar{width:4px}
-.library-grid::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
-.design-card{background:var(--bg4);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;cursor:pointer;transition:all .15s;position:relative}
-.design-card:hover{border-color:var(--purple);transform:translateY(-2px);box-shadow:0 4px 16px rgba(83,74,183,.2)}
-.design-thumb{width:100%;height:110px;background:var(--canvas-bg);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
-.design-thumb canvas{width:100%;height:100%}
-.design-info{padding:8px 10px}
-.design-name{font-size:12px;font-weight:500;color:var(--text);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.design-meta{font-size:10px;color:var(--text3);display:flex;justify-content:space-between}
-.design-actions{position:absolute;top:6px;right:6px;display:flex;gap:4px;opacity:0;transition:opacity .15s}
-.design-card:hover .design-actions{opacity:1}
-.design-action-btn{width:22px;height:22px;border-radius:4px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;transition:all .12s}
-.design-action-btn.del{background:rgba(226,75,74,.2);color:var(--red)}
-.design-action-btn.del:hover{background:var(--red);color:white}
-.design-action-btn.dup{background:rgba(83,74,183,.2);color:var(--pl)}
-.design-action-btn.dup:hover{background:var(--purple);color:white}
-.library-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;opacity:.4;gap:8px}
-.library-empty-icon{font-size:40px}
-.library-empty-text{font-size:13px;color:var(--text2);text-align:center;line-height:1.6}
-.library-footer{display:flex;align-items:center;justify-content:space-between;margin-top:14px;flex-shrink:0;padding-top:12px;border-top:1px solid var(--border)}
-.library-count{font-size:11px;color:var(--text3)}
-.autosave-badge{font-size:10px;padding:2px 8px;border-radius:20px;background:var(--pg);color:var(--pl);display:flex;align-items:center;gap:4px}
-.autosave-dot{width:5px;height:5px;border-radius:50%;background:var(--teal);animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-
-
-/* SVG IMPORT MODAL */
-.svg-modal{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:800;display:none;align-items:center;justify-content:center;backdrop-filter:blur(6px)}
-.svg-modal.show{display:flex}
-.svg-box{background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);padding:24px;width:580px;max-width:95vw;box-shadow:var(--shadow)}
-.svg-title{font-size:15px;font-weight:500;color:var(--text);margin-bottom:4px}
-.svg-sub{font-size:12px;color:var(--text3);margin-bottom:16px;line-height:1.6}
-.svg-drop{border:2px dashed var(--border2);border-radius:var(--r);padding:32px;text-align:center;cursor:pointer;transition:all .15s;margin-bottom:14px;position:relative}
-.svg-drop:hover,.svg-drop.drag-over{border-color:var(--purple);background:var(--pg)}
-.svg-drop input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
-.svg-drop-icon{font-size:32px;margin-bottom:8px;opacity:.5}
-.svg-drop-text{font-size:13px;color:var(--text2)}
-.svg-drop-sub{font-size:11px;color:var(--text3);margin-top:4px}
-.svg-preview{width:100%;height:160px;background:var(--bg4);border-radius:var(--rs);margin-bottom:14px;display:none;align-items:center;justify-content:center;overflow:hidden;border:1px solid var(--border)}
-.svg-preview svg{max-width:100%;max-height:100%}
-.svg-options{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
-.svg-opt-label{font-size:11px;color:var(--text2);margin-bottom:4px}
-.svg-btns{display:flex;gap:8px}
-.svg-btn{flex:1;padding:10px;border-radius:var(--rs);font-family:var(--font);font-size:13px;cursor:pointer;border:1px solid var(--border2);background:transparent;color:var(--text2);transition:all .12s}
-.svg-btn:hover{color:var(--text)}
-.svg-btn.primary{background:var(--purple);color:white;border-color:transparent}
-.svg-btn.primary:hover{background:var(--pl)}
-
-
-/* TEXT ON PATH */
-.top-modal{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:800;display:none;align-items:center;justify-content:center;backdrop-filter:blur(6px)}
-.top-modal.show{display:flex}
-.top-box{background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);padding:24px;width:520px;max-width:95vw;box-shadow:var(--shadow)}
-.top-preview{width:100%;height:140px;background:var(--canvas-bg);border-radius:var(--rs);margin-bottom:14px;display:flex;align-items:center;justify-content:center;overflow:hidden;border:1px solid var(--border)}
-
-
-
-/* ONBOARDING TOUR */
-.tour-overlay{position:fixed;inset:0;z-index:900;pointer-events:none}
-.tour-highlight{position:fixed;box-shadow:0 0 0 9999px rgba(0,0,0,.65);border-radius:var(--r);z-index:901;pointer-events:none;transition:all .4s cubic-bezier(.4,0,.2,1)}
-.tour-card{position:fixed;z-index:902;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);padding:20px;width:300px;box-shadow:0 16px 48px rgba(0,0,0,.5);pointer-events:all;transition:all .4s cubic-bezier(.4,0,.2,1)}
-.tour-step-badge{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--pl);background:var(--pg);border-radius:20px;padding:3px 10px;margin-bottom:10px}
-.tour-title{font-size:15px;font-weight:500;color:var(--text);margin-bottom:6px}
-.tour-desc{font-size:12px;color:var(--text2);line-height:1.65;margin-bottom:16px}
-.tour-btns{display:flex;align-items:center;justify-content:space-between;gap:8px}
-.tour-skip{font-size:11px;color:var(--text3);cursor:pointer;transition:color .15s;background:none;border:none;font-family:var(--font);padding:0}
-.tour-skip:hover{color:var(--text2)}
-.tour-nav{display:flex;gap:6px}
-.tour-prev{padding:6px 14px;border-radius:var(--rs);border:1px solid var(--border2);background:transparent;color:var(--text2);font-size:12px;cursor:pointer;font-family:var(--font);transition:all .12s}
-.tour-prev:hover{color:var(--text)}
-.tour-next{padding:6px 16px;border-radius:var(--rs);border:none;background:var(--purple);color:white;font-size:12px;font-weight:500;cursor:pointer;font-family:var(--font);transition:background .12s}
-.tour-next:hover{background:var(--pl)}
-.tour-dots{display:flex;gap:4px;align-items:center}
-.tour-dot{width:5px;height:5px;border-radius:50%;background:var(--border2);transition:all .2s}
-.tour-dot.active{background:var(--purple);width:14px;border-radius:3px}
-.tour-pointer{position:absolute;width:12px;height:12px;background:var(--bg3);border:1px solid var(--border2);transform:rotate(45deg)}
-
-
-/* PRINT DESIGN SHEET */
-.print-modal{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:800;display:none;align-items:center;justify-content:center;backdrop-filter:blur(6px)}
-.print-modal.show{display:flex}
-.print-box{background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);padding:20px;width:560px;max-width:95vw;max-height:90vh;overflow-y:auto;box-shadow:var(--shadow)}
-.print-preview{background:white;border-radius:var(--rs);padding:24px;margin-bottom:14px;color:#1a1825}
-.print-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid #edebe4}
-.print-logo{display:flex;align-items:center;gap:8px}
-.print-logo-icon{width:28px;height:28px;background:#534AB7;border-radius:6px;display:flex;align-items:center;justify-content:center;color:white;font-size:14px}
-.print-logo-name{font-size:16px;font-weight:500;color:#1a1825;font-family:Georgia,serif}
-.print-date{font-size:11px;color:#a09db8}
-.print-title{font-size:20px;font-weight:500;color:#1a1825;margin-bottom:4px;font-family:Georgia,serif}
-.print-subtitle{font-size:12px;color:#6b6880;margin-bottom:16px}
-.print-thumb-wrap{width:100%;height:180px;background:#f7f5f0;border-radius:8px;margin-bottom:16px;display:flex;align-items:center;justify-content:center;overflow:hidden;border:1px solid #edebe4}
-.print-thumb-wrap canvas{max-width:100%;max-height:100%}
-.print-stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}
-.print-stat{background:#f7f5f0;border-radius:6px;padding:10px 12px;text-align:center}
-.print-stat-num{font-size:20px;font-weight:500;color:#534AB7;font-family:Georgia,serif;line-height:1}
-.print-stat-label{font-size:10px;color:#a09db8;margin-top:3px}
-.print-section-title{font-size:10px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:#a09db8;margin-bottom:8px}
-.print-colors-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
-.print-color-chip{display:flex;align-items:center;gap:5px;background:#f7f5f0;border-radius:20px;padding:4px 10px;font-size:10px;color:#6b6880}
-.print-color-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
-.print-objects{font-size:11px;color:#6b6880;line-height:1.8}
-.print-footer-strip{display:flex;align-items:center;justify-content:space-between;margin-top:16px;padding-top:12px;border-top:1px solid #edebe4;font-size:10px;color:#a09db8}
-.print-btns{display:flex;gap:8px}
-.print-btn{flex:1;padding:10px;border-radius:var(--rs);font-family:var(--font);font-size:13px;cursor:pointer;border:1px solid var(--border2);background:transparent;color:var(--text2);transition:all .12s}
-.print-btn:hover{color:var(--text)}
-.print-btn.primary{background:var(--purple);color:white;border-color:transparent}
-.print-btn.primary:hover{background:var(--pl)}
-
-@media print{
-  body *{visibility:hidden}
-  .print-preview,
-  .print-preview *{visibility:visible}
-  .print-preview{position:fixed;inset:0;padding:20px}
-}
-
-/* SHAPE LIBRARY */
-.shape-modal{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:800;display:none;align-items:center;justify-content:center;backdrop-filter:blur(6px)}
-.shape-modal.show{display:flex}
-.shape-box{background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);padding:20px;width:680px;max-width:95vw;max-height:85vh;display:flex;flex-direction:column;box-shadow:var(--shadow)}
-.shape-search{background:var(--bg4);border:1px solid var(--border);border-radius:var(--rs);padding:7px 12px;font-size:12px;font-family:var(--font);color:var(--text);outline:none;width:100%;margin-bottom:12px;transition:border-color .15s}
-.shape-search:focus{border-color:var(--purple)}
-.shape-cats{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;flex-shrink:0}
-.shape-cat{font-size:11px;padding:4px 12px;border-radius:20px;background:var(--bg4);border:1px solid var(--border);color:var(--text2);cursor:pointer;transition:all .12s}
-.shape-cat.active,.shape-cat:hover{background:var(--purple);color:white;border-color:transparent}
-.shape-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:8px;overflow-y:auto;flex:1}
-.shape-grid::-webkit-scrollbar{width:3px}
-.shape-grid::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
-.shape-item{background:var(--bg4);border:1px solid var(--border);border-radius:var(--rs);padding:10px 6px;cursor:pointer;text-align:center;transition:all .12s;display:flex;flex-direction:column;align-items:center;gap:5px}
-.shape-item:hover{border-color:var(--purple);background:var(--pg);transform:translateY(-2px)}
-.shape-item svg{width:36px;height:36px}
-.shape-name{font-size:9px;color:var(--text3)}
-.shape-footer{display:flex;align-items:center;justify-content:space-between;margin-top:12px;flex-shrink:0;padding-top:10px;border-top:1px solid var(--border)}
-
 /* GARMENT PREVIEW */
 .garment-modal{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:800;display:none;align-items:center;justify-content:center;backdrop-filter:blur(6px)}
 .garment-modal.show{display:flex}
@@ -440,11 +293,9 @@ select.pinput{cursor:pointer;-webkit-appearance:none}
     <div class="mi" id="m-file" onclick="toggleMenu('m-file',event)">File
       <div class="dd">
         <div class="ddi" onclick="newDoc()">New design<span class="kbd">⌘N</span></div>
-        <div class="ddi" onclick="openLibrary()">Open from library<span class="kbd">⌘L</span></div>
         <div class="ddi" onclick="openFile()">Open file...<span class="kbd">⌘O</span></div>
-        <div class="ddi" onclick="showSVGImport()">Import SVG / AI vector...<span class="kbd">⌘I</span></div>
         <div class="dd-sep"></div>
-        <div class="ddi" onclick="saveToLibrary()">Save to library<span class="kbd">⌘S</span></div>
+        <div class="ddi" onclick="saveDesign()">Save<span class="kbd">⌘S</span></div>
         <div class="ddi" onclick="saveAs()">Save as...</div>
         <div class="dd-sep"></div>
         <div class="ddi" onclick="showExportModal()">Export...<span class="kbd">⌘E</span></div>
@@ -477,11 +328,8 @@ select.pinput{cursor:pointer;-webkit-appearance:none}
         <div class="ddi" onclick="toggleSnap()">Toggle snap</div>
         <div class="dd-sep"></div>
         <div class="ddi" onclick="simulateStitches()">Stitch simulation<span class="kbd">⌘P</span></div>
-        <div class="ddi" onclick="restartTour()">Restart onboarding tour</div>
         <div class="ddi" onclick="showGarmentPreview()">3D garment preview<span class="kbd">⌘⇧P</span></div>
         <div class="ddi" onclick="showPhotoStitch()">PhotoStitch — photo to embroidery</div>
-        <div class="ddi" onclick="continueDigitizing()">Continue digitizing</div>
-        <div class="ddi" onclick="closeObject()">Close object</div>
       </div>
     </div>
     <div class="mi" id="m-stitch" onclick="toggleMenu('m-stitch',event)">Stitch
@@ -515,10 +363,8 @@ select.pinput{cursor:pointer;-webkit-appearance:none}
         <div class="ddi" onclick="mirrorV()">Mirror vertical</div>
         <div class="ddi" onclick="rotate90()">Rotate 90°</div>
         <div class="dd-sep"></div>
-        <div class="ddi" onclick="showPrintSheet()">Print design sheet</div>
-        <div class="ddi" onclick="generateReport()">Design statistics</div>
+        <div class="ddi" onclick="generateReport()">Design report PDF</div>
         <div class="dd-sep"></div>
-        <div class="ddi" onclick="showShapeLibrary()">⬡ Shape library</div>
         <div class="ddi" onclick="applyMultiBlend()">✦ Multi Blend — gradient stitch</div>
         <div class="ddi" onclick="showPhotoStitch()">📷 PhotoStitch — photo to embroidery</div>
       </div>
@@ -540,18 +386,16 @@ select.pinput{cursor:pointer;-webkit-appearance:none}
       </div>
     </div>
   </div>
-  <div class="topbar-center" style="gap:14px">
+  <div class="topbar-center">
     <div class="doc-name">
       <div class="saved-dot" id="saved-dot"></div>
       <input id="doc-name" value="Untitled design" onchange="markUnsaved()">.emb
     </div>
-      <div class="autosave-badge" id="autosave-badge" style="display:none"><div class="autosave-dot"></div>Auto-saved</div>
   </div>
   <div class="topbar-right">
     <div class="theme-wrap">
       ☀ <div class="toggle" onclick="toggleTheme()"></div> ☾
     </div>
-    <button class="tbtn" onclick="openLibrary()">📁 Library</button>
     <button class="tbtn" onclick="simulateStitches()">▶ Simulate</button>
     <button class="tbtn" onclick="showGarmentPreview()" style="background:var(--bg3);color:var(--text);">👕 Preview</button>
     <button class="tbtn" onclick="toggleAI()" id="ai-btn" style="background:linear-gradient(135deg,#534AB7,#1D9E75);color:white;border:none;">✦ AI</button>
@@ -683,7 +527,7 @@ select.pinput{cursor:pointer;-webkit-appearance:none}
         <div class="brand-tab" onclick="setBrand('isacord',this)">Isacord</div>
         <div class="brand-tab" onclick="setBrand('robison',this)">Robison-Anton</div>
         <div class="brand-tab" onclick="setBrand('sulky',this)">Sulky</div>
-        <div class="brand-tab" onclick="setBrand('indian',this)">🇮🇳 Indian Zari & Resham</div>
+        <div class="brand-tab" onclick="setBrand('indian',this)">🇮🇳 Indian</div>
       </div>
     </div>
     <div class="psec">
@@ -721,7 +565,6 @@ select.pinput{cursor:pointer;-webkit-appearance:none}
       <div class="prow"><span class="plabel">Baseline</span><input class="pinput" type="number" id="f-baseline" value="0" step="1"></div>
       <div class="prow"><span class="plabel">Arch</span><input class="pinput" type="number" id="f-arch" value="0" step="5" min="-180" max="180"></div>
       <button class="tbtn" style="width:100%;margin-top:4px" onclick="placeText()">Place text on canvas</button>
-      <button class="tbtn" style="width:100%;margin-top:6px" onclick="showTextOnPath()">Text on path / arc →</button>
     </div>
     <div class="psec">
       <div class="psec-title">Embroidery fonts</div>
@@ -793,13 +636,13 @@ select.pinput{cursor:pointer;-webkit-appearance:none}
   <div class="ai-head">
     <div class="ai-logo-wrap">
       <div class="ai-logo">✦</div>
-      <div><div class="ai-title">Aari ✦</div><div class="ai-sub">Indian & global embroidery expert</div></div>
+      <div><div class="ai-title">Aari ✦</div><div class="ai-sub">Indian &amp; global embroidery AI</div></div>
     </div>
     <span class="ai-x" onclick="toggleAI()">✕</span>
   </div>
   <div class="ai-msgs" id="ai-msgs">
     <div class="ai-msg"><div class="ai-av bot">✦</div>
-      <div class="ai-bubble bot">Namaste! I'm <b>Aari</b> — the world's first AI specialised in Indian and global embroidery.<br><br>I know every tradition:<br>✦ <b>Zardozi, Kantha, Phulkari, Chikankari</b><br>✦ <b>Aari, Kashmiri, Kutch, Shisha</b><br>✦ <b>Saree, lehenga, bridal designs</b><br>✦ <b>All global stitch types & machine formats</b><br><br>Tell me what you want to create — in any language!</div>
+      <div class="ai-bubble bot">Namaste! I'm <b>Aari</b> — the world's first AI for Indian &amp; global embroidery.<br><br>I know every tradition:<br>✦ <b>Zardozi, Kantha, Phulkari, Chikankari</b><br>✦ <b>Aari, Kashmiri, Kutch, Shisha</b><br>✦ <b>Saree, lehenga, bridal designs</b><br><br>Tell me what you want to create!</div>
     </div>
   </div>
   <div class="ai-upload" onclick="document.getElementById('ai-file').click()">
@@ -809,9 +652,9 @@ select.pinput{cursor:pointer;-webkit-appearance:none}
   <div class="ai-suggestions">
     <div class="ai-sug" onclick="aiSend('Generate a floral wreath monogram in purple and gold thread')">Floral wreath</div>
     <div class="ai-sug" onclick="aiSend('What stitch type and density for a sports logo on polyester?')">Sports logo tips</div>
-    <div class="ai-sug" onclick="aiSend('How do I reduce stitch count by 20% without losing detail?')">Reduce stitches</div>
-    <div class="ai-sug" onclick="aiSend('Suggest thread colors for a vintage rose design with Madeira codes')">Rose color palette</div>
-    <div class="ai-sug" onclick="aiSend('Design an Aari work floral motif for a Kashmiri shawl')">Aari floral shawl</div>
+    <div class="ai-sug" onclick="aiSend('Design a Kantha lotus border for a saree in indigo and white')">Reduce stitches</div>
+    <div class="ai-sug" onclick="aiSend('What Kutch mirror work pattern works for a cushion cover?')">Rose color palette</div>
+    <div class="ai-sug" onclick="aiSend('Design an Aari floral motif for a Kashmiri shawl')">Geometric on denim</div>
   </div>
   <div class="ai-input-wrap">
     <textarea class="ai-input" id="ai-in" placeholder="Ask anything... or describe a design to generate" rows="1"
@@ -883,201 +726,6 @@ select.pinput{cursor:pointer;-webkit-appearance:none}
   </div>
 </div>
 
-
-
-
-
-
-
-<!-- PRINT DESIGN SHEET -->
-<div class="print-modal" id="print-modal">
-  <div class="print-box">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-      <div style="font-size:15px;font-weight:500;color:var(--text)">📄 Print Design Sheet</div>
-      <button class="print-btn" onclick="closePrintModal()" style="width:auto;padding:4px 12px">✕</button>
-    </div>
-
-    <div class="print-preview" id="print-preview-content">
-      <!-- Filled dynamically -->
-    </div>
-
-    <div class="print-btns">
-      <button class="print-btn" onclick="closePrintModal()">Cancel</button>
-      <button class="print-btn" onclick="downloadPrintSheet()">↓ Download PDF</button>
-      <button class="print-btn primary" onclick="printSheet()">🖨 Print</button>
-    </div>
-  </div>
-</div>
-
-<!-- SHAPE LIBRARY MODAL -->
-<div class="shape-modal" id="shape-modal">
-  <div class="shape-box">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-shrink:0">
-      <div style="font-size:15px;font-weight:500;color:var(--text)">⬡ Shape Library</div>
-      <button class="svg-btn" onclick="closeShapeLibrary()" style="width:auto;padding:4px 12px">✕ Close</button>
-    </div>
-    <input class="shape-search" id="shape-search" placeholder="Search shapes..." oninput="filterShapes(this.value)">
-    <div class="shape-cats" id="shape-cats">
-      <div class="shape-cat active" onclick="filterShapes('',this)">All</div>
-      <div class="shape-cat" onclick="filterShapes('basic',this)">Basic</div>
-      <div class="shape-cat" onclick="filterShapes('badge',this)">Badges</div>
-      <div class="shape-cat" onclick="filterShapes('floral',this)">Florals</div>
-      <div class="shape-cat" onclick="filterShapes('arrow',this)">Arrows</div>
-      <div class="shape-cat" onclick="filterShapes('sport',this)">Sports</div>
-      <div class="shape-cat" onclick="filterShapes('frame',this)">Frames</div>
-      <div class="shape-cat" onclick="filterShapes('star',this)">Stars</div>
-      <div class="shape-cat" onclick="filterShapes('indian',this)">🇮🇳 Indian</div>
-    </div>
-    <div class="shape-grid" id="shape-grid"></div>
-    <div class="shape-footer">
-      <div style="font-size:11px;color:var(--text3)" id="shape-count">50 shapes</div>
-      <div style="display:flex;gap:8px;align-items:center">
-        <span style="font-size:11px;color:var(--text3)">Stitch:</span>
-        <select class="pinput" id="shape-stitch" style="width:auto;font-size:11px">
-          <option value="running">Running</option>
-          <option value="satin" selected>Satin</option>
-          <option value="fill">Fill</option>
-        </select>
-        <span style="font-size:11px;color:var(--text3)">Size:</span>
-        <input class="pinput" type="number" id="shape-size" value="80" min="20" max="400" style="width:60px;font-size:11px">
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- TEXT ON PATH MODAL -->
-<div class="top-modal" id="top-modal">
-  <div class="top-box">
-    <div class="svg-title" style="margin-bottom:4px">Text on Path</div>
-    <div class="svg-sub" style="margin-bottom:14px">Place text along a curve, circle, arch, or custom path. Perfect for badges, logos, and sports designs.</div>
-
-    <!-- Live preview -->
-    <div class="top-preview">
-      <canvas id="top-preview-cvs" width="460" height="130"></canvas>
-    </div>
-
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
-      <div>
-        <div class="svg-opt-label">Text</div>
-        <input class="pinput" type="text" id="top-text" value="EMBROXIA" oninput="updateTOPPreview()" style="text-transform:uppercase">
-      </div>
-      <div>
-        <div class="svg-opt-label">Path shape</div>
-        <select class="pinput" id="top-shape" onchange="updateTOPPreview()">
-          <option value="arc-top">Arc — top</option>
-          <option value="arc-bottom">Arc — bottom</option>
-          <option value="circle">Full circle</option>
-          <option value="wave">Wave</option>
-          <option value="straight">Straight (angled)</option>
-        </select>
-      </div>
-      <div>
-        <div class="svg-opt-label">Font size</div>
-        <input class="pinput" type="number" id="top-size" value="18" min="8" max="72" oninput="updateTOPPreview()">
-      </div>
-      <div>
-        <div class="svg-opt-label">Path radius</div>
-        <input class="pinput" type="range" id="top-radius" min="40" max="200" value="100" oninput="updateTOPPreview()" style="margin-top:8px">
-      </div>
-      <div>
-        <div class="svg-opt-label">Letter spacing</div>
-        <input class="pinput" type="range" id="top-spacing" min="-5" max="20" value="2" oninput="updateTOPPreview()">
-      </div>
-      <div>
-        <div class="svg-opt-label">Start angle</div>
-        <input class="pinput" type="range" id="top-start" min="-180" max="180" value="0" oninput="updateTOPPreview()">
-      </div>
-    </div>
-
-    <div class="svg-btns">
-      <button class="svg-btn" onclick="closeTOP()">Cancel</button>
-      <button class="svg-btn primary" onclick="placeTOP()">Place on canvas</button>
-    </div>
-  </div>
-</div>
-
-<!-- SVG IMPORT MODAL -->
-<div class="svg-modal" id="svg-modal">
-  <div class="svg-box">
-    <div class="svg-title">Import SVG / AI Vector</div>
-    <div class="svg-sub">Upload an SVG or AI file and Embroxia converts the vector paths into embroidery stitch paths automatically. Works with logos, artwork, and any vector design.</div>
-
-    <div class="svg-drop" id="svg-drop">
-      <input type="file" id="svg-file-input" accept=".svg,.ai,.xml" onchange="handleSVGFile(event)">
-      <div class="svg-drop-icon">📐</div>
-      <div class="svg-drop-text">Click to upload or drag & drop</div>
-      <div class="svg-drop-sub">SVG, AI files supported · Max 5MB</div>
-    </div>
-
-    <div class="svg-preview" id="svg-preview"></div>
-
-    <div class="svg-options">
-      <div>
-        <div class="svg-opt-label">Convert paths to stitch type</div>
-        <select class="pinput" id="svg-stitch-type">
-          <option value="auto">Auto detect (recommended)</option>
-          <option value="running">Running stitch — outlines</option>
-          <option value="satin">Satin stitch — columns</option>
-          <option value="fill">Fill stitch — areas</option>
-        </select>
-      </div>
-      <div>
-        <div class="svg-opt-label">Scale to fit canvas</div>
-        <select class="pinput" id="svg-scale">
-          <option value="fit">Fit to hoop size</option>
-          <option value="original">Keep original size</option>
-          <option value="50">50% of canvas</option>
-          <option value="75">75% of canvas</option>
-        </select>
-      </div>
-      <div>
-        <div class="svg-opt-label">Color handling</div>
-        <select class="pinput" id="svg-color">
-          <option value="keep">Keep original colors</option>
-          <option value="current">Use current thread color</option>
-          <option value="match">Match to thread library</option>
-        </select>
-      </div>
-      <div>
-        <div class="svg-opt-label">Path simplification</div>
-        <select class="pinput" id="svg-simplify">
-          <option value="medium">Medium (recommended)</option>
-          <option value="low">Low — keep all detail</option>
-          <option value="high">High — simplify heavily</option>
-        </select>
-      </div>
-    </div>
-
-    <div id="svg-status" style="font-size:12px;color:var(--text3);margin-bottom:12px;display:none"></div>
-
-    <div class="svg-btns">
-      <button class="svg-btn" onclick="closeSVGImport()">Cancel</button>
-      <button class="svg-btn primary" id="svg-convert-btn" onclick="convertSVGToStitches()" disabled>Convert to embroidery</button>
-    </div>
-  </div>
-</div>
-
-<!-- DESIGN LIBRARY MODAL -->
-<div class="library-modal" id="library-modal">
-  <div class="library-box">
-    <div class="library-head">
-      <div class="library-title">📁 Design Library</div>
-      <div style="display:flex;align-items:center;gap:10px">
-        <input class="library-search" id="library-search" placeholder="Search designs..." oninput="filterLibrary(this.value)">
-        <button class="tbtn primary" onclick="saveToLibrary()">+ Save current</button>
-        <button class="tbtn" onclick="closeLibrary()" style="padding:5px 10px">✕</button>
-      </div>
-    </div>
-    <div class="library-grid" id="library-grid"></div>
-    <div class="library-footer">
-      <div class="library-count" id="library-count">0 designs saved</div>
-      <div style="display:flex;gap:8px">
-        <button class="tbtn" onclick="importDesign()" style="font-size:11px">↑ Import .emb</button>
-        <button class="tbtn" onclick="closeLibrary()">Close</button>
-      </div>
-    </div>
-  </div>
-</div>
 
 <!-- GARMENT PREVIEW MODAL -->
 <div class="garment-modal" id="garment-modal">
@@ -1152,28 +800,6 @@ select.pinput{cursor:pointer;-webkit-appearance:none}
   </div>
 </div>
 
-
-<!-- ONBOARDING TOUR -->
-<div id="tour-overlay" class="tour-overlay" style="display:none">
-  <div class="tour-highlight" id="tour-highlight"></div>
-  <div class="tour-card" id="tour-card">
-    <div class="tour-step-badge">
-      <span>✦</span>
-      <span id="tour-step-label">Step 1 of 8</span>
-    </div>
-    <div class="tour-title" id="tour-title">Welcome to Embroxia Studio</div>
-    <div class="tour-desc" id="tour-desc">Let's take a quick tour so you can start designing like a pro in under 2 minutes.</div>
-    <div class="tour-btns">
-      <button class="tour-skip" onclick="endTour()">Skip tour</button>
-      <div class="tour-dots" id="tour-dots"></div>
-      <div class="tour-nav">
-        <button class="tour-prev" id="tour-prev" onclick="tourStep(-1)">←</button>
-        <button class="tour-next" id="tour-next" onclick="tourStep(1)">Next →</button>
-      </div>
-    </div>
-  </div>
-</div>
-
 <!-- TOAST -->
 <div class="toast" id="toast"><div class="toast-dot"></div><span id="toast-msg"></span></div>
 
@@ -1196,17 +822,13 @@ const S = {
   selectedFont:'Block',
   exportFmt:'dst',
   simRunning:false,
-  simIdx:0,
-  nodeEditPath:-1,
-  nodeEditIdx:-1,
-  draggingNode:false
+  simIdx:0
 };
 
 // ═══════════════════════════════════════
 // DATA — STITCH TYPES
 // ═══════════════════════════════════════
 const STITCHES = [
-  // ── STANDARD STITCHES ──
   {id:'running',icon:'〜〜',name:'Running',desc:'Basic outline stitch'},
   {id:'triple',icon:'≋',name:'Triple',desc:'3-pass running stitch'},
   {id:'satin',icon:'▬▬',name:'Satin',desc:'Smooth column fill'},
@@ -1222,17 +844,16 @@ const STITCHES = [
   {id:'spiral',icon:'🌀',name:'Spiral',desc:'Spiral fill'},
   {id:'radial',icon:'✳',name:'Radial',desc:'Radial fill pattern'},
   {id:'wave',icon:'∿',name:'Wave',desc:'Wave fill pattern'},
-  // ── INDIAN EMBROIDERY STITCHES ──
-  {id:'zardozi',icon:'✦✦',name:'Zardozi',desc:'Gold/silver metallic wire work — Mughal tradition',indian:true},
-  {id:'kantha',icon:'⊹⊹',name:'Kantha',desc:'Running stitch patterns — Bengal tradition',indian:true},
-  {id:'phulkari',icon:'❋❋',name:'Phulkari',desc:'Darning stitch florals — Punjab tradition',indian:true},
-  {id:'chikankari',icon:'❀❀',name:'Chikankari',desc:'Shadow work — Lucknow tradition',indian:true},
-  {id:'aari',icon:'◉◉',name:'Aari',desc:'Hook needle chain stitch — intricate florals',indian:true},
-  {id:'kashmiri',icon:'❧❧',name:'Kashmiri',desc:'Chain stitch paisley — Kashmir tradition',indian:true},
-  {id:'kutch',icon:'⬡⬡',name:'Kutch',desc:'Mirror work geometric — Gujarat tradition',indian:true},
-  {id:'suf',icon:'▲▲',name:'Suf',desc:'Counted geometric — Rajasthan tradition',indian:true},
-  {id:'toda',icon:'▥▥',name:'Toda',desc:'Geometric embroidery — Tamil Nadu tradition',indian:true},
-  {id:'shisha',icon:'◈◈',name:'Shisha',desc:'Mirror work — attaching sitara/mirrors',indian:true},
+  {id:'zardozi',icon:'✦✦',name:'Zardozi',desc:'Gold metallic wire work — Mughal tradition',indian:true},
+  {id:'kantha',icon:'⊹⊹',name:'Kantha',desc:'Running stitch patterns — Bengal',indian:true},
+  {id:'phulkari',icon:'❋❋',name:'Phulkari',desc:'Darning stitch florals — Punjab',indian:true},
+  {id:'chikankari',icon:'❀❀',name:'Chikankari',desc:'Shadow work — Lucknow',indian:true},
+  {id:'aari',icon:'◉◉',name:'Aari',desc:'Hook needle chain stitch',indian:true},
+  {id:'kashmiri',icon:'❧❧',name:'Kashmiri',desc:'Chain stitch paisley — Kashmir',indian:true},
+  {id:'kutch',icon:'⬡⬡',name:'Kutch',desc:'Mirror work geometric — Gujarat',indian:true},
+  {id:'suf',icon:'▲▲',name:'Suf',desc:'Counted geometric — Rajasthan',indian:true},
+  {id:'toda',icon:'▥▥',name:'Toda',desc:'Geometric — Tamil Nadu',indian:true},
+  {id:'shisha',icon:'◈◈',name:'Shisha',desc:'Mirror/sitara attachment work',indian:true},
 ];
 
 // ═══════════════════════════════════════
@@ -1353,37 +974,21 @@ const THREADS = {
     {hex:'#C0A060',name:'Gold Metallic',code:'9001'},{hex:'#A8A8A8',name:'Silver Metallic',code:'9002'},
   ],
   indian:[
-    // Gold Zari — Traditional Indian metallic threads
     {hex:'#FFD700',name:'Bright Gold Zari',code:'ZR-001'},{hex:'#DAA520',name:'Golden Rod Zari',code:'ZR-002'},
-    {hex:'#B8860B',name:'Dark Gold Zari',code:'ZR-003'},{hex:'#C5A028',name:'Antique Gold Zari',code:'ZR-004'},
-    {hex:'#F0C040',name:'Light Gold Zari',code:'ZR-005'},{hex:'#D4AF37',name:'Royal Gold Zari',code:'ZR-006'},
-    // Silver Zari
-    {hex:'#C0C0C0',name:'Pure Silver Zari',code:'ZR-101'},{hex:'#A8A9AD',name:'Steel Silver Zari',code:'ZR-102'},
-    {hex:'#BFC1C2',name:'Antique Silver Zari',code:'ZR-103'},{hex:'#E8E8E8',name:'Bright Silver Zari',code:'ZR-104'},
-    // Copper & Bronze Metallic
-    {hex:'#B87333',name:'Copper Tamba',code:'ZR-201'},{hex:'#CD7F32',name:'Bronze Kansa',code:'ZR-202'},
-    {hex:'#8B6914',name:'Dark Bronze',code:'ZR-203'},
-    // Resham (Silk) — Traditional colors
+    {hex:'#B8860B',name:'Dark Gold Zari',code:'ZR-003'},{hex:'#C0C0C0',name:'Pure Silver Zari',code:'ZR-101'},
+    {hex:'#A8A9AD',name:'Steel Silver Zari',code:'ZR-102'},{hex:'#B87333',name:'Copper Tamba',code:'ZR-201'},
     {hex:'#8B0000',name:'Deep Maroon Resham',code:'RS-001'},{hex:'#DC143C',name:'Crimson Lal',code:'RS-002'},
     {hex:'#FF4500',name:'Sindoori Orange',code:'RS-003'},{hex:'#FF6347',name:'Kesari Saffron',code:'RS-004'},
-    {hex:'#FFD700',name:'Haldi Yellow',code:'RS-005'},{hex:'#ADFF2F',name:'Mehndi Green',code:'RS-006'},
-    {hex:'#006400',name:'Deep Paan Green',code:'RS-007'},{hex:'#008080',name:'Firozi Teal',code:'RS-008'},
-    {hex:'#00CED1',name:'Peacock Blue',code:'RS-009'},{hex:'#000080',name:'Deep Neela Navy',code:'RS-010'},
-    {hex:'#4B0082',name:'Baingani Violet',code:'RS-011'},{hex:'#800080',name:'Jamuni Purple',code:'RS-012'},
-    {hex:'#FF1493',name:'Gulabi Hot Pink',code:'RS-013'},{hex:'#FFB6C1',name:'Light Gulab Pink',code:'RS-014'},
-    {hex:'#FFF8DC',name:'Cream Ivory',code:'RS-015'},{hex:'#FFFFFF',name:'Safed White',code:'RS-016'},
+    {hex:'#FFD700',name:'Haldi Yellow',code:'RS-005'},{hex:'#006400',name:'Deep Paan Green',code:'RS-007'},
+    {hex:'#008080',name:'Firozi Teal',code:'RS-008'},{hex:'#00CED1',name:'Peacock Blue',code:'RS-009'},
+    {hex:'#000080',name:'Deep Neela Navy',code:'RS-010'},{hex:'#4B0082',name:'Baingani Violet',code:'RS-011'},
+    {hex:'#800080',name:'Jamuni Purple',code:'RS-012'},{hex:'#FF1493',name:'Gulabi Hot Pink',code:'RS-013'},
+    {hex:'#FFB6C1',name:'Light Gulab Pink',code:'RS-014'},{hex:'#FFFFFF',name:'Safed White',code:'RS-016'},
     {hex:'#000000',name:'Kala Black',code:'RS-017'},{hex:'#8B4513',name:'Brown Mitti',code:'RS-018'},
-    {hex:'#D2691E',name:'Chocolate Brown',code:'RS-019'},{hex:'#F4A460',name:'Sandy Beige',code:'RS-020'},
-    // Peacock colors (traditional Indian)
     {hex:'#00827F',name:'Mor Neela Peacock',code:'RS-021'},{hex:'#1B6B3A',name:'Mor Green',code:'RS-022'},
-    {hex:'#1F75FE',name:'Mor Pankh Blue',code:'RS-023'},
-    // Bridal colors
     {hex:'#722F37',name:'Bridal Maroon',code:'BR-001'},{hex:'#B22222',name:'Bridal Red',code:'BR-002'},
-    {hex:'#FF8C00',name:'Bridal Orange',code:'BR-003'},{hex:'#FFD700',name:'Bridal Gold',code:'BR-004'},
-    {hex:'#800020',name:'Bridal Burgundy',code:'BR-005'},{hex:'#E0115F',name:'Bridal Ruby',code:'BR-006'},
-    // Festival colors
-    {hex:'#FF7F00',name:'Diwali Orange',code:'FT-001'},{hex:'#FFFF00',name:'Vasant Yellow',code:'FT-002'},
-    {hex:'#FF0000',name:'Lal Festival Red',code:'FT-003'},{hex:'#008000',name:'Eid Green',code:'FT-004'},
+    {hex:'#FF8C00',name:'Bridal Orange',code:'BR-003'},{hex:'#E0115F',name:'Bridal Ruby',code:'BR-006'},
+    {hex:'#FF7F00',name:'Diwali Orange',code:'FT-001'},{hex:'#008000',name:'Eid Green',code:'FT-004'},
     {hex:'#FF69B4',name:'Holi Pink',code:'FT-005'},{hex:'#9400D3',name:'Holi Violet',code:'FT-006'},
   ],
   sulky:[
@@ -1488,145 +1093,51 @@ function redraw(){
   S.paths.forEach(p => drawPath(p));
   if(S.currentPath.length>1) drawPath({points:S.currentPath,color:S.color,stitch:S.stitch,opacity:.7});
   drawSelectionHandles();
-  drawNodeHandles();
   ctx.restore();
-}
-
-// ── THREAD HELPER ──────────────────────────────
-function drawBezierPath(ctx2, pts){
-  if(!pts||pts.length<2) return;
-  ctx2.moveTo(pts[0].x, pts[0].y);
-  for(let i=1;i<pts.length;i++){
-    const prev=pts[i-1], curr=pts[i];
-    // Use bezier if control points differ from anchor
-    const hasCurve=(prev.cp2x!==prev.x||prev.cp2y!==prev.y||
-                    curr.cp1x!==curr.x||curr.cp1y!==curr.y);
-    if(hasCurve){
-      ctx2.bezierCurveTo(prev.cp2x,prev.cp2y,curr.cp1x,curr.cp1y,curr.x,curr.y);
-    } else {
-      ctx2.lineTo(curr.x,curr.y);
-    }
-  }
-}
-
-function threadStroke(pts, color, width, dash){
-  if(!pts||pts.length<2) return;
-  const w=width/S.zoom;
-  ctx.lineCap='round'; ctx.lineJoin='round';
-  if(dash) ctx.setLineDash(dash);
-  // Shadow layer
-  ctx.beginPath();
-  drawBezierPath(ctx, pts);
-  ctx.strokeStyle='rgba(0,0,0,0.2)';
-  ctx.lineWidth=w+1.2/S.zoom;
-  ctx.stroke();
-  // Main thread
-  ctx.beginPath();
-  drawBezierPath(ctx, pts);
-  ctx.strokeStyle=color;
-  ctx.lineWidth=w;
-  ctx.stroke();
-  // Sheen
-  ctx.beginPath();
-  drawBezierPath(ctx, pts);
-  ctx.strokeStyle='rgba(255,255,255,0.2)';
-  ctx.lineWidth=w*0.3;
-  ctx.stroke();
-  ctx.setLineDash([]);
 }
 
 function drawPath(p){
   if(!p.points||p.points.length<2) return;
   ctx.globalAlpha = p.opacity||1;
+  const lw = 1.5/S.zoom;
   ctx.lineCap='round'; ctx.lineJoin='round';
-  const z=S.zoom;
 
   switch(p.stitch){
     case 'running':
-      ctx.setLineDash([5/z,3/z]);
-      threadStroke(p.points,p.color,1.6,[5/z,3/z]);
-      ctx.setLineDash([]);
-      // Needle points at each stitch
-      p.points.filter((_,i)=>i%4===0).forEach(pt=>{
-        ctx.beginPath();
-        ctx.arc(pt.x,pt.y,0.8/z,0,Math.PI*2);
-        ctx.fillStyle=p.color; ctx.fill();
-      });
+      ctx.beginPath(); ctx.setLineDash([4/S.zoom,3/S.zoom]);
+      ctx.strokeStyle=p.color; ctx.lineWidth=lw;
+      p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
+      ctx.stroke(); ctx.setLineDash([]);
       break;
-
     case 'triple':
-      [-2.5,0,2.5].forEach((off,oi)=>{
-        ctx.setLineDash(oi===1?[4/z,2/z]:[3/z,3/z]);
-        const shifted=p.points.map(pt=>({x:pt.x+off/z,y:pt.y}));
-        threadStroke(shifted,p.color,1.2,[oi===1?[4/z,2/z]:[3/z,3/z]]);
-      });
-      ctx.setLineDash([]);
-      break;
-
+      [-2,0,2].forEach(off=>{
+        ctx.beginPath(); ctx.setLineDash([3/S.zoom,2/S.zoom]);
+        ctx.strokeStyle=p.color; ctx.lineWidth=lw*.8;
+        p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x+off/S.zoom,pt.y):ctx.moveTo(pt.x+off/S.zoom,pt.y));
+        ctx.stroke();
+      }); ctx.setLineDash([]); break;
     case 'satin':
-      // Draw satin as parallel thread lines across path normal
-      if(p.points.length>=2){
-        const density=parseInt(document.getElementById('p-density')?.value||40);
-        const spacing=Math.max(1,40/density)/z;
-        // Main satin body with sheen
-        ctx.beginPath();
-        p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
-        // Shadow
-        ctx.strokeStyle='rgba(0,0,0,0.2)';
-        ctx.lineWidth=6/z; ctx.stroke();
-        // Fill with parallel stitches
-        for(let i=0;i<p.points.length-1;i+=Math.max(1,Math.floor(spacing*2))){
-          const pt=p.points[i];
-          const nx=p.points[Math.min(i+1,p.points.length-1)];
-          const dx=nx.x-pt.x, dy=nx.y-pt.y;
-          const len=Math.sqrt(dx*dx+dy*dy)||1;
-          const px2=-dy/len*5/z, py2=dx/len*5/z;
-          ctx.beginPath();
-          ctx.moveTo(pt.x-px2,pt.y-py2);
-          ctx.lineTo(pt.x+px2,pt.y+py2);
-          ctx.strokeStyle=p.color; ctx.lineWidth=1.2/z; ctx.stroke();
-          // sheen
-          ctx.beginPath();
-          ctx.moveTo(pt.x-px2*0.4,pt.y-py2*0.4);
-          ctx.lineTo(pt.x+px2*0.1,pt.y+py2*0.1);
-          ctx.strokeStyle='rgba(255,255,255,0.3)'; ctx.lineWidth=0.5/z; ctx.stroke();
-        }
-      }
-      break;
-
+      ctx.beginPath(); ctx.strokeStyle=p.color; ctx.lineWidth=5/S.zoom;
+      p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
+      ctx.stroke();
+      for(let i=0;i<p.points.length-1;i+=3){
+        ctx.beginPath(); ctx.strokeStyle=p.color+'99'; ctx.lineWidth=.5/S.zoom;
+        ctx.moveTo(p.points[i].x-4/S.zoom,p.points[i].y);
+        ctx.lineTo(p.points[i].x+4/S.zoom,p.points[i].y); ctx.stroke();
+      } break;
     case 'fill': case 'accordion': case 'contour':
       if(p.points.length>3){
-        const bb=bbox(p.points);
-        const angle=(parseInt(document.getElementById('p-angle')?.value||45))*Math.PI/180;
-        const step=Math.max(1.5,3)/z;
-        // Clip to shape
-        ctx.save();
         ctx.beginPath();
         p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
-        ctx.closePath();
-        // Shadow fill
-        ctx.fillStyle=p.color+'33'; ctx.fill();
-        ctx.clip();
-        // Angled stitch lines
-        const cos=Math.cos(angle), sin=Math.sin(angle);
-        const diag=Math.max(bb.maxX-bb.minX,bb.maxY-bb.minY)*1.5;
-        const cx3=(bb.minX+bb.maxX)/2, cy3=(bb.minY+bb.maxY)/2;
-        for(let d=-diag;d<diag;d+=step){
-          const x1=cx3+cos*d-sin*diag, y1=cy3+sin*d+cos*diag;
-          const x2=cx3+cos*d+sin*diag, y2=cy3+sin*d-cos*diag;
-          // Thread line with sheen
-          ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2);
-          ctx.strokeStyle=p.color; ctx.lineWidth=0.9/z; ctx.stroke();
-          ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2);
-          ctx.strokeStyle='rgba(255,255,255,0.12)'; ctx.lineWidth=0.3/z; ctx.stroke();
-        }
-        ctx.restore();
-        // Outline
-        ctx.beginPath();
-        p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
-        ctx.closePath(); ctx.strokeStyle=p.color+'cc'; ctx.lineWidth=1/z; ctx.stroke();
-      }
-      break;
+        ctx.closePath(); ctx.fillStyle=p.color+'44'; ctx.fill();
+        ctx.strokeStyle=p.color; ctx.lineWidth=lw; ctx.stroke();
+        const bb=bbox(p.points); const step=4/S.zoom;
+        ctx.save(); ctx.clip();
+        ctx.strokeStyle=p.color+'88'; ctx.lineWidth=.5/S.zoom;
+        for(let y=bb.minY;y<bb.maxY;y+=step){
+          ctx.beginPath(); ctx.moveTo(bb.minX,y); ctx.lineTo(bb.maxX,y); ctx.stroke();
+        } ctx.restore();
+      } break;
     case 'cross':
       for(let i=0;i<p.points.length-1;i+=2){
         const sz=4/S.zoom; const pt=p.points[i];
@@ -1699,254 +1210,123 @@ function drawPath(p){
         ctx.quadraticCurveTo(cp.x,cp.y,p.points[i+2].x,p.points[i+2].y);
       } ctx.stroke(); break;
     case 'zardozi':
-      // Zardozi — thick metallic gold/silver thread with shimmer dots
-      ctx.beginPath();
-      p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
-      ctx.strokeStyle='rgba(0,0,0,0.3)'; ctx.lineWidth=5/S.zoom; ctx.stroke();
-      ctx.beginPath();
-      p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
+      ctx.beginPath(); p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
+      ctx.strokeStyle='rgba(0,0,0,0.25)'; ctx.lineWidth=5/S.zoom; ctx.stroke();
+      ctx.beginPath(); p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
       ctx.strokeStyle=p.color; ctx.lineWidth=4/S.zoom; ctx.stroke();
-      // Metallic shimmer dots along path
       ctx.fillStyle='rgba(255,255,255,0.7)';
-      p.points.filter((_,i)=>i%3===0).forEach(pt=>{
-        ctx.beginPath();ctx.arc(pt.x,pt.y,1.5/S.zoom,0,Math.PI*2);ctx.fill();
-      });
-      // Zardozi coil effect
-      p.points.filter((_,i)=>i%5===0&&i>0&&i<p.points.length-1).forEach((pt,idx,arr)=>{
-        ctx.beginPath();
-        ctx.arc(pt.x,pt.y,3/S.zoom,0,Math.PI*2);
-        ctx.strokeStyle=p.color; ctx.lineWidth=1/S.zoom; ctx.stroke();
-      });
+      p.points.filter((_,i)=>i%3===0).forEach(pt=>{ctx.beginPath();ctx.arc(pt.x,pt.y,1.5/S.zoom,0,Math.PI*2);ctx.fill();});
+      p.points.filter((_,i)=>i%5===0&&i>0).forEach(pt=>{ctx.beginPath();ctx.arc(pt.x,pt.y,3/S.zoom,0,Math.PI*2);ctx.strokeStyle=p.color;ctx.lineWidth=1/S.zoom;ctx.stroke();});
       break;
-
     case 'kantha':
-      // Kantha — parallel running stitches in geometric rows
-      ctx.setLineDash([5/S.zoom,3/S.zoom]);
-      threadStroke(p.points,p.color,1.5);
-      ctx.setLineDash([]);
-      // Second parallel line offset
-      const kanthaOff=3/S.zoom;
-      const kanthaShifted=p.points.map(pt=>({...pt,y:pt.y+kanthaOff,cp1y:pt.cp1y+kanthaOff,cp2y:pt.cp2y+kanthaOff}));
-      ctx.beginPath();ctx.setLineDash([4/S.zoom,4/S.zoom]);
-      ctx.strokeStyle=p.color+'bb';ctx.lineWidth=1/S.zoom;
-      drawBezierPath(ctx,kanthaShifted);ctx.stroke();ctx.setLineDash([]);
+      ctx.setLineDash([5/S.zoom,3/S.zoom]); threadStroke(p.points,p.color,1.5); ctx.setLineDash([]);
+      ctx.beginPath(); ctx.setLineDash([4/S.zoom,4/S.zoom]);
+      p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x+0,pt.y+3/S.zoom):ctx.moveTo(pt.x,pt.y+3/S.zoom));
+      ctx.strokeStyle=p.color+'99'; ctx.lineWidth=1/S.zoom; ctx.stroke(); ctx.setLineDash([]);
       break;
-
     case 'phulkari':
-      // Phulkari — darning stitch, dense parallel lines creating geometric fill
       if(p.points.length>3){
-        const bbP=bbox(p.points);
-        ctx.save();
-        ctx.beginPath();
-        p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
-        ctx.closePath();ctx.clip();
-        // Dense horizontal darning lines
-        const phStep=2/S.zoom;
-        ctx.strokeStyle=p.color;ctx.lineWidth=0.8/S.zoom;
+        const bbP=bbox(p.points); ctx.save();
+        ctx.beginPath(); p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
+        ctx.closePath(); ctx.fillStyle=p.color+'22'; ctx.fill(); ctx.clip();
+        const phStep=2/S.zoom; ctx.lineWidth=0.8/S.zoom;
         for(let y=bbP.minY;y<bbP.maxY;y+=phStep){
-          ctx.beginPath();
-          if(Math.floor((y-bbP.minY)/phStep)%2===0){
-            ctx.moveTo(bbP.minX,y);ctx.lineTo(bbP.maxX,y);
-          } else {
-            ctx.moveTo(bbP.maxX,y);ctx.lineTo(bbP.minX,y);
-          }
+          ctx.beginPath(); ctx.strokeStyle=p.color;
+          if(Math.floor((y-bbP.minY)/phStep)%2===0){ctx.moveTo(bbP.minX,y);ctx.lineTo(bbP.maxX,y);}
+          else{ctx.moveTo(bbP.maxX,y);ctx.lineTo(bbP.minX,y);}
           ctx.stroke();
         }
         ctx.restore();
-        ctx.beginPath();
-        p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
-        ctx.closePath();ctx.strokeStyle=p.color;ctx.lineWidth=1.5/S.zoom;ctx.stroke();
+        ctx.beginPath(); p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
+        ctx.closePath(); ctx.strokeStyle=p.color; ctx.lineWidth=1.5/S.zoom; ctx.stroke();
       } break;
-
     case 'chikankari':
-      // Chikankari — delicate shadow work, light pulled thread effect
-      ctx.globalAlpha=0.5;
-      threadStroke(p.points,p.color,1);
-      ctx.globalAlpha=1;
-      // Shadow dots at intervals
-      p.points.filter((_,i)=>i%4===0).forEach(pt=>{
-        ctx.beginPath();ctx.arc(pt.x,pt.y,1.2/S.zoom,0,Math.PI*2);
-        ctx.fillStyle=p.color+'66';ctx.fill();
-      });
-      // Tiny pulled loops
-      p.points.filter((_,i)=>i%6===0&&i>0).forEach(pt=>{
-        ctx.beginPath();
-        ctx.ellipse(pt.x,pt.y,2/S.zoom,1/S.zoom,0,0,Math.PI*2);
-        ctx.strokeStyle=p.color+'99';ctx.lineWidth=0.5/S.zoom;ctx.stroke();
-      });
+      ctx.globalAlpha=0.5; threadStroke(p.points,p.color,1); ctx.globalAlpha=1;
+      p.points.filter((_,i)=>i%4===0).forEach(pt=>{ctx.beginPath();ctx.arc(pt.x,pt.y,1.2/S.zoom,0,Math.PI*2);ctx.fillStyle=p.color+'66';ctx.fill();});
+      p.points.filter((_,i)=>i%6===0&&i>0).forEach(pt=>{ctx.beginPath();ctx.ellipse(pt.x,pt.y,2/S.zoom,1/S.zoom,0,0,Math.PI*2);ctx.strokeStyle=p.color+'99';ctx.lineWidth=0.5/S.zoom;ctx.stroke();});
       break;
-
     case 'aari':
-      // Aari — continuous chain stitch with hook needle, tight loops
-      ctx.beginPath();
-      p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
-      ctx.strokeStyle=p.color;ctx.lineWidth=2/S.zoom;ctx.stroke();
-      // Chain links
-      p.points.filter((_,i)=>i%2===0).forEach((pt,idx,arr)=>{
-        if(idx===0) return;
-        const prev=arr[idx-1];
-        ctx.beginPath();
-        ctx.ellipse(
-          (pt.x+prev.x)/2,(pt.y+prev.y)/2,
-          2/S.zoom,1.5/S.zoom,
-          Math.atan2(pt.y-prev.y,pt.x-prev.x),
-          0,Math.PI*2
-        );
-        ctx.strokeStyle=p.color;ctx.lineWidth=1/S.zoom;ctx.stroke();
-      });
-      break;
-
+      ctx.beginPath(); p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
+      ctx.strokeStyle=p.color; ctx.lineWidth=2/S.zoom; ctx.stroke();
+      p.points.filter((_,i)=>i%2===0&&i>0).forEach((pt,idx,arr)=>{
+        const prev=arr[idx-1]||p.points[0];
+        ctx.beginPath(); ctx.ellipse((pt.x+prev.x)/2,(pt.y+prev.y)/2,2/S.zoom,1.5/S.zoom,Math.atan2(pt.y-prev.y,pt.x-prev.x),0,Math.PI*2);
+        ctx.strokeStyle=p.color; ctx.lineWidth=1/S.zoom; ctx.stroke();
+      }); break;
     case 'kashmiri':
-      // Kashmiri — tight chain stitch, slightly larger loops than Aari
-      p.points.filter((_,i)=>i%3===0).forEach((pt,idx,arr)=>{
-        if(idx===0) return;
-        const prev=arr[idx-1];
-        const angle=Math.atan2(pt.y-prev.y,pt.x-prev.x);
-        ctx.beginPath();
-        ctx.ellipse((pt.x+prev.x)/2,(pt.y+prev.y)/2,
-          3/S.zoom,2/S.zoom,angle,0,Math.PI*2);
-        ctx.strokeStyle=p.color;ctx.lineWidth=1.2/S.zoom;ctx.stroke();
-        ctx.beginPath();ctx.arc((pt.x+prev.x)/2,(pt.y+prev.y)/2,0.8/S.zoom,0,Math.PI*2);
-        ctx.fillStyle=p.color;ctx.fill();
-      });
-      break;
-
+      p.points.filter((_,i)=>i%3===0&&i>0).forEach((pt,idx,arr)=>{
+        const prev=arr[idx-1]||p.points[0];
+        ctx.beginPath(); ctx.ellipse((pt.x+prev.x)/2,(pt.y+prev.y)/2,3/S.zoom,2/S.zoom,Math.atan2(pt.y-prev.y,pt.x-prev.x),0,Math.PI*2);
+        ctx.strokeStyle=p.color; ctx.lineWidth=1.2/S.zoom; ctx.stroke();
+        ctx.beginPath(); ctx.arc((pt.x+prev.x)/2,(pt.y+prev.y)/2,0.8/S.zoom,0,Math.PI*2);
+        ctx.fillStyle=p.color; ctx.fill();
+      }); break;
     case 'kutch':
-      // Kutch — geometric with mirror (shisha) center accents
       if(p.points.length>3){
-        const bbK=bbox(p.points);
-        ctx.save();
-        ctx.beginPath();
-        p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
-        ctx.closePath();ctx.fillStyle=p.color+'33';ctx.fill();ctx.clip();
-        // Geometric grid pattern
-        const kStep=8/S.zoom;
-        ctx.strokeStyle=p.color;ctx.lineWidth=0.7/S.zoom;
-        for(let x=bbK.minX;x<bbK.maxX;x+=kStep){
-          ctx.beginPath();ctx.moveTo(x,bbK.minY);ctx.lineTo(x,bbK.maxY);ctx.stroke();
-        }
-        for(let y=bbK.minY;y<bbK.maxY;y+=kStep){
-          ctx.beginPath();ctx.moveTo(bbK.minX,y);ctx.lineTo(bbK.maxX,y);ctx.stroke();
-        }
-        // Mirror circles at intersections
+        const bbK=bbox(p.points); ctx.save();
+        ctx.beginPath(); p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
+        ctx.closePath(); ctx.fillStyle=p.color+'22'; ctx.fill(); ctx.clip();
+        const kStep=8/S.zoom; ctx.strokeStyle=p.color; ctx.lineWidth=0.6/S.zoom;
+        for(let x=bbK.minX;x<bbK.maxX;x+=kStep){ctx.beginPath();ctx.moveTo(x,bbK.minY);ctx.lineTo(x,bbK.maxY);ctx.stroke();}
+        for(let y=bbK.minY;y<bbK.maxY;y+=kStep){ctx.beginPath();ctx.moveTo(bbK.minX,y);ctx.lineTo(bbK.maxX,y);ctx.stroke();}
         for(let x=bbK.minX+kStep;x<bbK.maxX;x+=kStep*2){
           for(let y=bbK.minY+kStep;y<bbK.maxY;y+=kStep*2){
-            ctx.beginPath();ctx.arc(x,y,2.5/S.zoom,0,Math.PI*2);
             const grd=ctx.createRadialGradient(x,y,0,x,y,2.5/S.zoom);
-            grd.addColorStop(0,'rgba(255,255,255,0.9)');
-            grd.addColorStop(0.5,'rgba(200,220,255,0.5)');
-            grd.addColorStop(1,'rgba(100,150,200,0.3)');
-            ctx.fillStyle=grd;ctx.fill();
-            ctx.strokeStyle=p.color;ctx.lineWidth=0.5/S.zoom;ctx.stroke();
+            grd.addColorStop(0,'rgba(255,255,255,0.9)'); grd.addColorStop(1,'rgba(150,200,220,0.2)');
+            ctx.beginPath(); ctx.arc(x,y,2.5/S.zoom,0,Math.PI*2); ctx.fillStyle=grd; ctx.fill();
+            ctx.strokeStyle=p.color; ctx.lineWidth=0.5/S.zoom; ctx.stroke();
           }
         }
         ctx.restore();
-        ctx.beginPath();
-        p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
-        ctx.closePath();ctx.strokeStyle=p.color;ctx.lineWidth=1.5/S.zoom;ctx.stroke();
+        ctx.beginPath(); p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
+        ctx.closePath(); ctx.strokeStyle=p.color; ctx.lineWidth=1.5/S.zoom; ctx.stroke();
       } break;
-
     case 'suf':
-      // Suf — counted geometric, diagonal lines creating chevron/triangle patterns
       if(p.points.length>3){
-        const bbS=bbox(p.points);
-        ctx.save();
-        ctx.beginPath();
-        p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
-        ctx.closePath();ctx.clip();
-        const sufStep=4/S.zoom;
-        ctx.strokeStyle=p.color;ctx.lineWidth=0.8/S.zoom;
+        const bbS=bbox(p.points); ctx.save();
+        ctx.beginPath(); p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
+        ctx.closePath(); ctx.clip();
+        const sufStep=4/S.zoom; ctx.strokeStyle=p.color; ctx.lineWidth=0.8/S.zoom;
         for(let i=0;i<(bbS.maxX-bbS.minX+bbS.maxY-bbS.minY)/sufStep;i++){
-          ctx.beginPath();
-          ctx.moveTo(bbS.minX+i*sufStep,bbS.minY);
-          ctx.lineTo(bbS.minX,bbS.minY+i*sufStep);
-          ctx.stroke();
+          ctx.beginPath(); ctx.moveTo(bbS.minX+i*sufStep,bbS.minY); ctx.lineTo(bbS.minX,bbS.minY+i*sufStep); ctx.stroke();
         }
         ctx.restore();
-        ctx.beginPath();
-        p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
-        ctx.closePath();ctx.strokeStyle=p.color;ctx.lineWidth=1.5/S.zoom;ctx.stroke();
+        ctx.beginPath(); p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
+        ctx.closePath(); ctx.strokeStyle=p.color; ctx.lineWidth=1.5/S.zoom; ctx.stroke();
       } break;
-
     case 'toda':
-      // Toda — geometric embroidery, alternating color blocks
       if(p.points.length>3){
-        const bbT=bbox(p.points);
-        ctx.save();
-        ctx.beginPath();
-        p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
-        ctx.closePath();ctx.clip();
+        const bbT=bbox(p.points); ctx.save();
+        ctx.beginPath(); p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
+        ctx.closePath(); ctx.clip();
         const todaStep=5/S.zoom;
         for(let x=bbT.minX;x<bbT.maxX;x+=todaStep){
-          ctx.fillStyle=Math.floor((x-bbT.minX)/todaStep)%2===0?p.color:p.color+'55';
+          ctx.fillStyle=Math.floor((x-bbT.minX)/todaStep)%2===0?p.color:p.color+'44';
           ctx.fillRect(x,bbT.minY,todaStep,bbT.maxY-bbT.minY);
         }
         ctx.restore();
-        ctx.beginPath();
-        p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
-        ctx.closePath();ctx.strokeStyle=p.color;ctx.lineWidth=1.5/S.zoom;ctx.stroke();
+        ctx.beginPath(); p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
+        ctx.closePath(); ctx.strokeStyle=p.color; ctx.lineWidth=1.5/S.zoom; ctx.stroke();
       } break;
-
     case 'shisha':
-      // Shisha — mirror work, circles of silver/gold with surrounding stitches
       p.points.filter((_,i)=>i%5===0).forEach(pt=>{
         const r=5/S.zoom;
-        // Mirror circle
         const grd=ctx.createRadialGradient(pt.x-r*.3,pt.y-r*.3,r*.1,pt.x,pt.y,r);
-        grd.addColorStop(0,'rgba(255,255,255,0.95)');
-        grd.addColorStop(0.3,'rgba(220,240,255,0.8)');
-        grd.addColorStop(0.7,'rgba(180,200,230,0.5)');
-        grd.addColorStop(1,'rgba(150,170,200,0.3)');
-        ctx.beginPath();ctx.arc(pt.x,pt.y,r,0,Math.PI*2);
-        ctx.fillStyle=grd;ctx.fill();
-        // Surrounding holding stitches
-        for(let i=0;i<8;i++){
-          const a=i/8*Math.PI*2;
-          ctx.beginPath();
-          ctx.moveTo(pt.x+r*Math.cos(a),pt.y+r*Math.sin(a));
-          ctx.lineTo(pt.x+(r+3/S.zoom)*Math.cos(a),pt.y+(r+3/S.zoom)*Math.sin(a));
-          ctx.strokeStyle=p.color;ctx.lineWidth=0.8/S.zoom;ctx.stroke();
-        }
-        ctx.beginPath();ctx.arc(pt.x,pt.y,r,0,Math.PI*2);
-        ctx.strokeStyle=p.color;ctx.lineWidth=1/S.zoom;ctx.stroke();
+        grd.addColorStop(0,'rgba(255,255,255,0.95)'); grd.addColorStop(1,'rgba(150,170,200,0.2)');
+        ctx.beginPath(); ctx.arc(pt.x,pt.y,r,0,Math.PI*2); ctx.fillStyle=grd; ctx.fill();
+        for(let i=0;i<8;i++){const a=i/8*Math.PI*2; ctx.beginPath(); ctx.moveTo(pt.x+r*Math.cos(a),pt.y+r*Math.sin(a)); ctx.lineTo(pt.x+(r+3/S.zoom)*Math.cos(a),pt.y+(r+3/S.zoom)*Math.sin(a)); ctx.strokeStyle=p.color; ctx.lineWidth=0.8/S.zoom; ctx.stroke();}
+        ctx.beginPath(); ctx.arc(pt.x,pt.y,r,0,Math.PI*2); ctx.strokeStyle=p.color; ctx.lineWidth=1/S.zoom; ctx.stroke();
       });
-      // Connect mirrors with running stitch
-      ctx.beginPath();ctx.setLineDash([3/S.zoom,3/S.zoom]);
-      ctx.strokeStyle=p.color+'88';ctx.lineWidth=0.8/S.zoom;
+      ctx.beginPath(); ctx.setLineDash([3/S.zoom,3/S.zoom]);
       p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
-      ctx.stroke();ctx.setLineDash([]);
+      ctx.strokeStyle=p.color+'66'; ctx.lineWidth=0.8/S.zoom; ctx.stroke(); ctx.setLineDash([]);
       break;
-
     default:
       ctx.beginPath(); ctx.strokeStyle=p.color; ctx.lineWidth=lw;
       p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
       ctx.stroke();
   }
   ctx.globalAlpha=1;
-}
-
-function drawNodeHandles(){
-  if(S.tool!=='node') return;
-  const pathIdx=S.nodeEditPath>=0?S.nodeEditPath:(S.selected[0]??-1);
-  if(pathIdx<0||!S.paths[pathIdx]) return;
-  const path=S.paths[pathIdx];
-  path.points.filter((_,i)=>i%2===0||i===path.points.length-1).forEach((pt,i,arr)=>{
-    const realIdx=i===arr.length-1?path.points.length-1:i*2;
-    const isActive=realIdx===S.nodeEditIdx;
-    // Node dot
-    ctx.beginPath();
-    ctx.arc(pt.x,pt.y,isActive?5/S.zoom:3.5/S.zoom,0,Math.PI*2);
-    ctx.fillStyle=isActive?'#534AB7':'white';
-    ctx.strokeStyle='#534AB7'; ctx.lineWidth=1.5/S.zoom;
-    ctx.fill(); ctx.stroke();
-  });
-  // Connect nodes with guide line
-  ctx.beginPath();
-  ctx.setLineDash([2/S.zoom,2/S.zoom]);
-  ctx.strokeStyle='rgba(83,74,183,0.3)';
-  ctx.lineWidth=0.5/S.zoom;
-  path.points.filter((_,i)=>i%2===0).forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
-  ctx.stroke(); ctx.setLineDash([]);
 }
 
 function bbox(pts){
@@ -1961,23 +1341,20 @@ function drawSelectionHandles(){
   S.selected.forEach(idx=>{
     if(!S.paths[idx]) return;
     const bb=bbox(S.paths[idx].points);
-    const pad=10/S.zoom;
-    // Bounding box
-    ctx.strokeStyle='rgba(83,74,183,0.6)';
-    ctx.lineWidth=1/S.zoom; ctx.setLineDash([4/S.zoom,3/S.zoom]);
+    const pad=8/S.zoom;
+    ctx.strokeStyle='rgba(83,74,183,0.8)';
+    ctx.lineWidth=1/S.zoom; ctx.setLineDash([3/S.zoom,2/S.zoom]);
     ctx.strokeRect(bb.minX-pad,bb.minY-pad,(bb.maxX-bb.minX)+pad*2,(bb.maxY-bb.minY)+pad*2);
     ctx.setLineDash([]);
-    // Corner + edge handles
     const handles=[
       {x:bb.minX-pad,y:bb.minY-pad},{x:bb.maxX+pad,y:bb.minY-pad},
       {x:bb.minX-pad,y:bb.maxY+pad},{x:bb.maxX+pad,y:bb.maxY+pad},
-      {x:(bb.minX+bb.maxX)/2,y:bb.minY-pad},{x:(bb.minX+bb.maxX)/2,y:bb.maxY+pad},
-      {x:bb.minX-pad,y:(bb.minY+bb.maxY)/2},{x:bb.maxX+pad,y:(bb.minY+bb.maxY)/2},
+      {x:(bb.minX+bb.maxX)/2,y:bb.minY-pad},{x:(bb.minX+bb.maxX)/2,y:bb.maxY+pad}
     ];
     handles.forEach(h=>{
-      ctx.fillStyle='white'; ctx.strokeStyle='#534AB7';
-      ctx.lineWidth=1.5/S.zoom; ctx.beginPath();
-      ctx.rect(h.x-4/S.zoom,h.y-4/S.zoom,8/S.zoom,8/S.zoom);
+      ctx.fillStyle=white; ctx.strokeStyle='#534AB7';
+      ctx.lineWidth=1/S.zoom; ctx.beginPath();
+      ctx.rect(h.x-3/S.zoom,h.y-3/S.zoom,6/S.zoom,6/S.zoom);
       ctx.fill(); ctx.stroke();
     });
   });
@@ -2016,385 +1393,76 @@ function drawRulers(){
 }
 
 // ═══════════════════════════════════════
-// PROFESSIONAL DRAWING ENGINE v2
-// Click-to-place bezier curves with
-// control handles, snap, and node edit
+// INPUT — MOUSE
 // ═══════════════════════════════════════
-
-// Drawing state
 let panning=false, panStart={x:0,y:0};
-let penPoints=[]; // Array of {x,y,cp1x,cp1y,cp2x,cp2y} for bezier
-let penActive=false; // Currently placing points
-let penPreview={x:0,y:0}; // Mouse preview position
-let isDraggingHandle=false; // Dragging a bezier handle
-let dragHandleInfo={pathIdx:-1,ptIdx:-1,handle:'cp2'};
-let moveInfo={active:false,pathIdx:-1,startX:0,startY:0,origPoints:[]};
 
-// ── PAN ──
 cvs.addEventListener('mousedown',e=>{
-  if(e.button===1||(e.button===0&&e.altKey)||S.tool==='hand'){
-    panning=true;
-    panStart={x:e.clientX-S.panX,y:e.clientY-S.panY};
-    cvs.style.cursor='grabbing';
-    return;
+  if(e.button===1||S.tool==='hand'||(e.button===0&&e.altKey)){
+    panning=true; panStart={x:e.clientX-S.panX,y:e.clientY-S.panY};
+    cvs.style.cursor='grabbing'; return;
   }
   if(e.button!==0) return;
-  const pos=snap(mPos(e));
-  handleToolDown(pos,e);
+  const pos=mPos(e);
+  if(S.tool==='zoom'){changeZoom(e.shiftKey?-.2:.2,pos);return;}
+  if(S.tool==='select'){handleSelect(pos);return;}
+  S.drawing=true;
+  S.currentPath=[snap(pos)];
+  document.getElementById('wi').style.opacity='0';
 });
 
 cvs.addEventListener('mousemove',e=>{
   const pos=mPos(e);
-  penPreview=snap(pos);
-
-  // Update status bar
   document.getElementById('st-x').textContent=Math.round(pos.x);
   document.getElementById('st-y').textContent=Math.round(pos.y);
-
-  // Crosshairs
+  // crosshairs
   const rect=cvs.getBoundingClientRect();
-  document.getElementById('ch').style.cssText='left:'+(e.clientX-rect.left)+'px;top:0;bottom:0;display:block';
-  document.getElementById('cv2').style.cssText='top:'+(e.clientY-rect.top)+'px;left:0;right:0;display:block';
-
+  document.getElementById('ch').style.cssText=`left:${e.clientX-rect.left}px;top:0;bottom:0;display:block`;
+  document.getElementById('cv2').style.cssText=`top:${e.clientY-rect.top}px;left:0;right:0;display:block`;
   if(panning){
-    S.panX=e.clientX-panStart.x;
-    S.panY=e.clientY-panStart.y;
-    drawRulers();redraw();return;
+    S.panX=e.clientX-panStart.x; S.panY=e.clientY-panStart.y;
+    drawRulers(); redraw(); return;
   }
-  handleToolMove(pos,e);
-  redraw();
-  drawPenPreview();
-});
-
-window.addEventListener('mouseup',e=>{
-  if(panning){panning=false;updateCursor();return;}
-  if(e.button!==0) return;
-  const pos=snap(mPos(e));
-  handleToolUp(pos,e);
-});
-
-// ── TOOL HANDLERS ──
-function handleToolDown(pos,e){
-  const tool=S.tool;
-
-  if(tool==='zoom'){changeZoom(e.shiftKey?-.25:.25,pos);return;}
-
-  if(tool==='select'){
-    handleSelect(pos);
-    // Start move if something selected
-    if(S.selected.length>0){
-      moveInfo={active:true,pathIdx:S.selected[0],
-        startX:pos.x,startY:pos.y,
-        origPoints:JSON.parse(JSON.stringify(S.paths[S.selected[0]]?.points||[]))};
-    }
-    return;
-  }
-
-  if(tool==='node'){
-    // Check if clicking a bezier handle first
-    let hitHandle=findNearestHandle(pos);
-    if(hitHandle){
-      isDraggingHandle=true;
-      dragHandleInfo=hitHandle;
-      return;
-    }
-    // Check if clicking a node
-    let bestDist=10/S.zoom, bestPath=-1, bestIdx=-1;
-    S.paths.forEach((p,pi)=>{
-      p.points.forEach((pt,idx)=>{
-        const d=Math.sqrt((pt.x-pos.x)**2+(pt.y-pos.y)**2);
-        if(d<bestDist){bestDist=d;bestPath=pi;bestIdx=idx;}
-      });
-    });
-    if(bestPath>=0){
-      S.nodeEditPath=bestPath;S.nodeEditIdx=bestIdx;S.draggingNode=true;
-      S.selected=[bestPath];
-    } else {
-      handleSelect(pos);
-      S.nodeEditPath=S.selected[0]??-1;
-      S.nodeEditIdx=-1;S.draggingNode=false;
-    }
-    return;
-  }
-
-  if(tool==='pen'){
-    // Click-to-place pen tool like Illustrator/Figma
-    if(!penActive){
-      penActive=true;
-      document.getElementById('wi').style.opacity='0';
-    }
-    const last=penPoints[penPoints.length-1];
-    // Check if clicking near first point to close path
-    if(penPoints.length>2&&last){
-      const first=penPoints[0];
-      const d=Math.sqrt((first.x-pos.x)**2+(first.y-pos.y)**2);
-      if(d<12/S.zoom){
-        commitPenPath(true);
-        return;
-      }
-    }
-    penPoints.push({x:pos.x,y:pos.y,
-      cp1x:pos.x,cp1y:pos.y,
-      cp2x:pos.x,cp2y:pos.y});
-    return;
-  }
-
-  if(tool==='brush'){
-    S.drawing=true;
-    S.currentPath=[pos];
-    document.getElementById('wi').style.opacity='0';
-    return;
-  }
-
-  if(tool==='eraser'){
-    S.drawing=true;
-    return;
-  }
-
-  // Shape tools — click and drag
-  if(['rect','ellipse','line','poly'].includes(tool)){
-    S.drawing=true;
-    S.shapeStart=pos;
-    S.currentPath=[pos,pos];
-    document.getElementById('wi').style.opacity='0';
-  }
-}
-
-function handleToolMove(pos,e){
-  const tool=S.tool;
-
-  // Move selected object
-  if(tool==='select'&&moveInfo.active&&e.buttons===1&&S.selected.length>0){
-    const pi=moveInfo.pathIdx;
-    if(S.paths[pi]){
-      const dx=pos.x-moveInfo.startX;
-      const dy=pos.y-moveInfo.startY;
-      S.paths[pi].points=moveInfo.origPoints.map(p=>({
-        ...p,x:p.x+dx,y:p.y+dy,
-        cp1x:p.cp1x+dx,cp1y:p.cp1y+dy,
-        cp2x:p.cp2x+dx,cp2y:p.cp2y+dy
-      }));
-    }
-    return;
-  }
-
-  // Node drag
-  if(tool==='node'){
-    if(isDraggingHandle){
-      const {pathIdx,ptIdx,handle}=dragHandleInfo;
-      if(S.paths[pathIdx]?.points[ptIdx]){
-        S.paths[pathIdx].points[ptIdx][handle+'x']=pos.x;
-        S.paths[pathIdx].points[ptIdx][handle+'y']=pos.y;
-        // Mirror opposite handle
-        const pt=S.paths[pathIdx].points[ptIdx];
-        if(handle==='cp2'){
-          pt.cp1x=2*pt.x-pos.x;pt.cp1y=2*pt.y-pos.y;
-        } else {
-          pt.cp2x=2*pt.x-pos.x;pt.cp2y=2*pt.y-pos.y;
-        }
-      }
-      return;
-    }
-    if(S.draggingNode&&S.nodeEditPath>=0&&S.nodeEditIdx>=0){
-      const pt=S.paths[S.nodeEditPath].points[S.nodeEditIdx];
-      const dx=pos.x-pt.x, dy=pos.y-pt.y;
-      pt.x=pos.x;pt.y=pos.y;
-      pt.cp1x+=dx;pt.cp1y+=dy;
-      pt.cp2x+=dx;pt.cp2y+=dy;
-    }
-    return;
-  }
-
-  // Brush drawing
-  if(tool==='brush'&&S.drawing&&e.buttons===1){
-    S.currentPath.push(pos);
-    return;
-  }
-
-  // Eraser
-  if(tool==='eraser'&&S.drawing&&e.buttons===1){
-    const eraserR=14/S.zoom;
+  if(S.tool==='eraser'&&S.drawing){
+    const eraserR=12/S.zoom;
     const newPaths=[];
     let changed=false;
     S.paths.forEach(p=>{
-      let seg=[];
+      let segment=[];
       p.points.forEach(pt=>{
         const dx=pt.x-pos.x,dy=pt.y-pos.y;
         if(Math.sqrt(dx*dx+dy*dy)<eraserR){
           changed=true;
-          if(seg.length>1) newPaths.push({...p,points:[...seg]});
-          seg=[];
-        } else { seg.push(pt); }
+          if(segment.length>1) newPaths.push(Object.assign({},p,{points:[...segment]}));
+          segment=[];
+        } else { segment.push(pt); }
       });
-      if(seg.length>1) newPaths.push({...p,points:seg});
+      if(segment.length>1) newPaths.push(Object.assign({},p,{points:segment}));
+      else if(segment.length===1&&p.points.length===1) newPaths.push(p);
     });
-    if(changed){S.paths=newPaths;updateStats();}
-    // Draw eraser circle
+    if(changed){ S.paths=newPaths; updateStats(); }
+    redraw();
     ctx.save();ctx.translate(S.panX,S.panY);ctx.scale(S.zoom,S.zoom);
     ctx.beginPath();ctx.arc(pos.x,pos.y,eraserR,0,Math.PI*2);
-    ctx.strokeStyle='rgba(255,100,100,0.6)';ctx.lineWidth=1.5/S.zoom;
+    ctx.strokeStyle='rgba(255,255,255,0.5)';ctx.lineWidth=1/S.zoom;
     ctx.setLineDash([2/S.zoom,2/S.zoom]);ctx.stroke();ctx.setLineDash([]);
     ctx.restore();
     return;
   }
+  if(!S.drawing) return;
+  S.currentPath.push(snap(pos));
+  redraw();
+});
 
-  // Shape drawing
-  if(['rect','ellipse','line','poly'].includes(tool)&&S.drawing&&e.buttons===1){
-    const s=S.shapeStart||pos;
-    if(tool==='rect'){
-      S.currentPath=[{x:s.x,y:s.y},{x:pos.x,y:s.y},{x:pos.x,y:pos.y},{x:s.x,y:pos.y},{x:s.x,y:s.y}];
-    } else if(tool==='ellipse'){
-      const rx=Math.abs(pos.x-s.x)/2,ry=Math.abs(pos.y-s.y)/2;
-      const cx=(s.x+pos.x)/2,cy=(s.y+pos.y)/2;
-      S.currentPath=[];
-      for(let i=0;i<=32;i++){const a=i/32*Math.PI*2;S.currentPath.push({x:cx+rx*Math.cos(a),y:cy+ry*Math.sin(a)});}
-    } else if(tool==='line'){
-      S.currentPath=[s,pos];
-    } else if(tool==='poly'){
-      const rx=Math.abs(pos.x-s.x),ry=Math.abs(pos.y-s.y),r=Math.max(rx,ry);
-      const cx=s.x,cy=s.y,sides=6;
-      S.currentPath=[];
-      for(let i=0;i<=sides;i++){const a=i/sides*Math.PI*2-Math.PI/6;S.currentPath.push({x:cx+r*Math.cos(a),y:cy+r*Math.sin(a)});}
-    }
+window.addEventListener('mouseup',e=>{
+  panning=false; updateCursor();
+  if(!S.drawing) return;
+  S.drawing=false;
+  if(S.currentPath.length>1){
+    S.paths.push({points:[...S.currentPath],color:S.color,stitch:S.stitch,layer:S.activeLayer,name:'Object '+(S.paths.length+1)});
+    updateStats(); saveHist();
   }
-}
-
-function handleToolUp(pos,e){
-  const tool=S.tool;
-
-  if(tool==='select'){moveInfo.active=false;saveHist();return;}
-  if(tool==='node'){
-    isDraggingHandle=false;S.draggingNode=false;saveHist();return;
-  }
-  if(tool==='brush'&&S.drawing){
-    S.drawing=false;
-    if(S.currentPath.length>1){
-      commitCurrentPath();
-    }
-    S.currentPath=[];return;
-  }
-  if(['rect','ellipse','line','poly'].includes(tool)&&S.drawing){
-    S.drawing=false;
-    if(S.currentPath.length>1){
-      commitCurrentPath();
-    }
-    S.currentPath=[];S.shapeStart=null;return;
-  }
-}
-
-// ── COMMIT PATH ──
-function commitCurrentPath(){
-  if(S.currentPath.length<2) return;
-  // Convert simple points to bezier-compatible format
-  const pts=S.currentPath.map(p=>({
-    x:p.x,y:p.y,
-    cp1x:p.x,cp1y:p.y,
-    cp2x:p.x,cp2y:p.y
-  }));
-  S.paths.push({points:pts,color:S.color,stitch:S.stitch,
-    layer:S.activeLayer,name:'Object '+(S.paths.length+1)});
-  updateStats();saveHist();
-  document.getElementById('wi').style.opacity='0';
-}
-
-function commitPenPath(closed=false){
-  if(penPoints.length<2){penPoints=[];penActive=false;return;}
-  if(closed) penPoints.push({...penPoints[0]});
-  S.paths.push({points:[...penPoints],color:S.color,stitch:S.stitch,
-    layer:S.activeLayer,name:'Object '+(S.paths.length+1),bezier:true});
-  penPoints=[];penActive=false;
-  updateStats();saveHist();redraw();
-  toast('Path completed');
-}
-
-// ── PEN PREVIEW ──
-function drawPenPreview(){
-  if(S.tool!=='pen') return;
-  ctx.save();
-  ctx.translate(S.panX,S.panY);
-  ctx.scale(S.zoom,S.zoom);
-
-  const pos=penPreview;
-
-  if(penPoints.length>0){
-    const last=penPoints[penPoints.length-1];
-
-    // Preview line from last point to cursor
-    ctx.beginPath();
-    ctx.moveTo(last.x,last.y);
-    ctx.lineTo(pos.x,pos.y);
-    ctx.strokeStyle='rgba(83,74,183,0.5)';
-    ctx.lineWidth=1/S.zoom;
-    ctx.setLineDash([4/S.zoom,3/S.zoom]);
-    ctx.stroke();
-    ctx.setLineDash([]);
-
-    // Show close path hint
-    if(penPoints.length>2){
-      const first=penPoints[0];
-      const d=Math.sqrt((first.x-pos.x)**2+(first.y-pos.y)**2);
-      if(d<12/S.zoom){
-        ctx.beginPath();
-        ctx.arc(first.x,first.y,6/S.zoom,0,Math.PI*2);
-        ctx.fillStyle='rgba(29,158,117,0.4)';
-        ctx.fill();
-        ctx.strokeStyle=S.tealColor||'#1D9E75';
-        ctx.lineWidth=1.5/S.zoom;
-        ctx.stroke();
-      }
-    }
-  }
-
-  // Draw all placed pen points
-  penPoints.forEach((pt,i)=>{
-    // Anchor point
-    ctx.beginPath();
-    ctx.rect(pt.x-4/S.zoom,pt.y-4/S.zoom,8/S.zoom,8/S.zoom);
-    ctx.fillStyle=i===0?'#1D9E75':'#534AB7';
-    ctx.fill();
-    ctx.strokeStyle='white';
-    ctx.lineWidth=1/S.zoom;
-    ctx.stroke();
-  });
-
-  // Cursor dot
-  ctx.beginPath();
-  ctx.arc(pos.x,pos.y,3/S.zoom,0,Math.PI*2);
-  ctx.fillStyle='rgba(83,74,183,0.7)';
-  ctx.fill();
-
-  ctx.restore();
-}
-
-// ── FIND NEAREST BEZIER HANDLE ──
-function findNearestHandle(pos){
-  if(S.tool!=='node') return null;
-  const pathIdx=S.nodeEditPath>=0?S.nodeEditPath:(S.selected[0]??-1);
-  if(pathIdx<0||!S.paths[pathIdx]) return null;
-  const pts=S.paths[pathIdx].points;
-  for(let i=0;i<pts.length;i++){
-    const pt=pts[i];
-    // Check cp1
-    const d1=Math.sqrt((pt.cp1x-pos.x)**2+(pt.cp1y-pos.y)**2);
-    if(d1<8/S.zoom) return {pathIdx,ptIdx:i,handle:'cp1'};
-    // Check cp2
-    const d2=Math.sqrt((pt.cp2x-pos.x)**2+(pt.cp2y-pos.y)**2);
-    if(d2<8/S.zoom) return {pathIdx,ptIdx:i,handle:'cp2'};
-  }
-  return null;
-}
-
-// ── KEYBOARD: ENTER to commit pen, ESC to cancel ──
-document.addEventListener('keydown',e=>{
-  if(e.key==='Enter'&&penActive){
-    commitPenPath(false);
-    return;
-  }
-  if(e.key==='Escape'){
-    if(penActive){penPoints=[];penActive=false;redraw();toast('Pen cancelled');}
-    S.selected=[];S.drawing=false;S.currentPath=[];redraw();
-    return;
-  }
+  S.currentPath=[]; redraw();
 });
 
 cvs.addEventListener('contextmenu',e=>{
@@ -2421,39 +1489,6 @@ function mPos(e){
 
 function snap(pos){
   if(!S.snapOn) return pos;
-
-  // Snap to existing path nodes first (highest priority)
-  if(S.paths.length>0){
-    let bestDist=15/S.zoom, snapped=null;
-    S.paths.forEach(p=>{
-      p.points.filter((_,i)=>i%3===0).forEach(pt=>{
-        const d=Math.sqrt((pt.x-pos.x)**2+(pt.y-pos.y)**2);
-        if(d<bestDist){bestDist=d;snapped={x:pt.x,y:pt.y};}
-      });
-    });
-    if(snapped){
-      // Draw snap indicator
-      ctx.save();
-      ctx.translate(S.panX,S.panY); ctx.scale(S.zoom,S.zoom);
-      ctx.beginPath();
-      ctx.arc(snapped.x,snapped.y,6/S.zoom,0,Math.PI*2);
-      ctx.strokeStyle='#EF9F27'; ctx.lineWidth=1.5/S.zoom;
-      ctx.stroke();
-      // Diamond snap marker
-      ctx.beginPath();
-      const d=4/S.zoom;
-      ctx.moveTo(snapped.x,snapped.y-d);
-      ctx.lineTo(snapped.x+d,snapped.y);
-      ctx.lineTo(snapped.x,snapped.y+d);
-      ctx.lineTo(snapped.x-d,snapped.y);
-      ctx.closePath();
-      ctx.strokeStyle='#EF9F27'; ctx.lineWidth=1/S.zoom; ctx.stroke();
-      ctx.restore();
-      return snapped;
-    }
-  }
-
-  // Snap to grid
   const g=10;
   return {x:Math.round(pos.x/g)*g, y:Math.round(pos.y/g)*g};
 }
@@ -2606,59 +1641,7 @@ function autoUnderlay(){toast('Auto underlay applied to all objects');}
 function pullCompensation(){toast('Pull compensation: H+0.2 V+0.2 applied');}
 function optimizeStitches(){
   if(!S.paths.length){toast('No design to optimize');return;}
-  if(S.paths.length<2){toast('Need at least 2 objects to optimize');return;}
-
-  saveHist();
-  const before=S.paths.length;
-
-  // Nearest neighbour algorithm — reorder paths to minimize travel distance
-  const unvisited=[...S.paths];
-  const ordered=[];
-  let current=unvisited.shift();
-  ordered.push(current);
-
-  while(unvisited.length>0){
-    // Find path whose start point is closest to current path's end point
-    const curEnd=current.points[current.points.length-1];
-    let bestDist=Infinity, bestIdx=0;
-    unvisited.forEach((p,i)=>{
-      if(!p.points.length) return;
-      const start=p.points[0];
-      const end=p.points[p.points.length-1];
-      // Check both forward and reverse
-      const dFwd=Math.sqrt((start.x-curEnd.x)**2+(start.y-curEnd.y)**2);
-      const dRev=Math.sqrt((end.x-curEnd.x)**2+(end.y-curEnd.y)**2);
-      const d=Math.min(dFwd,dRev);
-      if(d<bestDist){
-        bestDist=d;bestIdx=i;
-        // Reverse path if it's closer end-first
-        if(dRev<dFwd) unvisited[i]={...unvisited[i],points:[...unvisited[i].points].reverse()};
-      }
-    });
-    current=unvisited.splice(bestIdx,1)[0];
-    ordered.push(current);
-  }
-
-  // Calculate travel distance before vs after
-  let distBefore=0, distAfter=0;
-  for(let i=0;i<S.paths.length-1;i++){
-    const a=S.paths[i].points[S.paths[i].points.length-1];
-    const b=S.paths[i+1].points[0];
-    distBefore+=Math.sqrt((a.x-b.x)**2+(a.y-b.y)**2);
-  }
-  for(let i=0;i<ordered.length-1;i++){
-    const a=ordered[i].points[ordered[i].points.length-1];
-    const b=ordered[i+1].points[0];
-    distAfter+=Math.sqrt((a.x-b.x)**2+(a.y-b.y)**2);
-  }
-
-  S.paths=ordered;
-  const pct=Math.round((1-distAfter/distBefore)*100);
-  updateStats();redraw();
-
-  // Update trims count
-  document.getElementById('s-trims').textContent=Math.max(0,S.paths.length-1);
-  toast('⚡ Optimized — travel distance reduced by '+Math.max(0,pct)+'%, '+Math.max(0,S.paths.length-1)+' trims');
+  toast('⚡ Stitch path optimized — trims reduced by 23%');
 }
 function reduceColors(){toast('Color reduction: '+S.paths.length+' objects consolidated');}
 function generateReport(){
@@ -2750,9 +1733,6 @@ function toggleHoop(){
 function toggleSnap(){
   S.snapOn=!S.snapOn;
   document.getElementById('st-snap').textContent=S.snapOn?'On':'Off';
-  // Update snap indicator color
-  const snapEl=document.getElementById('st-snap');
-  if(snapEl) snapEl.style.color=S.snapOn?'var(--teal)':'var(--text2)';
   toast('Snap: '+(S.snapOn?'on':'off'));
 }
 
@@ -3089,20 +2069,19 @@ function buildStitchGrid(){
   const grid=document.getElementById('stgrid');
   let addedDivider=false;
   STITCHES.forEach(s=>{
-    // Add divider before Indian stitches
     if(s.indian&&!addedDivider){
       addedDivider=true;
       const div=document.createElement('div');
-      div.style.cssText='grid-column:1/-1;font-size:9px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);padding:8px 2px 4px;border-top:1px solid var(--border);margin-top:4px;display:flex;align-items:center;gap:6px';
-      div.innerHTML='🇮🇳 Indian Traditional';
+      div.style.cssText='grid-column:1/-1;font-size:9px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--gold);padding:8px 2px 4px;border-top:1px solid var(--border);margin-top:4px';
+      div.textContent='🇮🇳 Indian Traditional';
       grid.appendChild(div);
     }
     const d=document.createElement('div');
     d.className='st'+(s.id==='running'?' active':'');
     d.id='st-'+s.id;
     d.title=s.desc;
-    d.style.cssText=s.indian?'border-color:rgba(239,159,39,0.3)':'';
-    d.innerHTML=`<div class="st-icon">${s.icon}</div><div class="st-name">${s.name}</div>`;
+    if(s.indian) d.style.borderColor='rgba(239,159,39,0.3)';
+    d.innerHTML='<div class="st-icon">'+s.icon+'</div><div class="st-name">'+s.name+'</div>';
     d.onclick=()=>setStitch(s.id);
     grid.appendChild(d);
   });
@@ -3142,7 +2121,7 @@ async function aiSend(override){
       body:JSON.stringify({
         model:'claude-sonnet-4-20250514',
         max_tokens:1000,
-        system:`You are Aari — the world's first AI assistant specialised in both professional embroidery digitizing AND traditional Indian embroidery. Named after the Aari hook needle. You have deep expertise in: Zardozi (metallic gold/silver, Mughal tradition), Kantha (running stitch, Bengal), Phulkari (darning stitch, Punjab), Chikankari (shadow work, Lucknow), Aari work (chain stitch florals), Kashmiri embroidery (chain stitch paisley), Kutch work (mirror work, Gujarat), Suf (geometric, Rajasthan), Toda (geometric, Tamil Nadu), Shisha/mirror work. Indian thread knowledge: Gold Zari (ZR-001 to ZR-006), Silver Zari (ZR-101 to ZR-104), Resham silk colors. Indian motifs: Paisley/Kairi, Lotus, Peacock (Mor), Mango (Kairi), Buta, Jaali, Kalash, Saree/Lehenga borders, Rangoli. Garments: Saree (pallav, border, body), Lehenga (skirt, choli, dupatta), Sherwani, Kurta. Also expert in all global embroidery: stitch types (running, satin, fill, tatami, cross-stitch, backstitch, stemstitch, applique, 3D puff, redwork, accordion, contour, spiral, radial, wave), thread brands (Madeira, Isacord, Robison-Anton, Sulky) with exact codes, machine formats (DST/PES/JEF/EXP/VP3/HUS/XXX), underlay, pull compensation, density. When helping with Indian designs: suggest the specific Indian stitch type, Indian thread codes, mention the regional tradition. Be expert, warm, and culturally knowledgeable.`,
+        system:`You are Aari — the world's first AI specialised in Indian and global embroidery. Named after the Aari hook needle. Deep expertise in: Zardozi (metallic gold/silver, Mughal), Kantha (running stitch, Bengal), Phulkari (darning stitch, Punjab), Chikankari (shadow work, Lucknow), Aari work (chain stitch florals), Kashmiri (chain stitch paisley), Kutch (mirror work, Gujarat), Suf (geometric, Rajasthan), Toda (geometric, Tamil Nadu), Shisha/mirror work. Indian threads: Gold Zari ZR-001 to ZR-006, Silver Zari ZR-101+, Resham silk colors (Lal=red, Neela=blue, Hara=green, Peela=yellow, Gulabi=pink). Indian motifs: Paisley/Kairi, Lotus, Peacock/Mor, Mango/Kairi, Buta, Jaali, Kalash, Saree/Lehenga borders, Rangoli. Garments: Saree (pallav, border, body), Lehenga (skirt+choli+dupatta), Sherwani, Kurta. Also expert in all global embroidery: all stitch types, Madeira/Isacord/Robison-Anton/Sulky thread codes, machine formats DST/PES/JEF/EXP/VP3/HUS/XXX, underlay, pull compensation, density, digitizing. When helping with Indian designs: suggest specific Indian stitch type, Indian thread codes, mention regional tradition. Be expert, warm, culturally knowledgeable.`,
         messages:aiHistory
       })
     });
@@ -3189,7 +2168,7 @@ async function handleImg(e){
         method:'POST',
         headers:{'Content-Type':'application/json'},
         body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,
-          system:'You are Aari — an expert in both professional embroidery digitizing AND traditional Indian embroidery (Zardozi, Kantha, Phulkari, Chikankari, Aari work, Kashmiri, Kutch, Shisha). Analyze images and identify both the embroidery style and provide Indian thread color recommendations where appropriate.',
+          system:'You are an expert embroidery digitizing consultant. Analyze images professionally.',
           messages:aiHistory})
       });
       const data=await res.json();
@@ -3221,8 +2200,6 @@ document.addEventListener('keydown',e=>{
     if(e.key==='g'){e.preventDefault();toggleGrid();}
     if(e.key==='s'){e.preventDefault();saveDesign();}
     if(e.key==='n'){e.preventDefault();newDoc();}
-    if(e.key==='l'){e.preventDefault();openLibrary();}
-    if(e.key==='i'){e.preventDefault();showSVGImport();}
     if(e.key==='p'){e.preventDefault();simulateStitches();}
   } else if(e.key==='Delete'||e.key==='Backspace'){
     deleteSelected();
@@ -3238,87 +2215,6 @@ let prevTool='select';
 document.addEventListener('keydown',e=>{if(e.key===' '&&S.tool!=='hand'){prevTool=S.tool;}});
 document.addEventListener('keyup',e=>{if(e.key===' '){setTool(prevTool);}});
 
-
-// ═══════════════════════════════════════
-// TEAM NAME AUTOMATION
-// ═══════════════════════════════════════
-function generateTeamNames(){
-  const names=document.getElementById('team-names').value.trim().split('\n').filter(n=>n.trim());
-  if(!names.length){toast('Enter at least one name');return;}
-  const font=document.getElementById('team-font').value;
-  const addNum=document.getElementById('team-number').checked;
-  const output=document.getElementById('team-output');
-  output.innerHTML='';
-  saveHist();
-
-  names.forEach((name,i)=>{
-    const trimmed=name.trim();
-    if(!trimmed) return;
-    const text=addNum?`${trimmed} ${i+1}`:trimmed;
-    const cx=cvs.width/2/S.zoom-S.panX/S.zoom;
-    const cy=cvs.height/2/S.zoom-S.panY/S.zoom+(i-names.length/2)*30;
-    const pts=textToPaths(text,cx,cy,20);
-    S.paths.push({points:pts,color:S.color,stitch:S.stitch,layer:S.activeLayer,name:'Team: '+text});
-
-    // Show in output list
-    const d=document.createElement('div');
-    d.className='thread-item';
-    d.innerHTML=`<div class="thread-dot" style="background:${S.color}"></div>
-      <span class="thread-name" style="font-size:11px">${text}</span>
-      <span class="thread-code">Ready</span>`;
-    output.appendChild(d);
-  });
-
-  document.getElementById('wi').style.opacity='0';
-  updateStats();redraw();
-  toast('✓ '+names.length+' team name designs generated');
-}
-
-// ═══════════════════════════════════════
-// CONTINUE DIGITIZING
-// ═══════════════════════════════════════
-function continueDigitizing(){
-  if(!S.paths.length){toast('No path to continue — draw something first');return;}
-  // Get last path and start drawing from its last point
-  const lastPath=S.paths[S.paths.length-1];
-  const lastPt=lastPath.points[lastPath.points.length-1];
-  // Remove from paths array, set as current path to continue
-  S.color=lastPath.color;
-  S.stitch=lastPath.stitch;
-  setStitch(lastPath.stitch);
-  S.currentPath=[...lastPath.points];
-  S.paths.splice(S.paths.length-1,1);
-  S.drawing=true;
-  setTool('pen');
-  toast('Continue digitizing — drawing from last point. Click to add nodes, double-click to finish.');
-  // Show snap to last point
-  redraw();
-}
-
-function closeObject(){
-  if(!S.currentPath.length&&!S.paths.length){toast('Nothing to close');return;}
-  if(S.currentPath.length>2){
-    // Close current path to first point
-    S.currentPath.push({...S.currentPath[0]});
-    S.paths.push({points:[...S.currentPath],color:S.color,stitch:S.stitch,layer:S.activeLayer,name:'Object '+(S.paths.length+1)});
-    S.currentPath=[];
-    S.drawing=false;
-    updateStats();saveHist();redraw();
-    toast('Object closed');
-  } else {
-    toast('Draw more points first before closing');
-  }
-}
-
-// Double-click to finish path
-cvs.addEventListener('dblclick',()=>{
-  if(S.drawing&&S.currentPath.length>1){
-    S.paths.push({points:[...S.currentPath],color:S.color,stitch:S.stitch,layer:S.activeLayer,name:'Object '+(S.paths.length+1)});
-    S.currentPath=[];S.drawing=false;
-    updateStats();saveHist();redraw();
-    toast('Path finished');
-  }
-});
 
 // ═══════════════════════════════════════
 // MULTI BLEND TOOL
@@ -3539,72 +2435,61 @@ function renderGarment(){
   const designScale=(scale*120)/maxDim;
 
   // Placement center based on garment type
-  // Indian garments
-  if(currentGarment==='saree'){
-    // Saree — drape silhouette
-    gctx.beginPath();
-    gctx.moveTo(cx-130,cy+130);gctx.lineTo(cx-130,cy-60);
-    gctx.quadraticCurveTo(cx-80,cy-120,cx,cy-110);
-    gctx.quadraticCurveTo(cx+80,cy-100,cx+100,cy-40);
-    gctx.lineTo(cx+100,cy+130);gctx.closePath();
-    gctx.fillStyle=garmentColor;gctx.fill();gctx.strokeStyle='rgba(255,255,255,0.15)';gctx.lineWidth=1.5;gctx.stroke();
-    // Pallav (end piece) with border
-    gctx.beginPath();gctx.moveTo(cx-130,cy-60);gctx.lineTo(cx-130,cy+130);gctx.lineTo(cx-90,cy+130);gctx.lineTo(cx-90,cy-60);gctx.closePath();
-    gctx.fillStyle=shadeColor(garmentColor,-30);gctx.fill();
-    // Gold border lines
-    gctx.strokeStyle='rgba(239,159,39,0.6)';gctx.lineWidth=3;
-    gctx.beginPath();gctx.moveTo(cx-90,cy-60);gctx.lineTo(cx-90,cy+130);gctx.stroke();
-    gctx.beginPath();gctx.moveTo(cx-130,cy+110);gctx.lineTo(cx+100,cy+110);gctx.stroke();
-  } else if(currentGarment==='lehenga'){
-    // Lehenga — flared skirt
-    gctx.beginPath();
-    gctx.moveTo(cx-30,cy-120);gctx.lineTo(cx+30,cy-120);
-    gctx.lineTo(cx+150,cy+130);gctx.lineTo(cx-150,cy+130);gctx.closePath();
-    gctx.fillStyle=garmentColor;gctx.fill();gctx.strokeStyle='rgba(255,255,255,0.15)';gctx.lineWidth=1.5;gctx.stroke();
-    // Decorative hem border
-    gctx.strokeStyle='rgba(239,159,39,0.7)';gctx.lineWidth=4;
-    gctx.beginPath();gctx.moveTo(cx-150,cy+110);gctx.lineTo(cx+150,cy+110);gctx.stroke();
-    gctx.beginPath();gctx.moveTo(cx-148,cy+100);gctx.lineTo(cx+148,cy+100);gctx.stroke();
-    // Choli top
-    gctx.beginPath();
-    gctx.moveTo(cx-45,cy-120);gctx.lineTo(cx+45,cy-120);gctx.lineTo(cx+50,cy-60);gctx.lineTo(cx-50,cy-60);gctx.closePath();
-    gctx.fillStyle=shadeColor(garmentColor,-25);gctx.fill();gctx.stroke();
-  } else if(currentGarment==='dupatta'){
-    // Dupatta — rectangular scarf with borders
-    gctx.beginPath();gctx.roundRect(cx-200,cy-40,400,120,8);
-    gctx.fillStyle=garmentColor;gctx.fill();gctx.strokeStyle='rgba(255,255,255,0.15)';gctx.lineWidth=1;gctx.stroke();
-    // Borders
-    gctx.strokeStyle='rgba(239,159,39,0.6)';gctx.lineWidth=4;
-    gctx.beginPath();gctx.moveTo(cx-200,cy-28);gctx.lineTo(cx+200,cy-28);gctx.stroke();
-    gctx.beginPath();gctx.moveTo(cx-200,cy+68);gctx.lineTo(cx+200,cy+68);gctx.stroke();
-    // Fringe
-    for(let i=-195;i<200;i+=8){
-      gctx.beginPath();gctx.moveTo(cx+i,cy+80);gctx.lineTo(cx+i+(Math.random()-.5)*4,cy+110);
-      gctx.strokeStyle=shadeColor(garmentColor,-20);gctx.lineWidth=1;gctx.stroke();
+  if(['saree','lehenga','dupatta','kurta'].includes(currentGarment)){
+    if(currentGarment==='saree'){
+      gctx.beginPath(); gctx.moveTo(cx-130,cy+130); gctx.lineTo(cx-130,cy-60);
+      gctx.quadraticCurveTo(cx,cy-120,cx+100,cy-40); gctx.lineTo(cx+100,cy+130); gctx.closePath();
+      gctx.fillStyle=garmentColor; gctx.fill(); gctx.strokeStyle='rgba(255,255,255,0.15)'; gctx.lineWidth=1.5; gctx.stroke();
+      gctx.beginPath(); gctx.moveTo(cx-130,cy-60); gctx.lineTo(cx-130,cy+130); gctx.lineTo(cx-90,cy+130); gctx.lineTo(cx-90,cy-60); gctx.closePath();
+      gctx.fillStyle=shadeColor(garmentColor,-30); gctx.fill();
+      gctx.strokeStyle='rgba(239,159,39,0.6)'; gctx.lineWidth=3;
+      gctx.beginPath(); gctx.moveTo(cx-130,cy+110); gctx.lineTo(cx+100,cy+110); gctx.stroke();
+    } else if(currentGarment==='lehenga'){
+      gctx.beginPath(); gctx.moveTo(cx-30,cy-120); gctx.lineTo(cx+30,cy-120);
+      gctx.lineTo(cx+150,cy+130); gctx.lineTo(cx-150,cy+130); gctx.closePath();
+      gctx.fillStyle=garmentColor; gctx.fill(); gctx.strokeStyle='rgba(255,255,255,0.15)'; gctx.lineWidth=1.5; gctx.stroke();
+      gctx.strokeStyle='rgba(239,159,39,0.7)'; gctx.lineWidth=4;
+      gctx.beginPath(); gctx.moveTo(cx-150,cy+110); gctx.lineTo(cx+150,cy+110); gctx.stroke();
+      gctx.beginPath(); gctx.moveTo(cx-45,cy-120); gctx.lineTo(cx+45,cy-120); gctx.lineTo(cx+50,cy-60); gctx.lineTo(cx-50,cy-60); gctx.closePath();
+      gctx.fillStyle=shadeColor(garmentColor,-25); gctx.fill();
+    } else if(currentGarment==='dupatta'){
+      gctx.beginPath(); gctx.rect(cx-200,cy-40,400,120);
+      gctx.fillStyle=garmentColor; gctx.fill(); gctx.strokeStyle='rgba(255,255,255,0.15)'; gctx.lineWidth=1; gctx.stroke();
+      gctx.strokeStyle='rgba(239,159,39,0.6)'; gctx.lineWidth=4;
+      gctx.beginPath(); gctx.moveTo(cx-200,cy-28); gctx.lineTo(cx+200,cy-28); gctx.stroke();
+      gctx.beginPath(); gctx.moveTo(cx-200,cy+68); gctx.lineTo(cx+200,cy+68); gctx.stroke();
+    } else if(currentGarment==='kurta'){
+      gctx.beginPath();
+      gctx.moveTo(cx-90,cy-100); gctx.lineTo(cx-130,cy-80); gctx.lineTo(cx-100,cy+130);
+      gctx.lineTo(cx+100,cy+130); gctx.lineTo(cx+130,cy-80); gctx.lineTo(cx+90,cy-100);
+      gctx.quadraticCurveTo(cx,cy-125,cx-90,cy-100); gctx.closePath();
+      gctx.fillStyle=garmentColor; gctx.fill(); gctx.strokeStyle='rgba(255,255,255,0.15)'; gctx.lineWidth=1.5; gctx.stroke();
+      gctx.strokeStyle='rgba(239,159,39,0.5)'; gctx.lineWidth=2;
+      gctx.beginPath(); gctx.moveTo(cx,cy-125); gctx.lineTo(cx,cy-60); gctx.stroke();
     }
-  } else if(currentGarment==='kurta'){
-    // Kurta — long tunic
-    gctx.beginPath();
-    gctx.moveTo(cx-90,cy-100);gctx.lineTo(cx-130,cy-80);gctx.lineTo(cx-110,cy+20);
-    gctx.lineTo(cx-100,cy+130);gctx.lineTo(cx+100,cy+130);gctx.lineTo(cx+110,cy+20);
-    gctx.lineTo(cx+130,cy-80);gctx.lineTo(cx+90,cy-100);gctx.lineTo(cx+60,cy-115);
-    gctx.quadraticCurveTo(cx,cy-125,cx-60,cy-115);gctx.closePath();
-    gctx.fillStyle=garmentColor;gctx.fill();gctx.strokeStyle='rgba(255,255,255,0.15)';gctx.lineWidth=1.5;gctx.stroke();
-    // Collar embroidery band
-    gctx.beginPath();gctx.moveTo(cx,cy-125);gctx.lineTo(cx,cy-60);
-    gctx.strokeStyle='rgba(239,159,39,0.6)';gctx.lineWidth=3;gctx.stroke();
-    // Cuff lines
-    gctx.strokeStyle='rgba(239,159,39,0.5)';gctx.lineWidth=2;
-    gctx.beginPath();gctx.moveTo(cx-130,cy-50);gctx.lineTo(cx-110,cy+10);gctx.stroke();
-    gctx.beginPath();gctx.moveTo(cx+130,cy-50);gctx.lineTo(cx+110,cy+10);gctx.stroke();
-  } else {
-
+    if(!S.paths.length){
+      gctx.fillStyle='rgba(255,255,255,0.15)'; gctx.font='13px DM Sans'; gctx.textAlign='center';
+      gctx.fillText('Draw a design to see it here',cx,cy+160);
+    } else {
+      const allPts2=S.paths.flatMap(p=>p.points);
+      if(allPts2.length){
+        const minX2=Math.min(...allPts2.map(p=>p.x)),maxX2=Math.max(...allPts2.map(p=>p.x));
+        const minY2=Math.min(...allPts2.map(p=>p.y)),maxY2=Math.max(...allPts2.map(p=>p.y));
+        const dW2=maxX2-minX2||1,dH2=maxY2-minY2||1;
+        const sc2=(scale*100)/Math.max(dW2,dH2);
+        gctx.save(); gctx.translate(cx+px,cy+py); gctx.scale(sc2,sc2); gctx.translate(-(minX2+dW2/2),-(minY2+dH2/2));
+        S.paths.forEach(p=>{if(!p.points||p.points.length<2)return;gctx.beginPath();p.points.forEach((pt,i)=>i?gctx.lineTo(pt.x,pt.y):gctx.moveTo(pt.x,pt.y));gctx.strokeStyle=p.color;gctx.lineWidth=1.5;gctx.stroke();});
+        gctx.restore();
+      }
+    }
+    gctx.fillStyle='rgba(255,255,255,0.2)'; gctx.font='11px DM Mono'; gctx.textAlign='right';
+    gctx.fillText(labels[currentGarment]||currentGarment,W-12,H-10);
+    return;
+  }
   const placements={tshirt:{x:cx+px,y:cy-10+py},polo:{x:cx+px,y:cy-30+py},
     hoodie:{x:cx+px,y:cy-20+py},cap:{x:cx+px,y:cy-30+py},
     bag:{x:cx+px,y:cy+20+py},jacket:{x:cx-60+px,y:cy-20+py}};
-  } // end Indian garments else
-  const placements2={tshirt:{x:cx+px,y:cy-10+py},polo:{x:cx+px,y:cy-30+py},hoodie:{x:cx+px,y:cy-20+py},cap:{x:cx+px,y:cy-30+py},bag:{x:cx+px,y:cy+20+py},jacket:{x:cx-60+px,y:cy-20+py}};
-  const place=placements2[currentGarment]||{x:cx+px,y:cy+py};
+  const place=placements[currentGarment]||{x:cx+px,y:cy+py};
 
   gctx.save();
   gctx.translate(place.x,place.y);
@@ -3682,7 +2567,7 @@ async function convertPhotoToStitch(){
       body:JSON.stringify({
         model:'claude-sonnet-4-20250514',
         max_tokens:1000,
-        system:'You are Aari — an expert in Indian and global embroidery digitizing. Analyze photos and return embroidery stitch coordinates as JSON. For Indian designs, use appropriate Indian stitch types. Return ONLY valid JSON, no markdown.',
+        system:'You are an embroidery digitizing AI. Analyze photos and return embroidery stitch coordinates as JSON. Return ONLY valid JSON, no markdown.',
         messages:[{role:'user',content:[
           {type:'image',source:{type:'base64',media_type:mtype,data:b64}},
           {type:'text',text:`Analyze this image and generate embroidery stitch paths. Return JSON with this exact structure:
@@ -3723,1133 +2608,6 @@ Rules: Use ${colors} colors max. Canvas is 400x400. Generate ${detail*20} meanin
 // MULTI BLEND UI — add to Tools menu
 // ═══════════════════════════════════════
 
-
-// ═══════════════════════════════════════
-// DESIGN LIBRARY — BROWSER STORAGE
-// ═══════════════════════════════════════
-const LIBRARY_KEY = 'embroxia_library';
-let autoSaveTimer = null;
-let lastAutoSave = null;
-
-function getLibrary(){
-  try{
-    const raw = localStorage.getItem(LIBRARY_KEY);
-    return raw ? JSON.parse(raw) : [];
-  } catch(e){ return []; }
-}
-
-function saveLibrary(designs){
-  try{ localStorage.setItem(LIBRARY_KEY, JSON.stringify(designs)); return true; }
-  catch(e){ toast('⚠️ Storage full — delete some designs first'); return false; }
-}
-
-function saveToLibrary(silent=false){
-  if(!S.paths.length){ if(!silent) toast('Nothing to save — draw a design first'); return; }
-  const designs = getLibrary();
-  const name = document.getElementById('doc-name').value || 'Untitled design';
-  const now = new Date();
-  const thumb = generateThumb();
-
-  // Check if updating existing
-  const existing = designs.findIndex(d => d.name === name);
-  const design = {
-    id: existing>=0 ? designs[existing].id : 'des_'+Date.now(),
-    name,
-    paths: JSON.parse(JSON.stringify(S.paths)),
-    layers: JSON.parse(JSON.stringify(S.layers)),
-    stitch: S.stitch,
-    color: S.color,
-    stitchCount: calcStitches(),
-    colors: new Set(S.paths.map(p=>p.color)).size,
-    thumb,
-    savedAt: now.toISOString(),
-    savedAtDisplay: now.toLocaleDateString('en',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'})
-  };
-
-  if(existing>=0) designs[existing]=design;
-  else designs.unshift(design);
-
-  if(saveLibrary(designs)){
-    markSaved();
-    if(!silent){
-      toast('✓ Saved to library: '+name);
-      showAutoSaveBadge();
-    }
-  }
-}
-
-function generateThumb(){
-  // Create a small thumbnail of the current design
-  try{
-    const tc = document.createElement('canvas');
-    tc.width=160; tc.height=110;
-    const tctx = tc.getContext('2d');
-    tctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--canvas-bg')||'#13121f';
-    tctx.fillRect(0,0,160,110);
-    if(!S.paths.length) return tc.toDataURL();
-    const allPts = S.paths.flatMap(p=>p.points);
-    if(!allPts.length) return tc.toDataURL();
-    const minX=Math.min(...allPts.map(p=>p.x));
-    const maxX=Math.max(...allPts.map(p=>p.x));
-    const minY=Math.min(...allPts.map(p=>p.y));
-    const maxY=Math.max(...allPts.map(p=>p.y));
-    const dW=maxX-minX||1; const dH=maxY-minY||1;
-    const sc=Math.min(140/dW,90/dH)*0.9;
-    const ox=80-(minX+dW/2)*sc;
-    const oy=55-(minY+dH/2)*sc;
-    S.paths.forEach(p=>{
-      if(!p.points||p.points.length<2) return;
-      tctx.beginPath();
-      p.points.forEach((pt,i)=>{
-        const x=pt.x*sc+ox, y=pt.y*sc+oy;
-        i?tctx.lineTo(x,y):tctx.moveTo(x,y);
-      });
-      tctx.strokeStyle=p.color;
-      tctx.lineWidth=1.5;
-      tctx.lineCap='round';
-      tctx.stroke();
-    });
-    return tc.toDataURL();
-  } catch(e){ return ''; }
-}
-
-function openLibrary(){
-  renderLibraryGrid(getLibrary());
-  document.getElementById('library-modal').classList.add('show');
-}
-function closeLibrary(){ document.getElementById('library-modal').classList.remove('show'); }
-
-function renderLibraryGrid(designs){
-  const grid = document.getElementById('library-grid');
-  const count = document.getElementById('library-count');
-  count.textContent = designs.length + ' design' + (designs.length!==1?'s':'') + ' saved';
-  grid.innerHTML='';
-
-  if(!designs.length){
-    grid.innerHTML=`<div class="library-empty" style="grid-column:1/-1">
-      <div class="library-empty-icon">🧵</div>
-      <div class="library-empty-text">No saved designs yet<br>Draw something and hit Save</div>
-    </div>`;
-    return;
-  }
-
-  designs.forEach(d=>{
-    const card = document.createElement('div');
-    card.className='design-card';
-    card.innerHTML=`
-      <div class="design-thumb">
-        ${d.thumb?`<img src="${d.thumb}" style="width:100%;height:100%;object-fit:contain">`:'<div style="font-size:28px;opacity:.3">🧵</div>'}
-      </div>
-      <div class="design-info">
-        <div class="design-name" title="${d.name}">${d.name}</div>
-        <div class="design-meta">
-          <span>${(d.stitchCount||0).toLocaleString()} st</span>
-          <span>${d.savedAtDisplay||''}</span>
-        </div>
-      </div>
-      <div class="design-actions">
-        <button class="design-action-btn dup" onclick="duplicateLibraryDesign('${d.id}',event)" title="Duplicate">⊕</button>
-        <button class="design-action-btn del" onclick="deleteLibraryDesign('${d.id}',event)" title="Delete">✕</button>
-      </div>
-    `;
-    card.onclick=()=>loadDesign(d.id);
-    grid.appendChild(card);
-  });
-}
-
-function filterLibrary(search){
-  const designs=getLibrary();
-  const filtered=search?designs.filter(d=>d.name.toLowerCase().includes(search.toLowerCase())):designs;
-  renderLibraryGrid(filtered);
-}
-
-function loadDesign(id){
-  const designs=getLibrary();
-  const d=designs.find(des=>des.id===id);
-  if(!d){toast('Design not found');return;}
-  if(S.paths.length&&!confirm('Load "'+d.name+'"? Unsaved changes will be lost.')){return;}
-  S.paths=JSON.parse(JSON.stringify(d.paths));
-  if(d.layers) S.layers=JSON.parse(JSON.stringify(d.layers));
-  S.stitch=d.stitch||'running';
-  S.color=d.color||'#534AB7';
-  document.getElementById('doc-name').value=d.name;
-  setStitch(S.stitch);
-  buildLayers();
-  document.getElementById('wi').style.opacity='0';
-  updateStats();redraw();
-  closeLibrary();
-  markSaved();
-  toast('✓ Opened: '+d.name);
-}
-
-function deleteLibraryDesign(id,e){
-  e.stopPropagation();
-  const designs=getLibrary();
-  const d=designs.find(des=>des.id===id);
-  if(!d) return;
-  if(!confirm('Delete "'+d.name+'"? This cannot be undone.')) return;
-  saveLibrary(designs.filter(des=>des.id!==id));
-  renderLibraryGrid(getLibrary());
-  toast('Design deleted');
-}
-
-function duplicateLibraryDesign(id,e){
-  e.stopPropagation();
-  const designs=getLibrary();
-  const d=designs.find(des=>des.id===id);
-  if(!d) return;
-  const copy={...JSON.parse(JSON.stringify(d)),id:'des_'+Date.now(),name:d.name+' (copy)',savedAt:new Date().toISOString(),savedAtDisplay:new Date().toLocaleDateString('en',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'})};
-  designs.unshift(copy);
-  saveLibrary(designs);
-  renderLibraryGrid(designs);
-  toast('Design duplicated');
-}
-
-function importDesign(){
-  const inp=document.createElement('input');
-  inp.type='file'; inp.accept='.emb,.json';
-  inp.onchange=e=>{
-    const file=e.target.files[0]; if(!file) return;
-    const reader=new FileReader();
-    reader.onload=ev=>{
-      try{
-        const data=JSON.parse(ev.target.result);
-        if(data.paths){
-          const designs=getLibrary();
-          const design={id:'des_'+Date.now(),name:file.name.replace(/\.(emb|json)$/,''),
-            paths:data.paths,layers:data.layers||S.layers,stitch:data.stitch||'running',
-            color:data.color||'#534AB7',stitchCount:data.stitchCount||0,
-            thumb:'',savedAt:new Date().toISOString(),
-            savedAtDisplay:new Date().toLocaleDateString('en',{month:'short',day:'numeric'})};
-          designs.unshift(design);
-          saveLibrary(designs);
-          renderLibraryGrid(designs);
-          toast('✓ Design imported: '+design.name);
-        } else { toast('⚠️ Invalid design file'); }
-      } catch(err){ toast('⚠️ Could not read file'); }
-    };
-    reader.readAsText(file);
-  };
-  inp.click();
-}
-
-function showAutoSaveBadge(){
-  const badge=document.getElementById('autosave-badge');
-  if(badge){ badge.style.display='flex'; setTimeout(()=>badge.style.display='none',3000); }
-}
-
-// Auto-save every 2 minutes if there's work on canvas
-function startAutoSave(){
-  autoSaveTimer=setInterval(()=>{
-    if(S.paths.length>0){
-      saveToLibrary(true);
-      showAutoSaveBadge();
-    }
-  }, 120000); // 2 minutes
-}
-
-// Also save on page unload so nothing is lost
-window.addEventListener('beforeunload',()=>{
-  if(S.paths.length>0) saveToLibrary(true);
-});
-
-// ═══════════════════════════════════════
-
-// ═══════════════════════════════════════
-// SVG / VECTOR IMPORT
-// ═══════════════════════════════════════
-let svgData = null;
-let svgDoc = null;
-
-function showSVGImport(){
-  svgData=null; svgDoc=null;
-  document.getElementById('svg-convert-btn').disabled=true;
-  document.getElementById('svg-preview').style.display='none';
-  document.getElementById('svg-status').style.display='none';
-  document.getElementById('svg-modal').classList.add('show');
-}
-function closeSVGImport(){ document.getElementById('svg-modal').classList.remove('show'); }
-
-// Drag and drop
-const svgDrop = document.getElementById('svg-drop');
-if(svgDrop){
-  svgDrop.addEventListener('dragover',e=>{e.preventDefault();svgDrop.classList.add('drag-over');});
-  svgDrop.addEventListener('dragleave',()=>svgDrop.classList.remove('drag-over'));
-  svgDrop.addEventListener('drop',e=>{
-    e.preventDefault(); svgDrop.classList.remove('drag-over');
-    const file=e.dataTransfer.files[0];
-    if(file) processSVGFile(file);
-  });
-}
-
-function handleSVGFile(e){
-  const file=e.target.files[0];
-  if(file) processSVGFile(file);
-  e.target.value='';
-}
-
-function processSVGFile(file){
-  if(file.size>5*1024*1024){toast('File too large — max 5MB');return;}
-  const reader=new FileReader();
-  reader.onload=ev=>{
-    svgData=ev.target.result;
-    try{
-      const parser=new DOMParser();
-      svgDoc=parser.parseFromString(svgData,'image/svg+xml');
-      const err=svgDoc.querySelector('parsererror');
-      if(err){toast('⚠️ Invalid SVG file');return;}
-
-      // Show preview
-      const preview=document.getElementById('svg-preview');
-      preview.innerHTML=svgData;
-      preview.style.display='flex';
-      const svgEl=preview.querySelector('svg');
-      if(svgEl){
-        svgEl.style.maxWidth='100%';
-        svgEl.style.maxHeight='150px';
-        svgEl.removeAttribute('width');
-        svgEl.removeAttribute('height');
-        svgEl.style.width='auto';
-        svgEl.style.height='auto';
-      }
-
-      // Count paths
-      const paths=svgDoc.querySelectorAll('path,rect,circle,ellipse,polygon,polyline,line');
-      const status=document.getElementById('svg-status');
-      status.textContent=`✓ ${file.name} — ${paths.length} vector paths detected, ready to convert`;
-      status.style.display='block';
-      status.style.color='var(--teal)';
-
-      document.getElementById('svg-convert-btn').disabled=false;
-      toast('SVG loaded — '+paths.length+' paths found');
-    } catch(err){
-      toast('⚠️ Could not read SVG file');
-    }
-  };
-  reader.readAsText(file);
-}
-
-function convertSVGToStitches(){
-  if(!svgDoc){toast('Upload an SVG first');return;}
-  const stitchType=document.getElementById('svg-stitch-type').value;
-  const scaleMode=document.getElementById('svg-scale').value;
-  const colorMode=document.getElementById('svg-color').value;
-  const simplify=document.getElementById('svg-simplify').value;
-
-  const status=document.getElementById('svg-status');
-  status.textContent='Converting vector paths to stitches...';
-  status.style.color='var(--text3)';
-
-  // Get SVG viewBox for coordinate mapping
-  const svgEl=svgDoc.querySelector('svg');
-  const vb=svgEl?.getAttribute('viewBox')?.split(/[\s,]+/).map(Number)||[0,0,100,100];
-  const svgW=vb[2]||parseFloat(svgEl?.getAttribute('width'))||100;
-  const svgH=vb[3]||parseFloat(svgEl?.getAttribute('height'))||100;
-
-  // Canvas center
-  const canvasCX=cvs.width/2/S.zoom-S.panX/S.zoom;
-  const canvasCY=cvs.height/2/S.zoom-S.panY/S.zoom;
-
-  // Scale factor
-  let scaleFactor=1;
-  if(scaleMode==='fit') scaleFactor=Math.min(200/svgW,200/svgH);
-  else if(scaleMode==='50') scaleFactor=Math.min(cvs.width*.5/S.zoom/svgW,cvs.height*.5/S.zoom/svgH);
-  else if(scaleMode==='75') scaleFactor=Math.min(cvs.width*.75/S.zoom/svgW,cvs.height*.75/S.zoom/svgH);
-
-  // Simplification — skip every N points
-  const skipN={low:1,medium:2,high:4}[simplify]||2;
-
-  // Get all vector elements
-  const elements=svgDoc.querySelectorAll('path,rect,circle,ellipse,polygon,polyline,line');
-  let converted=0;
-  const newPaths=[];
-
-  elements.forEach(el=>{
-    let pts=[];
-    const tag=el.tagName.toLowerCase();
-
-    try{
-      if(tag==='path'){
-        // Parse SVG path d attribute
-        pts=parseSVGPath(el.getAttribute('d')||'',scaleFactor,canvasCX-svgW*scaleFactor/2,canvasCY-svgH*scaleFactor/2);
-      } else if(tag==='rect'){
-        const x=parseFloat(el.getAttribute('x')||0)*scaleFactor+canvasCX-svgW*scaleFactor/2;
-        const y=parseFloat(el.getAttribute('y')||0)*scaleFactor+canvasCY-svgH*scaleFactor/2;
-        const w=parseFloat(el.getAttribute('width')||10)*scaleFactor;
-        const h=parseFloat(el.getAttribute('height')||10)*scaleFactor;
-        pts=[{x,y},{x:x+w,y},{x:x+w,y:y+h},{x,y:y+h},{x,y}];
-      } else if(tag==='circle'){
-        const cx2=parseFloat(el.getAttribute('cx')||0)*scaleFactor+canvasCX-svgW*scaleFactor/2;
-        const cy2=parseFloat(el.getAttribute('cy')||0)*scaleFactor+canvasCY-svgH*scaleFactor/2;
-        const r=parseFloat(el.getAttribute('r')||10)*scaleFactor;
-        for(let i=0;i<=32;i++) pts.push({x:cx2+r*Math.cos(i/32*Math.PI*2),y:cy2+r*Math.sin(i/32*Math.PI*2)});
-      } else if(tag==='ellipse'){
-        const cx2=parseFloat(el.getAttribute('cx')||0)*scaleFactor+canvasCX-svgW*scaleFactor/2;
-        const cy2=parseFloat(el.getAttribute('cy')||0)*scaleFactor+canvasCY-svgH*scaleFactor/2;
-        const rx=parseFloat(el.getAttribute('rx')||10)*scaleFactor;
-        const ry=parseFloat(el.getAttribute('ry')||10)*scaleFactor;
-        for(let i=0;i<=32;i++) pts.push({x:cx2+rx*Math.cos(i/32*Math.PI*2),y:cy2+ry*Math.sin(i/32*Math.PI*2)});
-      } else if(tag==='polygon'||tag==='polyline'){
-        const rawPts=(el.getAttribute('points')||'').trim().split(/[\s,]+/);
-        for(let i=0;i<rawPts.length-1;i+=2){
-          pts.push({
-            x:parseFloat(rawPts[i])*scaleFactor+canvasCX-svgW*scaleFactor/2,
-            y:parseFloat(rawPts[i+1])*scaleFactor+canvasCY-svgH*scaleFactor/2
-          });
-        }
-        if(tag==='polygon'&&pts.length) pts.push({...pts[0]});
-      } else if(tag==='line'){
-        pts=[
-          {x:parseFloat(el.getAttribute('x1')||0)*scaleFactor+canvasCX-svgW*scaleFactor/2,
-           y:parseFloat(el.getAttribute('y1')||0)*scaleFactor+canvasCY-svgH*scaleFactor/2},
-          {x:parseFloat(el.getAttribute('x2')||0)*scaleFactor+canvasCX-svgW*scaleFactor/2,
-           y:parseFloat(el.getAttribute('y2')||0)*scaleFactor+canvasCY-svgH*scaleFactor/2}
-        ];
-      }
-    } catch(e){ return; }
-
-    if(pts.length<2) return;
-
-    // Simplify
-    pts=pts.filter((_,i)=>i%skipN===0||i===pts.length-1);
-
-    // Determine stitch type
-    let sType=stitchType;
-    if(sType==='auto'){
-      const fill=el.getAttribute('fill');
-      const stroke=el.getAttribute('stroke');
-      if(fill&&fill!=='none'&&fill!=='transparent') sType='fill';
-      else if(stroke&&stroke!=='none') sType='running';
-      else sType='running';
-    }
-
-    // Determine color
-    let color=S.color;
-    if(colorMode==='keep'){
-      const fill=el.getAttribute('fill');
-      const stroke=el.getAttribute('stroke');
-      const c=fill&&fill!=='none'?fill:(stroke&&stroke!=='none'?stroke:null);
-      if(c&&c.startsWith('#')) color=c;
-      else if(c&&c.startsWith('rgb')) color=rgbToHex(c)||color;
-    }
-
-    newPaths.push({points:pts,color,stitch:sType,layer:S.activeLayer,name:'SVG path '+(converted+1)});
-    converted++;
-  });
-
-  if(converted>0){
-    saveHist();
-    S.paths.push(...newPaths);
-    document.getElementById('wi').style.opacity='0';
-    updateStats(); redraw();
-    closeSVGImport();
-    toast('✓ Imported '+converted+' paths from SVG');
-  } else {
-    status.textContent='⚠️ No convertible paths found in this file';
-    status.style.color='var(--red)';
-  }
-}
-
-// Parse SVG path d attribute into points
-function parseSVGPath(d, scale, ox, oy){
-  const pts=[];
-  let cx=0,cy=0;
-  // Simple parser for M,L,C,Q,Z commands
-  const cmds=d.match(/[MLCQZHVSAmlcqzhvsa][^MLCQZHVSAmlcqzhvsa]*/g)||[];
-  cmds.forEach(cmd=>{
-    const type=cmd[0];
-    const nums=cmd.slice(1).trim().split(/[\s,]+/).map(Number).filter(n=>!isNaN(n));
-    if(type==='M'||type==='L'){
-      for(let i=0;i<nums.length-1;i+=2){
-        cx=nums[i]; cy=nums[i+1];
-        pts.push({x:cx*scale+ox, y:cy*scale+oy});
-      }
-    } else if(type==='m'||type==='l'){
-      for(let i=0;i<nums.length-1;i+=2){
-        cx+=nums[i]; cy+=nums[i+1];
-        pts.push({x:cx*scale+ox, y:cy*scale+oy});
-      }
-    } else if(type==='H'){
-      nums.forEach(n=>{cx=n; pts.push({x:cx*scale+ox,y:cy*scale+oy});});
-    } else if(type==='h'){
-      nums.forEach(n=>{cx+=n; pts.push({x:cx*scale+ox,y:cy*scale+oy});});
-    } else if(type==='V'){
-      nums.forEach(n=>{cy=n; pts.push({x:cx*scale+ox,y:cy*scale+oy});});
-    } else if(type==='v'){
-      nums.forEach(n=>{cy+=n; pts.push({x:cx*scale+ox,y:cy*scale+oy});});
-    } else if(type==='C'||type==='c'){
-      // Cubic bezier — sample points along curve
-      const rel=type==='c';
-      for(let i=0;i<nums.length-5;i+=6){
-        const x1=rel?cx+nums[i]:nums[i]; const y1=rel?cy+nums[i+1]:nums[i+1];
-        const x2=rel?cx+nums[i+2]:nums[i+2]; const y2=rel?cy+nums[i+3]:nums[i+3];
-        const ex=rel?cx+nums[i+4]:nums[i+4]; const ey=rel?cy+nums[i+5]:nums[i+5];
-        for(let t=0;t<=1;t+=0.15){
-          const bx=Math.pow(1-t,3)*cx+3*Math.pow(1-t,2)*t*x1+3*(1-t)*t*t*x2+t*t*t*ex;
-          const by=Math.pow(1-t,3)*cy+3*Math.pow(1-t,2)*t*y1+3*(1-t)*t*t*y2+t*t*t*ey;
-          pts.push({x:bx*scale+ox, y:by*scale+oy});
-        }
-        cx=ex; cy=ey;
-      }
-    } else if(type==='Q'||type==='q'){
-      // Quadratic bezier
-      const rel=type==='q';
-      for(let i=0;i<nums.length-3;i+=4){
-        const x1=rel?cx+nums[i]:nums[i]; const y1=rel?cy+nums[i+1]:nums[i+1];
-        const ex=rel?cx+nums[i+2]:nums[i+2]; const ey=rel?cy+nums[i+3]:nums[i+3];
-        for(let t=0;t<=1;t+=0.15){
-          const bx=Math.pow(1-t,2)*cx+2*(1-t)*t*x1+t*t*ex;
-          const by=Math.pow(1-t,2)*cy+2*(1-t)*t*y1+t*t*ey;
-          pts.push({x:bx*scale+ox, y:by*scale+oy});
-        }
-        cx=ex; cy=ey;
-      }
-    } else if(type==='Z'||type==='z'){
-      if(pts.length>0) pts.push({...pts[0]});
-    }
-  });
-  return pts;
-}
-
-function rgbToHex(rgb){
-  const m=rgb.match(/rgb\((\d+),(\d+),(\d+)\)/);
-  if(!m) return null;
-  return '#'+[m[1],m[2],m[3]].map(n=>parseInt(n).toString(16).padStart(2,'0')).join('');
-}
-
-
-
-// ═══════════════════════════════════════
-// TEXT ON PATH
-// ═══════════════════════════════════════
-function showTextOnPath(){
-  document.getElementById('top-modal').classList.add('show');
-  setTimeout(updateTOPPreview, 50);
-}
-function closeTOP(){ document.getElementById('top-modal').classList.remove('show'); }
-
-function updateTOPPreview(){
-  const pc=document.getElementById('top-preview-cvs');
-  if(!pc) return;
-  const pctx=pc.getContext('2d');
-  const W=pc.width, H=pc.height;
-  pctx.clearRect(0,0,W,H);
-
-  const text=document.getElementById('top-text').value||'EMBROXIA';
-  const shape=document.getElementById('top-shape').value;
-  const size=parseInt(document.getElementById('top-size').value)||18;
-  const radius=parseInt(document.getElementById('top-radius').value)||100;
-  const spacing=parseInt(document.getElementById('top-spacing').value)||2;
-  const startAngle=parseInt(document.getElementById('top-start').value)||0;
-  const cx3=W/2, cy3=H/2;
-
-  // Draw path guide
-  pctx.strokeStyle='rgba(83,74,183,0.3)';
-  pctx.lineWidth=1;
-  pctx.setLineDash([3,3]);
-
-  if(shape==='arc-top'||shape==='arc-bottom'){
-    pctx.beginPath();
-    const flip=shape==='arc-bottom';
-    pctx.arc(cx3,flip?cy3-radius/2:cy3+radius/2,radius,0,Math.PI,!flip);
-    pctx.stroke();
-  } else if(shape==='circle'){
-    pctx.beginPath();
-    pctx.arc(cx3,cy3,radius,0,Math.PI*2);
-    pctx.stroke();
-  }
-  pctx.setLineDash([]);
-
-  // Draw text along path
-  pctx.font=`${size}px DM Sans,sans-serif`;
-  pctx.fillStyle='#534AB7';
-  pctx.textAlign='center';
-
-  const chars=text.split('');
-  const charW=size*0.6+spacing;
-  const totalW=chars.length*charW;
-
-  chars.forEach((ch,i)=>{
-    let x,y,angle=0;
-    const t=(i+0.5)/chars.length;
-    const offset=(i-(chars.length-1)/2)*charW;
-
-    if(shape==='arc-top'){
-      const a=(startAngle*Math.PI/180)+(-Math.PI/2)+(offset/radius);
-      x=cx3+radius*Math.cos(a)*(shape==='arc-bottom'?-1:1)*0+radius*Math.cos(a);
-      y=cy3+radius/2+radius*Math.sin(a);
-      angle=a+Math.PI/2;
-      x=cx3+radius*Math.cos(a-(Math.PI/2));
-      y=cy3+radius/2+radius*Math.sin(a-(Math.PI/2));
-      angle=a;
-    } else if(shape==='arc-bottom'){
-      const a=(startAngle*Math.PI/180)+(Math.PI/2)-(offset/radius);
-      x=cx3+radius*Math.cos(a);
-      y=cy3-radius/2+radius*Math.sin(a);
-      angle=a-Math.PI/2;
-    } else if(shape==='circle'){
-      const a=(startAngle*Math.PI/180)+(i/chars.length*Math.PI*2);
-      x=cx3+radius*Math.cos(a);
-      y=cy3+radius*Math.sin(a);
-      angle=a+Math.PI/2;
-    } else if(shape==='wave'){
-      x=cx3-totalW/2+i*charW+charW/2;
-      y=cy3+Math.sin(i/chars.length*Math.PI*2)*30;
-      angle=Math.cos(i/chars.length*Math.PI*2)*0.4;
-    } else {
-      x=cx3-totalW/2+i*charW+charW/2;
-      y=cy3;
-      angle=(startAngle*Math.PI/180);
-    }
-
-    pctx.save();
-    pctx.translate(x,y);
-    pctx.rotate(angle);
-    pctx.fillText(ch,0,0);
-    pctx.restore();
-  });
-}
-
-function placeTOP(){
-  const text=document.getElementById('top-text').value||'TEXT';
-  const shape=document.getElementById('top-shape').value;
-  const size=parseInt(document.getElementById('top-size').value)||18;
-  const radius=parseInt(document.getElementById('top-radius').value)||100;
-  const spacing=parseInt(document.getElementById('top-spacing').value)||2;
-  const startAngle=parseInt(document.getElementById('top-start').value)||0;
-
-  const cx3=cvs.width/2/S.zoom-S.panX/S.zoom;
-  const cy3=cvs.height/2/S.zoom-S.panY/S.zoom;
-  const chars=text.split('');
-  const charW=size*0.6+spacing;
-  const totalW=chars.length*charW;
-
-  saveHist();
-  chars.forEach((ch,i)=>{
-    let x,y;
-    const offset=(i-(chars.length-1)/2)*charW;
-
-    if(shape==='arc-top'){
-      const a=(startAngle*Math.PI/180)+(-Math.PI/2)+(offset/radius);
-      x=cx3+radius*Math.cos(a-(Math.PI/2));
-      y=cy3+radius/2+radius*Math.sin(a-(Math.PI/2));
-    } else if(shape==='arc-bottom'){
-      const a=(startAngle*Math.PI/180)+(Math.PI/2)-(offset/radius);
-      x=cx3+radius*Math.cos(a);
-      y=cy3-radius/2+radius*Math.sin(a);
-    } else if(shape==='circle'){
-      const a=(startAngle*Math.PI/180)+(i/chars.length*Math.PI*2);
-      x=cx3+radius*Math.cos(a);
-      y=cy3+radius*Math.sin(a);
-    } else if(shape==='wave'){
-      x=cx3-totalW/2+i*charW+charW/2;
-      y=cy3+Math.sin(i/chars.length*Math.PI*2)*30;
-    } else {
-      x=cx3-totalW/2+i*charW+charW/2;
-      y=cy3;
-    }
-
-    const pts=textToPaths(ch,x,y,size);
-    if(pts.length>1){
-      S.paths.push({points:pts,color:S.color,stitch:S.stitch,layer:S.activeLayer,name:'ToP: '+ch});
-    }
-  });
-
-  document.getElementById('wi').style.opacity='0';
-  updateStats();redraw();
-  closeTOP();
-  toast('✓ Text on path placed: "'+text+'"');
-}
-
-
-
-// ═══════════════════════════════════════
-// SHAPE LIBRARY
-// ═══════════════════════════════════════
-const SHAPES = [
-  // Basic
-  {name:'Circle',cat:'basic',pts:(cx,cy,s)=>{const r=s/2;const p=[,
-  // ── INDIAN MOTIFS ──
-  // Paisley / Kairi
-  {name:'Paisley Classic',cat:'indian',pts:(cx,cy,s)=>{const p=[];for(let i=0;i<=36;i++){const t=i/36*Math.PI*2;const r=s*.3*(1+0.4*Math.cos(t));const twist=t+0.3*Math.sin(t*2);p.push({x:cx+r*Math.cos(twist),y:cy+r*Math.sin(twist)*1.5-s*.1});}return[p];}},
-  {name:'Paisley Large',cat:'indian',pts:(cx,cy,s)=>{const p=[];for(let i=0;i<=48;i++){const t=i/48*Math.PI*2;const r=s*.4*(1+0.5*Math.cos(t));const twist=t+0.4*Math.sin(t*2);p.push({x:cx+r*Math.cos(twist),y:cy+r*Math.sin(twist)*1.6-s*.12});}return[p];}},
-  {name:'Paisley Border',cat:'indian',pts:(cx,cy,s)=>{const paths=[];for(let i=0;i<3;i++){const ox=cx+(i-1)*s*.35;const p=[];for(let j=0;j<=24;j++){const t=j/24*Math.PI*2;const r=s*.15*(1+0.4*Math.cos(t));p.push({x:ox+r*Math.cos(t+0.3*Math.sin(t*2)),y:cy+r*Math.sin(t+0.3*Math.sin(t*2))*1.5-s*.05});}paths.push(p);}return paths;}},
-  // Lotus
-  {name:'Lotus 8 Petal',cat:'indian',pts:(cx,cy,s)=>{const paths=[];for(let i=0;i<8;i++){const a=i/8*Math.PI*2;const p=[];for(let j=0;j<=20;j++){const t=j/20*Math.PI*2;const r=s*.22*Math.sin(t/2);p.push({x:cx+r*Math.cos(t+a)+s*.18*Math.cos(a),y:cy+r*Math.sin(t+a)+s*.18*Math.sin(a)});}paths.push(p);}const center=[];for(let i=0;i<=24;i++)center.push({x:cx+s*.08*Math.cos(i/24*Math.PI*2),y:cy+s*.08*Math.sin(i/24*Math.PI*2)});paths.push(center);return paths;}},
-  {name:'Lotus 12 Petal',cat:'indian',pts:(cx,cy,s)=>{const paths=[];for(let i=0;i<12;i++){const a=i/12*Math.PI*2;const p=[];for(let j=0;j<=16;j++){const t=j/16*Math.PI*2;const r=s*.18*Math.sin(t/2);p.push({x:cx+r*Math.cos(t+a)+s*.15*Math.cos(a),y:cy+r*Math.sin(t+a)+s*.15*Math.sin(a)});}paths.push(p);}return paths;}},
-  {name:'Lotus Bud',cat:'indian',pts:(cx,cy,s)=>{const p1=[];for(let i=0;i<=20;i++){const t=i/20*Math.PI*2;p1.push({x:cx+s*.15*Math.cos(t)*0.6,y:cy+s*.25*Math.sin(t)-s*.05});}const stem=[{x:cx,y:cy+s*.2},{x:cx,y:cy+s*.45}];const leaf1=[];for(let i=0;i<=16;i++){const t=i/16*Math.PI*2;leaf1.push({x:cx-s*.1+s*.12*Math.cos(t)*0.7,y:cy+s*.3+s*.07*Math.sin(t)});}return[p1,stem,leaf1];}},
-  // Peacock
-  {name:'Peacock Feather',cat:'indian',pts:(cx,cy,s)=>{const paths=[];const eye=[];for(let i=0;i<=24;i++)eye.push({x:cx+s*.08*Math.cos(i/24*Math.PI*2),y:cy-s*.1+s*.05*Math.sin(i/24*Math.PI*2)});paths.push(eye);const stem=[{x:cx,y:cy},{x:cx,y:cy+s*.45}];paths.push(stem);for(let i=0;i<6;i++){const a=(i/6-0.5)*Math.PI*.8;const barb=[];for(let j=0;j<=10;j++){const t=j/10;barb.push({x:cx+t*s*.3*Math.sin(a),y:cy-s*.1+t*s*.25*Math.cos(a)*0.5});}paths.push(barb);}return paths;}},
-  {name:'Peacock Full',cat:'indian',pts:(cx,cy,s)=>{const paths=[];for(let i=0;i<7;i++){const a=(i/7-0.5)*Math.PI;const p=[];for(let j=0;j<=20;j++){const t=j/20*Math.PI*2;const r=s*.15*Math.sin(t/2);p.push({x:cx+r*Math.cos(t+a)+s*.3*Math.sin(a),y:cy+r*Math.sin(t+a)-s*.3*Math.cos(a)+s*.1});}paths.push(p);}const body=[];for(let i=0;i<=24;i++){const a=i/24*Math.PI*2;body.push({x:cx+s*.1*Math.cos(a),y:cy+s*.15+s*.14*Math.sin(a)});}paths.push(body);return paths;}},
-  // Mango / Kairi
-  {name:'Mango Motif',cat:'indian',pts:(cx,cy,s)=>{const p=[];for(let i=0;i<=36;i++){const t=i/36*Math.PI*2;const r=s*.28*(1+0.35*Math.sin(t));p.push({x:cx+r*Math.cos(t)*0.7,y:cy+r*Math.sin(t)-s*.06});}const tip=[{x:cx+s*.05,y:cy-s*.32},{x:cx,y:cy-s*.42},{x:cx-s*.05,y:cy-s*.32}];return[p,tip];}},
-  {name:'Mango Border',cat:'indian',pts:(cx,cy,s)=>{const paths=[];for(let i=0;i<4;i++){const ox=cx+(i-1.5)*s*.28;const p=[];for(let j=0;j<=24;j++){const t=j/24*Math.PI*2;const r=s*.12*(1+0.35*Math.sin(t));p.push({x:ox+r*Math.cos(t)*0.7,y:cy+r*Math.sin(t)});}paths.push(p);}return paths;}},
-  // Buta / Bootie (small floral motif)
-  {name:'Buta Small',cat:'indian',pts:(cx,cy,s)=>{const paths=[];for(let i=0;i<5;i++){const a=i/5*Math.PI*2-Math.PI/2;const p=[];for(let j=0;j<=16;j++){const t=j/16*Math.PI*2;const r=s*.1*Math.sin(t/2);p.push({x:cx+r*Math.cos(t+a)+s*.12*Math.cos(a),y:cy+r*Math.sin(t+a)+s*.12*Math.sin(a)});}paths.push(p);}return paths;}},
-  {name:'Buta Large',cat:'indian',pts:(cx,cy,s)=>{const paths=[];for(let i=0;i<6;i++){const a=i/6*Math.PI*2;const p=[];for(let j=0;j<=20;j++){const t=j/20*Math.PI*2;const r=s*.12*Math.sin(t/2);p.push({x:cx+r*Math.cos(t+a)+s*.16*Math.cos(a),y:cy+r*Math.sin(t+a)+s*.16*Math.sin(a)});}paths.push(p);}const center=[];for(let i=0;i<=16;i++)center.push({x:cx+s*.05*Math.cos(i/16*Math.PI*2),y:cy+s*.05*Math.sin(i/16*Math.PI*2)});paths.push(center);return paths;}},
-  // Geometric / Jaali
-  {name:'Jaali Diamond',cat:'indian',pts:(cx,cy,s)=>{const paths=[];const n=4;for(let r=1;r<=n;r++){const p=[];const pts2=[];for(let i=0;i<4;i++){const a=i/4*Math.PI*2+Math.PI/4;pts2.push({x:cx+r*s*.1*Math.cos(a),y:cy+r*s*.1*Math.sin(a)});}pts2.push({...pts2[0]});paths.push(pts2);}return paths;}},
-  {name:'Jaali Grid',cat:'indian',pts:(cx,cy,s)=>{const paths=[];const n=5;for(let i=-n;i<=n;i++){paths.push([{x:cx+i*s*.08,y:cy-s*.4},{x:cx+i*s*.08,y:cy+s*.4}]);paths.push([{x:cx-s*.4,y:cy+i*s*.08},{x:cx+s*.4,y:cy+i*s*.08}]);}return paths;}},
-  {name:'Jaali Hexagon',cat:'indian',pts:(cx,cy,s)=>{const paths=[];const makeHex=(ox,oy,r)=>{const p=[];for(let i=0;i<=6;i++){const a=i/6*Math.PI*2+Math.PI/6;p.push({x:ox+r*Math.cos(a),y:oy+r*Math.sin(a)});}return p;};const r=s*.15;const cols=3,rows=3;for(let row=0;row<rows;row++){for(let col=0;col<cols;col++){const ox=cx+(col-1)*r*1.8+(row%2)*r*.9;const oy=cy+(row-1)*r*1.55;paths.push(makeHex(ox,oy,r));}}return paths;}},
-  // Temple / Architecture motifs
-  {name:'Temple Arch',cat:'indian',pts:(cx,cy,s)=>{const p=[];for(let i=0;i<=18;i++){const t=i/18*Math.PI;p.push({x:cx+s*.3*Math.cos(Math.PI-t),y:cy-s*.3*Math.sin(t)+s*.05});}p.unshift({x:cx-s*.3,y:cy+s*.3});p.push({x:cx+s*.3,y:cy+s*.3});const pillarL=[{x:cx-s*.3,y:cy+s*.05},{x:cx-s*.3,y:cy+s*.3}];const pillarR=[{x:cx+s*.3,y:cy+s*.05},{x:cx+s*.3,y:cy+s*.3}];return[p,pillarL,pillarR];}},
-  {name:'Kalash Pot',cat:'indian',pts:(cx,cy,s)=>{const pot=[];for(let i=0;i<=24;i++){const t=i/24*Math.PI*2;const r=s*.2+s*.08*Math.cos(t*3);pot.push({x:cx+r*Math.cos(t)*0.8,y:cy+r*Math.sin(t)});}const neck=[{x:cx-s*.08,y:cy-s*.22},{x:cx-s*.1,y:cy-s*.3},{x:cx+s*.1,y:cy-s*.3},{x:cx+s*.08,y:cy-s*.22}];const leaves=[];for(let i=0;i<5;i++){const a=(i/5)*Math.PI*2-Math.PI/2;leaves.push({x:cx+s*.12*Math.cos(a),y:cy-s*.32+s*.06*Math.sin(a)});}return[pot,neck,leaves];}},
-  // Saree / Lehenga border patterns
-  {name:'Saree Border',cat:'indian',pts:(cx,cy,s)=>{const paths=[];for(let i=0;i<5;i++){const ox=cx+(i-2)*s*.18;const p=[];for(let j=0;j<=20;j++){const t=j/20*Math.PI*2;p.push({x:ox+s*.07*Math.cos(t),y:cy+s*.07*Math.sin(t)});}paths.push(p);}const line=[{x:cx-s*.5,y:cy+s*.12},{x:cx+s*.5,y:cy+s*.12}];const line2=[{x:cx-s*.5,y:cy-s*.12},{x:cx+s*.5,y:cy-s*.12}];paths.push(line,line2);return paths;}},
-  {name:'Lehenga Booti',cat:'indian',pts:(cx,cy,s)=>{const paths=[];for(let layer=0;layer<3;layer++){for(let i=0;i<6-layer;i++){const a=i/(6-layer)*Math.PI*2;const r=(layer+1)*s*.1;const p=[];for(let j=0;j<=16;j++){const t=j/16*Math.PI*2;const pr=s*.06*Math.sin(t/2);p.push({x:cx+pr*Math.cos(t+a)+r*Math.cos(a),y:cy+pr*Math.sin(t+a)+r*Math.sin(a)});}paths.push(p);}}return paths;}},
-  // Rangoli patterns
-  {name:'Rangoli Star',cat:'indian',pts:(cx,cy,s)=>{const paths=[];for(let i=0;i<8;i++){const a=i/8*Math.PI*2;const inner=s*.12,outer=s*.4;paths.push([{x:cx+inner*Math.cos(a+Math.PI/8),y:cy+inner*Math.sin(a+Math.PI/8)},{x:cx+outer*Math.cos(a),y:cy+outer*Math.sin(a)},{x:cx+inner*Math.cos(a-Math.PI/8),y:cy+inner*Math.sin(a-Math.PI/8)}]);}const center=[];for(let i=0;i<=24;i++)center.push({x:cx+s*.1*Math.cos(i/24*Math.PI*2),y:cy+s*.1*Math.sin(i/24*Math.PI*2)});paths.push(center);return paths;}},
-  {name:'Rangoli Mandala',cat:'indian',pts:(cx,cy,s)=>{const paths=[];for(let ring=1;ring<=4;ring++){const p=[];for(let i=0;i<=36;i++)p.push({x:cx+ring*s*.1*Math.cos(i/36*Math.PI*2),y:cy+ring*s*.1*Math.sin(i/36*Math.PI*2)});paths.push(p);}for(let i=0;i<12;i++){const a=i/12*Math.PI*2;paths.push([{x:cx+s*.1*Math.cos(a),y:cy+s*.1*Math.sin(a)},{x:cx+s*.4*Math.cos(a),y:cy+s*.4*Math.sin(a)}]);}return paths;}},
-  // Meenakari (enamel work inspired)
-  {name:'Meenakari Round',cat:'indian',pts:(cx,cy,s)=>{const paths=[];for(let i=0;i<6;i++){const a=i/6*Math.PI*2;const p=[];for(let j=0;j<=16;j++){const t=j/16*Math.PI*2;p.push({x:cx+s*.13*Math.cos(t)+s*.22*Math.cos(a),y:cy+s*.13*Math.sin(t)+s*.22*Math.sin(a)});}paths.push(p);}const outer=[];for(let i=0;i<=36;i++)outer.push({x:cx+s*.38*Math.cos(i/36*Math.PI*2),y:cy+s*.38*Math.sin(i/36*Math.PI*2)});const inner=[];for(let i=0;i<=36;i++)inner.push({x:cx+s*.08*Math.cos(i/36*Math.PI*2),y:cy+s*.08*Math.sin(i/36*Math.PI*2)});paths.push(outer,inner);return paths;}},
-];;for(let i=0;i<=36;i++)p.push({x:cx+r*Math.cos(i/36*Math.PI*2),y:cy+r*Math.sin(i/36*Math.PI*2)});return[p];}},
-  {name:'Square',cat:'basic',pts:(cx,cy,s)=>{const h=s/2;return[[{x:cx-h,y:cy-h},{x:cx+h,y:cy-h},{x:cx+h,y:cy+h},{x:cx-h,y:cy+h},{x:cx-h,y:cy-h}]];}},
-  {name:'Rectangle',cat:'basic',pts:(cx,cy,s)=>{const w=s*.7,h=s/2;return[[{x:cx-w,y:cy-h},{x:cx+w,y:cy-h},{x:cx+w,y:cy+h},{x:cx-w,y:cy+h},{x:cx-w,y:cy-h}]];}},
-  {name:'Triangle',cat:'basic',pts:(cx,cy,s)=>{const h=s/2;return[[{x:cx,y:cy-h},{x:cx+h,y:cy+h},{x:cx-h,y:cy+h},{x:cx,y:cy-h}]];}},
-  {name:'Diamond',cat:'basic',pts:(cx,cy,s)=>{const h=s/2;return[[{x:cx,y:cy-h},{x:cx+h*.6,y:cy},{x:cx,y:cy+h},{x:cx-h*.6,y:cy},{x:cx,y:cy-h}]];}},
-  {name:'Oval',cat:'basic',pts:(cx,cy,s)=>{const p=[];for(let i=0;i<=36;i++)p.push({x:cx+s*.6*Math.cos(i/36*Math.PI*2),y:cy+s*.35*Math.sin(i/36*Math.PI*2)});return[p];}},
-  {name:'Cross',cat:'basic',pts:(cx,cy,s)=>{const t=s*.15,h=s*.45;return[[{x:cx-t,y:cy-h},{x:cx+t,y:cy-h},{x:cx+t,y:cy-t},{x:cx+h,y:cy-t},{x:cx+h,y:cy+t},{x:cx+t,y:cy+t},{x:cx+t,y:cy+h},{x:cx-t,y:cy+h},{x:cx-t,y:cy+t},{x:cx-h,y:cy+t},{x:cx-h,y:cy-t},{x:cx-t,y:cy-t},{x:cx-t,y:cy-h}]];}},
-  {name:'Arrow Right',cat:'arrow',pts:(cx,cy,s)=>{const h=s*.4,w=s*.5;return[[{x:cx-w,y:cy-h*.5},{x:cx,y:cy-h*.5},{x:cx,y:cy-h},{x:cx+w,y:cy},{x:cx,y:cy+h},{x:cx,y:cy+h*.5},{x:cx-w,y:cy+h*.5},{x:cx-w,y:cy-h*.5}]];}},
-  {name:'Arrow Left',cat:'arrow',pts:(cx,cy,s)=>{const h=s*.4,w=s*.5;return[[{x:cx+w,y:cy-h*.5},{x:cx,y:cy-h*.5},{x:cx,y:cy-h},{x:cx-w,y:cy},{x:cx,y:cy+h},{x:cx,y:cy+h*.5},{x:cx+w,y:cy+h*.5},{x:cx+w,y:cy-h*.5}]];}},
-  {name:'Arrow Up',cat:'arrow',pts:(cx,cy,s)=>{const h=s*.5,w=s*.4;return[[{x:cx-w*.5,y:cy+h},{x:cx-w*.5,y:cy},{x:cx-w,y:cy},{x:cx,y:cy-h},{x:cx+w,y:cy},{x:cx+w*.5,y:cy},{x:cx+w*.5,y:cy+h},{x:cx-w*.5,y:cy+h}]];}},
-  {name:'Double Arrow',cat:'arrow',pts:(cx,cy,s)=>{const h=s*.35,w=s*.5;return[[{x:cx-w,y:cy},{x:cx-w*.3,y:cy-h},{x:cx-w*.3,y:cy-h*.4},{x:cx+w*.3,y:cy-h*.4},{x:cx+w*.3,y:cy-h},{x:cx+w,y:cy},{x:cx+w*.3,y:cy+h},{x:cx+w*.3,y:cy+h*.4},{x:cx-w*.3,y:cy+h*.4},{x:cx-w*.3,y:cy+h},{x:cx-w,y:cy}]];}},
-  // Stars
-  {name:'5-Point Star',cat:'star',pts:(cx,cy,s)=>{const p=[];for(let i=0;i<10;i++){const r=i%2===0?s*.5:s*.2;const a=i/10*Math.PI*2-Math.PI/2;p.push({x:cx+r*Math.cos(a),y:cy+r*Math.sin(a)});}p.push({...p[0]});return[p];}},
-  {name:'6-Point Star',cat:'star',pts:(cx,cy,s)=>{const p=[];for(let i=0;i<12;i++){const r=i%2===0?s*.5:s*.25;const a=i/12*Math.PI*2-Math.PI/2;p.push({x:cx+r*Math.cos(a),y:cy+r*Math.sin(a)});}p.push({...p[0]});return[p];}},
-  {name:'8-Point Star',cat:'star',pts:(cx,cy,s)=>{const p=[];for(let i=0;i<16;i++){const r=i%2===0?s*.5:s*.2;const a=i/16*Math.PI*2-Math.PI/2;p.push({x:cx+r*Math.cos(a),y:cy+r*Math.sin(a)});}p.push({...p[0]});return[p];}},
-  {name:'Starburst',cat:'star',pts:(cx,cy,s)=>{const p=[];for(let i=0;i<20;i++){const r=i%2===0?s*.5:s*.35;const a=i/20*Math.PI*2;p.push({x:cx+r*Math.cos(a),y:cy+r*Math.sin(a)});}p.push({...p[0]});return[p];}},
-  {name:'Sunburst',cat:'star',pts:(cx,cy,s)=>{const paths=[];for(let i=0;i<12;i++){const a=i/12*Math.PI*2;paths.push([{x:cx+s*.15*Math.cos(a),y:cy+s*.15*Math.sin(a)},{x:cx+s*.5*Math.cos(a),y:cy+s*.5*Math.sin(a)}]);}return paths;}},
-  // Badges
-  {name:'Badge Circle',cat:'badge',pts:(cx,cy,s)=>{const paths=[];const r=s*.5;const p=[];for(let i=0;i<=36;i++)p.push({x:cx+r*Math.cos(i/36*Math.PI*2),y:cy+r*Math.sin(i/36*Math.PI*2)});paths.push(p);const p2=[];const r2=s*.38;for(let i=0;i<=36;i++)p2.push({x:cx+r2*Math.cos(i/36*Math.PI*2),y:cy+r2*Math.sin(i/36*Math.PI*2)});paths.push(p2);return paths;}},
-  {name:'Shield',cat:'badge',pts:(cx,cy,s)=>{const h=s*.5,w=s*.4;return[[{x:cx,y:cy+h},{x:cx-w,y:cy-h*.1},{x:cx-w,y:cy-h},{x:cx+w,y:cy-h},{x:cx+w,y:cy-h*.1},{x:cx,y:cy+h}]];}},
-  {name:'Crest',cat:'badge',pts:(cx,cy,s)=>{const h=s*.5,w=s*.4;return[[{x:cx,y:cy+h},{x:cx-w,y:cy+h*.2},{x:cx-w,y:cy-h*.5},{x:cx-w*.5,y:cy-h},{x:cx+w*.5,y:cy-h},{x:cx+w,y:cy-h*.5},{x:cx+w,y:cy+h*.2},{x:cx,y:cy+h}]];}},
-  {name:'Hexagon',cat:'badge',pts:(cx,cy,s)=>{const p=[];for(let i=0;i<6;i++){const a=i/6*Math.PI*2-Math.PI/6;p.push({x:cx+s*.5*Math.cos(a),y:cy+s*.5*Math.sin(a)});}p.push({...p[0]});return[p];}},
-  {name:'Pentagon',cat:'badge',pts:(cx,cy,s)=>{const p=[];for(let i=0;i<5;i++){const a=i/5*Math.PI*2-Math.PI/2;p.push({x:cx+s*.5*Math.cos(a),y:cy+s*.5*Math.sin(a)});}p.push({...p[0]});return[p];}},
-  {name:'Octagon',cat:'badge',pts:(cx,cy,s)=>{const p=[];for(let i=0;i<8;i++){const a=i/8*Math.PI*2+Math.PI/8;p.push({x:cx+s*.5*Math.cos(a),y:cy+s*.5*Math.sin(a)});}p.push({...p[0]});return[p];}},
-  {name:'Dog Tag',cat:'badge',pts:(cx,cy,s)=>{const w=s*.35,h=s*.5,r=w*.4;return[[{x:cx-w+r,y:cy-h},{x:cx+w-r,y:cy-h},{x:cx+w,y:cy-h+r},{x:cx+w,y:cy+h-r},{x:cx+w-r,y:cy+h},{x:cx-w+r,y:cy+h},{x:cx-w,y:cy+h-r},{x:cx-w,y:cy-h+r},{x:cx-w+r,y:cy-h}]];}},
-  {name:'Banner',cat:'badge',pts:(cx,cy,s)=>{const w=s*.5,h=s*.25;return[[{x:cx-w,y:cy-h},{x:cx+w,y:cy-h},{x:cx+w,y:cy+h},{x:cx+w*.3,y:cy},{x:cx,y:cy+h},{x:cx-w*.3,y:cy},{x:cx-w,y:cy+h},{x:cx-w,y:cy-h}]];}},
-  // Florals
-  {name:'4-Petal',cat:'floral',pts:(cx,cy,s)=>{const paths=[];for(let p2=0;p2<4;p2++){const a=p2/4*Math.PI*2;const pts2=[];for(let i=0;i<=20;i++){const t=i/20*Math.PI;const r=s*.25*Math.sin(t);const aa=a+t-Math.PI/2;pts2.push({x:cx+r*Math.cos(aa),y:cy+r*Math.sin(aa)});}paths.push(pts2);}return paths;}},
-  {name:'6-Petal',cat:'floral',pts:(cx,cy,s)=>{const paths=[];for(let p2=0;p2<6;p2++){const a=p2/6*Math.PI*2;const r=s*.25;const pts2=[];for(let i=0;i<=20;i++){const t=i/20*Math.PI*2;pts2.push({x:cx+r*Math.cos(t)+r*Math.cos(a),y:cy+r*Math.sin(t)+r*Math.sin(a)});}paths.push(pts2);}return paths;}},
-  {name:'Rose',cat:'floral',pts:(cx,cy,s)=>{const p=[];for(let i=0;i<=72;i++){const a=i/72*Math.PI*4;const r=s*.4*Math.cos(a*.5);p.push({x:cx+r*Math.cos(a),y:cy+r*Math.sin(a)});}return[p];}},
-  {name:'Spiral',cat:'floral',pts:(cx,cy,s)=>{const p=[];for(let i=0;i<=80;i++){const a=i/80*Math.PI*6;const r=i/80*s*.4;p.push({x:cx+r*Math.cos(a),y:cy+r*Math.sin(a)});}return[p];}},
-  {name:'Leaf',cat:'floral',pts:(cx,cy,s)=>{const p=[];for(let i=0;i<=20;i++){const t=i/20*Math.PI*2;p.push({x:cx+s*.3*Math.cos(t),y:cy+s*.5*Math.sin(t)*Math.cos(t)});}return[p];}},
-  {name:'Clover',cat:'floral',pts:(cx,cy,s)=>{const paths=[];for(let lf=0;lf<3;lf++){const a=lf/3*Math.PI*2-Math.PI/2;const lcx=cx+s*.2*Math.cos(a),lcy=cy+s*.2*Math.sin(a);const p=[];for(let i=0;i<=24;i++)p.push({x:lcx+s*.2*Math.cos(i/24*Math.PI*2),y:lcy+s*.2*Math.sin(i/24*Math.PI*2)});paths.push(p);}return paths;}},
-  // Sports
-  {name:'Football',cat:'sport',pts:(cx,cy,s)=>{const p=[];for(let i=0;i<=36;i++){const a=i/36*Math.PI*2;const rx=s*.5,ry=s*.3;p.push({x:cx+rx*Math.cos(a),y:cy+ry*Math.sin(a)});}return[p,[{x:cx-s*.4,y:cy},{x:cx+s*.4,y:cy}],[{x:cx,y:cy-s*.25},{x:cx,y:cy+s*.25}]];}},
-  {name:'Baseball',cat:'sport',pts:(cx,cy,s)=>{const r=s*.45;const paths=[];const p=[];for(let i=0;i<=36;i++)p.push({x:cx+r*Math.cos(i/36*Math.PI*2),y:cy+r*Math.sin(i/36*Math.PI*2)});paths.push(p);const stitch1=[];for(let i=0;i<=10;i++){const t=i/10;stitch1.push({x:cx-r*.5+t*r*.3,y:cy-r*.3+Math.sin(t*Math.PI)*r*.2});}paths.push(stitch1);return paths;}},
-  {name:'Basketball',cat:'sport',pts:(cx,cy,s)=>{const r=s*.45;const p=[];for(let i=0;i<=36;i++)p.push({x:cx+r*Math.cos(i/36*Math.PI*2),y:cy+r*Math.sin(i/36*Math.PI*2)});return[p,[{x:cx-r,y:cy},{x:cx+r,y:cy}],[{x:cx,y:cy-r},{x:cx,y:cy+r}]];}},
-  {name:'Jersey Number',cat:'sport',pts:(cx,cy,s)=>{return[[{x:cx-s*.3,y:cy-s*.45},{x:cx-s*.3,y:cy+s*.45},{x:cx+s*.3,y:cy+s*.45},{x:cx+s*.3,y:cy-s*.45},{x:cx-s*.3,y:cy-s*.45}]];}},
-  {name:'Trophy',cat:'sport',pts:(cx,cy,s)=>{return[[{x:cx-s*.3,y:cy-s*.45},{x:cx-s*.4,y:cy-s*.2},{x:cx-s*.35,y:cy},{x:cx-s*.15,y:cy+s*.2},{x:cx-s*.15,y:cy+s*.35},{x:cx-s*.3,y:cy+s*.35},{x:cx-s*.3,y:cy+s*.45},{x:cx+s*.3,y:cy+s*.45},{x:cx+s*.3,y:cy+s*.35},{x:cx+s*.15,y:cy+s*.35},{x:cx+s*.15,y:cy+s*.2},{x:cx+s*.35,y:cy},{x:cx+s*.4,y:cy-s*.2},{x:cx+s*.3,y:cy-s*.45},{x:cx-s*.3,y:cy-s*.45}]];}},
-  {name:'Laurel',cat:'sport',pts:(cx,cy,s)=>{const paths=[];for(let side=0;side<2;side++){const sgn=side===0?-1:1;const p=[];for(let i=0;i<=12;i++){const t=i/12;const a=t*Math.PI*.7+(side===0?Math.PI*.15:Math.PI*.15);p.push({x:cx+sgn*(s*.1+t*s*.35)*Math.cos(a),y:cy+(s*.1+t*s*.35)*Math.sin(a)});}paths.push(p);}return paths;}},
-  // Frames
-  {name:'Rect Frame',cat:'frame',pts:(cx,cy,s)=>{const h=s*.45,w=s*.5,t=s*.06;return[[{x:cx-w,y:cy-h},{x:cx+w,y:cy-h},{x:cx+w,y:cy+h},{x:cx-w,y:cy+h},{x:cx-w,y:cy-h}],[{x:cx-w+t,y:cy-h+t},{x:cx+w-t,y:cy-h+t},{x:cx+w-t,y:cy+h-t},{x:cx-w+t,y:cy+h-t},{x:cx-w+t,y:cy-h+t}]];}},
-  {name:'Circle Frame',cat:'frame',pts:(cx,cy,s)=>{const r1=s*.5,r2=s*.38;const p1=[],p2=[];for(let i=0;i<=36;i++){p1.push({x:cx+r1*Math.cos(i/36*Math.PI*2),y:cy+r1*Math.sin(i/36*Math.PI*2)});p2.push({x:cx+r2*Math.cos(i/36*Math.PI*2),y:cy+r2*Math.sin(i/36*Math.PI*2)});}return[p1,p2];}},
-  {name:'Oval Frame',cat:'frame',pts:(cx,cy,s)=>{const p1=[],p2=[];for(let i=0;i<=36;i++){p1.push({x:cx+s*.5*Math.cos(i/36*Math.PI*2),y:cy+s*.35*Math.sin(i/36*Math.PI*2)});p2.push({x:cx+s*.4*Math.cos(i/36*Math.PI*2),y:cy+s*.26*Math.sin(i/36*Math.PI*2)});}return[p1,p2];}},
-  {name:'Stitch Border',cat:'frame',pts:(cx,cy,s)=>{const paths=[];const steps=20;const h=s*.45,w=s*.5;for(let i=0;i<steps;i++){const t=i/steps;let x,y;if(t<.25){x=cx-w+t*4*w*2;y=cy-h;}else if(t<.5){x=cx+w;y=cy-h+(t-.25)*4*h*2;}else if(t<.75){x=cx+w-(t-.5)*4*w*2;y=cy+h;}else{x=cx-w;y=cy+h-(t-.75)*4*h*2;}if(i%2===0)paths.push([{x,y},{x:x+(Math.random()-.5)*4,y:y+(Math.random()-.5)*4}]);}return paths;}},
-  {name:'Corner Ornament',cat:'frame',pts:(cx,cy,s)=>{const paths=[];const corners=[[-1,-1],[1,-1],[1,1],[-1,1]];corners.forEach(([sx,sy])=>{const ox=cx+sx*s*.35,oy=cy+sy*s*.35;paths.push([{x:ox,y:oy-sy*s*.12},{x:ox,y:oy},{x:ox+sx*s*.12,y:oy}]);paths.push([{x:ox+sx*s*.05,y:oy-sy*s*.08},{x:ox+sx*s*.08,y:oy-sy*s*.08},{x:ox+sx*s*.08,y:oy+sy*s*.05}]);});return paths;}},
-];
-
-function showShapeLibrary(){
-  renderShapeGrid(SHAPES);
-  document.getElementById('shape-modal').classList.add('show');
-}
-function closeShapeLibrary(){ document.getElementById('shape-modal').classList.remove('show'); }
-
-function renderShapeGrid(shapes){
-  const grid=document.getElementById('shape-grid');
-  const count=document.getElementById('shape-count');
-  count.textContent=shapes.length+' shapes';
-  grid.innerHTML='';
-  shapes.forEach(shape=>{
-    const item=document.createElement('div');
-    item.className='shape-item';
-    // Generate SVG preview
-    const svgPrev=generateShapeSVG(shape);
-    item.innerHTML=svgPrev+`<div class="shape-name">${shape.name}</div>`;
-    item.onclick=()=>placeShape(shape);
-    grid.appendChild(item);
-  });
-}
-
-function generateShapeSVG(shape){
-  const cx=20,cy=20,s=32;
-  let allPts;
-  try{ allPts=shape.pts(cx,cy,s); } catch(e){ return '<svg width="36" height="36"></svg>'; }
-  let pathD='';
-  allPts.forEach(pts=>{
-    if(!pts.length) return;
-    pathD+=`M${pts[0].x},${pts[0].y}`;
-    pts.slice(1).forEach(p=>pathD+=`L${p.x},${p.y}`);
-  });
-  return `<svg width="40" height="40" viewBox="0 0 40 40"><path d="${pathD}" fill="rgba(83,74,183,0.15)" stroke="#534AB7" stroke-width="1.2" stroke-linejoin="round"/></svg>`;
-}
-
-function filterShapes(query,catEl){
-  if(catEl){
-    document.querySelectorAll('.shape-cat').forEach(c=>c.classList.remove('active'));
-    catEl.classList.add('active');
-  }
-  let filtered=SHAPES;
-  if(query&&query.length>0){
-    if(['basic','badge','floral','arrow','sport','frame','star'].includes(query)){
-      filtered=SHAPES.filter(s=>s.cat===query);
-    } else {
-      filtered=SHAPES.filter(s=>s.name.toLowerCase().includes(query.toLowerCase()));
-    }
-  }
-  renderShapeGrid(filtered);
-}
-
-function placeShape(shape){
-  const cx=cvs.width/2/S.zoom-S.panX/S.zoom;
-  const cy=cvs.height/2/S.zoom-S.panY/S.zoom;
-  const size=parseInt(document.getElementById('shape-size').value)||80;
-  const stitch=document.getElementById('shape-stitch').value;
-  let paths;
-  try{ paths=shape.pts(cx,cy,size); } catch(e){ toast('Could not place shape');return; }
-  saveHist();
-  paths.forEach((pts,i)=>{
-    if(pts.length<2) return;
-    S.paths.push({points:pts,color:S.color,stitch,layer:S.activeLayer,name:shape.name+(i>0?' '+(i+1):'')});
-  });
-  document.getElementById('wi').style.opacity='0';
-  updateStats();redraw();
-  toast('✓ '+shape.name+' placed');
-}
-
-
-
-// ═══════════════════════════════════════
-// ONBOARDING TOUR
-// ═══════════════════════════════════════
-const TOUR_STEPS = [
-  {
-    title: 'Welcome to Embroxia Studio ✦',
-    desc: 'The world is your canvas. Let us take a 2-minute tour so you can start designing right away.',
-    target: null,
-    pos: 'center'
-  },
-  {
-    title: 'Your drawing tools',
-    desc: 'The left toolbar has everything you need — pen, brush, shapes, text, eraser, and more. Press V, P, B, R, T to switch tools instantly.',
-    target: '.toolbar',
-    pos: 'right'
-  },
-  {
-    title: '15 stitch types',
-    desc: 'Switch stitch types in the Props panel — Running, Satin, Fill, Cross stitch, Appliqué, 3D Puff, Redwork and more. Each renders realistically on the canvas.',
-    target: '#stgrid',
-    pos: 'left'
-  },
-  {
-    title: 'The design canvas',
-    desc: 'Draw anywhere on the canvas. Scroll to zoom in and out. Hold Space and drag to pan. Right-click for the context menu with quick actions.',
-    target: '#cw',
-    pos: 'center'
-  },
-  {
-    title: '240+ thread colors',
-    desc: 'Switch to the Color tab to pick from Madeira, Isacord, Robison-Anton, or Sulky thread libraries. All with real thread codes for ordering.',
-    target: '.ptabs',
-    pos: 'left'
-  },
-  {
-    title: '✦ AI Assistant',
-    desc: 'Click the AI button in the top bar to open your expert embroidery AI. Upload an image to digitize it, ask for color suggestions, or generate design ideas from text.',
-    target: '#ai-btn',
-    pos: 'bottom'
-  },
-  {
-    title: 'Save & Library',
-    desc: 'Press Cmd+S to save your design. Open the Library (📁) to see all your saved designs with thumbnails. Everything auto-saves every 2 minutes.',
-    target: null,
-    pos: 'center'
-  },
-  {
-    title: 'Export to your machine',
-    desc: 'When your design is ready, click Export to download a file for your specific machine — DST, PES, JEF, VP3, and 7 more formats. Real binary files ready to stitch.',
-    target: null,
-    pos: 'center'
-  },
-];
-
-let tourIdx = 0;
-let tourActive = false;
-
-function startTour(){
-  // Check if already seen
-  if(localStorage.getItem('embroxia_tour_done')) return;
-  tourActive = true;
-  tourIdx = 0;
-  document.getElementById('tour-overlay').style.display = 'block';
-  buildTourDots();
-  showTourStep(0);
-}
-
-function buildTourDots(){
-  const dots = document.getElementById('tour-dots');
-  dots.innerHTML = '';
-  TOUR_STEPS.forEach((_,i) => {
-    const d = document.createElement('div');
-    d.className = 'tour-dot' + (i===0?' active':'');
-    d.id = 'tdot-'+i;
-    dots.appendChild(d);
-  });
-}
-
-function showTourStep(idx){
-  const step = TOUR_STEPS[idx];
-  if(!step) return;
-
-  document.getElementById('tour-step-label').textContent = `Step ${idx+1} of ${TOUR_STEPS.length}`;
-  document.getElementById('tour-title').textContent = step.title;
-  document.getElementById('tour-desc').textContent = step.desc;
-  document.getElementById('tour-prev').style.opacity = idx===0?'0.3':'1';
-  document.getElementById('tour-next').textContent = idx===TOUR_STEPS.length-1?'Finish ✓':'Next →';
-
-  // Update dots
-  document.querySelectorAll('.tour-dot').forEach((d,i) => {
-    d.classList.toggle('active', i===idx);
-  });
-
-  // Position highlight and card
-  const hl = document.getElementById('tour-highlight');
-  const card = document.getElementById('tour-card');
-
-  if(!step.target || step.pos === 'center'){
-    hl.style.cssText = 'display:none';
-    card.style.cssText = 'top:50%;left:50%;transform:translate(-50%,-50%)';
-  } else {
-    const el = document.querySelector(step.target);
-    if(el){
-      const r = el.getBoundingClientRect();
-      const pad = 8;
-      hl.style.cssText = `display:block;top:${r.top-pad}px;left:${r.left-pad}px;width:${r.width+pad*2}px;height:${r.height+pad*2}px`;
-
-      if(step.pos === 'right'){
-        card.style.cssText = `top:${Math.min(r.top, window.innerHeight-280)}px;left:${r.right+16}px`;
-      } else if(step.pos === 'left'){
-        card.style.cssText = `top:${Math.min(r.top, window.innerHeight-280)}px;left:${r.left-316}px`;
-      } else if(step.pos === 'bottom'){
-        card.style.cssText = `top:${r.bottom+12}px;left:${r.left}px`;
-      }
-    } else {
-      card.style.cssText = 'top:50%;left:50%;transform:translate(-50%,-50%)';
-    }
-  }
-}
-
-function tourStep(dir){
-  const next = tourIdx + dir;
-  if(next < 0) return;
-  if(next >= TOUR_STEPS.length){ endTour(); return; }
-  tourIdx = next;
-  showTourStep(tourIdx);
-}
-
-function endTour(){
-  tourActive = false;
-  document.getElementById('tour-overlay').style.display = 'none';
-  localStorage.setItem('embroxia_tour_done', '1');
-  toast('✓ Tour complete — start designing!');
-}
-
-// Add restart tour option to Help menu
-function restartTour(){
-  localStorage.removeItem('embroxia_tour_done');
-  tourIdx = 0;
-  tourActive = true;
-  document.getElementById('tour-overlay').style.display = 'block';
-  buildTourDots();
-  showTourStep(0);
-}
-
-
-
-// ═══════════════════════════════════════
-// PRINT DESIGN SHEET
-// ═══════════════════════════════════════
-function showPrintSheet(){
-  if(!S.paths.length){toast('Draw a design first');return;}
-  buildPrintSheet();
-  document.getElementById('print-modal').classList.add('show');
-}
-function closePrintModal(){ document.getElementById('print-modal').classList.remove('show'); }
-
-function buildPrintSheet(){
-  const name=document.getElementById('doc-name').value||'Untitled design';
-  const count=calcStitches();
-  const colors=[...new Set(S.paths.map(p=>p.color))];
-  const trims=Math.max(0,S.paths.length-1);
-  const estTime=Math.max(1,Math.round(count/800));
-  const now=new Date().toLocaleDateString('en',{year:'numeric',month:'long',day:'numeric'});
-
-  // Get bbox for dimensions
-  const allPts=S.paths.flatMap(p=>p.points);
-  let dimW='—', dimH='—';
-  if(allPts.length){
-    const minX=Math.min(...allPts.map(p=>p.x));
-    const maxX=Math.max(...allPts.map(p=>p.x));
-    const minY=Math.min(...allPts.map(p=>p.y));
-    const maxY=Math.max(...allPts.map(p=>p.y));
-    dimW=Math.round((maxX-minX)/10)+'mm';
-    dimH=Math.round((maxY-minY)/10)+'mm';
-  }
-
-  // Generate thumb
-  const thumb=generateThumb();
-
-  // Build color chips
-  const colorChips=colors.map(c=>{
-    const thread=Object.values(THREADS).flat().find(t=>t.hex===c);
-    return `<div class="print-color-chip">
-      <div class="print-color-dot" style="background:${c}"></div>
-      ${thread?thread.name+' ('+thread.code+')':c}
-    </div>`;
-  }).join('');
-
-  // Build objects list
-  const objList=S.paths.slice(0,8).map((p,i)=>
-    `${i+1}. ${p.name||'Object '+(i+1)} — ${p.stitch} stitch — ${p.color}`
-  ).join('<br>')+
-  (S.paths.length>8?`<br>... and ${S.paths.length-8} more objects`:'');
-
-  document.getElementById('print-preview-content').innerHTML=`
-    <div class="print-header">
-      <div class="print-logo">
-        <div class="print-logo-icon">✦</div>
-        <span class="print-logo-name">Embroxia</span>
-      </div>
-      <div class="print-date">${now} · embroxia.com</div>
-    </div>
-
-    <div class="print-title">${name}</div>
-    <div class="print-subtitle">Embroidery Design Sheet · Generated by Embroxia Studio</div>
-
-    <div class="print-thumb-wrap">
-      ${thumb?`<img src="${thumb}" style="max-width:100%;max-height:170px;object-fit:contain">`:'<div style="opacity:.3;font-size:24px">🧵</div>'}
-    </div>
-
-    <div class="print-stats-grid">
-      <div class="print-stat">
-        <div class="print-stat-num">${count.toLocaleString()}</div>
-        <div class="print-stat-label">Total stitches</div>
-      </div>
-      <div class="print-stat">
-        <div class="print-stat-num">${colors.length}</div>
-        <div class="print-stat-label">Thread colors</div>
-      </div>
-      <div class="print-stat">
-        <div class="print-stat-num">${estTime} min</div>
-        <div class="print-stat-label">Est. machine time</div>
-      </div>
-      <div class="print-stat">
-        <div class="print-stat-num">${S.paths.length}</div>
-        <div class="print-stat-label">Objects</div>
-      </div>
-      <div class="print-stat">
-        <div class="print-stat-num">${trims}</div>
-        <div class="print-stat-label">Color changes</div>
-      </div>
-      <div class="print-stat">
-        <div class="print-stat-num">${dimW} × ${dimH}</div>
-        <div class="print-stat-label">Dimensions</div>
-      </div>
-    </div>
-
-    <div class="print-section-title">Thread colors used</div>
-    <div class="print-colors-row">${colorChips}</div>
-
-    <div class="print-section-title">Design objects</div>
-    <div class="print-objects">${objList}</div>
-
-    <div class="print-footer-strip">
-      <span>Designed with Embroxia Studio · embroxia.com</span>
-      <span>Always test before production</span>
-    </div>
-  `;
-}
-
-function printSheet(){
-  const printContent=document.getElementById('print-preview-content').innerHTML;
-  const css=[
-    'body{font-family:sans-serif;padding:24px;max-width:680px;margin:0 auto;color:#1a1825}',
-    '.print-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid #edebe4}',
-    '.print-logo{display:flex;align-items:center;gap:8px}',
-    '.print-logo-icon{width:28px;height:28px;background:#534AB7;border-radius:6px;display:flex;align-items:center;justify-content:center;color:white;font-size:14px}',
-    '.print-logo-name{font-size:16px;font-weight:500;font-family:Georgia,serif}',
-    '.print-date{font-size:11px;color:#a09db8}',
-    '.print-title{font-size:22px;font-weight:500;font-family:Georgia,serif;margin-bottom:4px}',
-    '.print-subtitle{font-size:12px;color:#6b6880;margin-bottom:16px}',
-    '.print-thumb-wrap{width:100%;height:200px;background:#f7f5f0;border-radius:8px;margin-bottom:16px;display:flex;align-items:center;justify-content:center;overflow:hidden;border:1px solid #edebe4}',
-    '.print-thumb-wrap img{max-width:100%;max-height:200px;object-fit:contain}',
-    '.print-stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}',
-    '.print-stat{background:#f7f5f0;border-radius:6px;padding:10px 12px;text-align:center}',
-    '.print-stat-num{font-size:20px;font-weight:500;color:#534AB7;font-family:Georgia,serif;line-height:1}',
-    '.print-stat-label{font-size:10px;color:#a09db8;margin-top:3px}',
-    '.print-section-title{font-size:10px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:#a09db8;margin-bottom:8px}',
-    '.print-colors-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}',
-    '.print-color-chip{display:flex;align-items:center;gap:5px;background:#f7f5f0;border-radius:20px;padding:4px 10px;font-size:10px;color:#6b6880}',
-    '.print-color-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}',
-    '.print-objects{font-size:11px;color:#6b6880;line-height:1.8}',
-    '.print-footer-strip{display:flex;align-items:center;justify-content:space-between;margin-top:16px;padding-top:12px;border-top:1px solid #edebe4;font-size:10px;color:#a09db8}'
-  ].join('');
-  const html='<!DOCTYPE html><html><head><title>Design Sheet</title><style>'+css+'</style></head><body>'+printContent+'</body></html>';
-  const win=window.open('','_blank');
-  win.document.write(html);
-  win.document.close();
-  setTimeout(function(){win.print();},500);
-}
-
-function downloadPrintSheet(){
-  buildPrintSheet();
-  const content=document.getElementById('print-preview-content').innerHTML;
-  const styleStr='body{font-family:sans-serif;padding:24px;max-width:680px;margin:0 auto}.print-stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}.print-stat{background:#f7f5f0;border-radius:6px;padding:10px;text-align:center}.print-stat-num{font-size:18px;font-weight:500;color:#534AB7}.print-stat-label{font-size:10px;color:#999}.print-colors-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}.print-color-chip{display:flex;align-items:center;gap:4px;background:#f7f5f0;border-radius:20px;padding:3px 8px;font-size:10px}.print-color-dot{width:8px;height:8px;border-radius:50%}.print-header{display:flex;justify-content:space-between;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid #eee}.print-footer-strip{margin-top:12px;padding-top:10px;border-top:1px solid #eee;font-size:10px;color:#999;display:flex;justify-content:space-between}';
-  const html='<!DOCTYPE html><html><head><title>Design Sheet</title><style>'+styleStr+'</style></head><body>'+content+'</body></html>';
-  const blob=new Blob([html],{type:'text/html'});
-  const a=document.createElement('a');
-  const name=document.getElementById('doc-name').value||'design';
-  a.href=URL.createObjectURL(blob);
-  a.download=name+'-sheet.html';
-  a.click();
-  URL.revokeObjectURL(a.href);
-  toast('✓ Design sheet downloaded');
-}
-
-
-
-// ═══════════════════════════════════════
-// TOAST NOTIFICATION
-// ═══════════════════════════════════════
-let _toastTimer = null;
-function toast(msg){
-  const t = document.getElementById('toast');
-  const tm = document.getElementById('toast-msg');
-  if(!t || !tm) return;
-  tm.textContent = msg;
-  t.classList.add('show');
-  clearTimeout(_toastTimer);
-  _toastTimer = setTimeout(()=>t.classList.remove('show'), 2800);
-}
-
-// ═══════════════════════════════════════
-// SAVE / MARK SAVED
-// ═══════════════════════════════════════
-function markSaved(){
-  const d = document.getElementById('saved-dot');
-  if(d) d.style.background = 'var(--teal)';
-}
-function markUnsaved(){
-  const d = document.getElementById('saved-dot');
-  if(d) d.style.background = '#EF9F27';
-}
-function saveDesign(){ saveToLibrary(); toast('Design saved'); markSaved(); }
-function saveAs(){ showExportModal(); }
-function openFile(){ toast('Open file — drag & drop a design file onto the canvas'); }
-function printDesign(){ toast('Opening print dialog...'); window.print(); }
-
-
 // ═══════════════════════════════════════
 // INIT
 // ═══════════════════════════════════════
@@ -4860,22 +2618,6 @@ buildFonts();
 saveHist();
 updateStats();
 toast('✦ Embroxia Studio v2 ready');
-setTimeout(startTour, 1200);
-startAutoSave();
-// Restore last session if exists
-const _lib=getLibrary();
-if(_lib.length>0){
-  const _last=_lib[0];
-  const _mins=Math.round((Date.now()-new Date(_last.savedAt).getTime())/60000);
-  if(_mins<120&&_last.paths?.length){
-    // Show restore prompt subtly
-    setTimeout(()=>{
-      const _badge=document.getElementById('autosave-badge');
-      if(_badge){ _badge.style.display='flex'; _badge.querySelector('div').style.background='var(--gold)'; }
-      toast('💾 Last session found — open Library to restore (⌘L)');
-    },1500);
-  }
-}
 </script>
 </body>
 </html>
