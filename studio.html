@@ -645,7 +645,10 @@ select.pinput{cursor:pointer;-webkit-appearance:none}
       <div class="ai-bubble bot">Namaste! I'm <b>Aari</b> — the world's first AI for Indian &amp; global embroidery.<br><br>I know every tradition:<br>✦ <b>Zardozi, Kantha, Phulkari, Chikankari</b><br>✦ <b>Aari, Kashmiri, Kutch, Shisha</b><br>✦ <b>Saree, lehenga, bridal designs</b><br><br>Tell me what you want to create!</div>
     </div>
   </div>
-  <div class="ai-upload" onclick="document.getElementById('ai-file').click()">
+  <div style="padding:6px 10px;border-top:1px solid var(--border);flex-shrink:0">
+  <button onclick="showGeneratePrompt()" style="width:100%;padding:8px;border-radius:var(--rs);background:linear-gradient(135deg,#534AB7,#1D9E75);color:white;border:none;font-family:var(--font);font-size:12px;font-weight:500;cursor:pointer;">✨ Generate design from prompt</button>
+</div>
+<div class="ai-upload" onclick="document.getElementById('ai-file').click()">
     <input type="file" id="ai-file" accept="image/*" onchange="handleImg(event)">
     <div class="ai-upload-label">📎 <span>Upload image</span> to analyze & digitize</div>
   </div>
@@ -2119,7 +2122,7 @@ async function aiSend(override){
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
+        model:'claude-sonnet-4-6',
         max_tokens:1000,
         system:`You are Aari — the world's first AI specialised in Indian and global embroidery. Named after the Aari hook needle. Deep expertise in: Zardozi (metallic gold/silver, Mughal), Kantha (running stitch, Bengal), Phulkari (darning stitch, Punjab), Chikankari (shadow work, Lucknow), Aari work (chain stitch florals), Kashmiri (chain stitch paisley), Kutch (mirror work, Gujarat), Suf (geometric, Rajasthan), Toda (geometric, Tamil Nadu), Shisha/mirror work. Indian threads: Gold Zari ZR-001 to ZR-006, Silver Zari ZR-101+, Resham silk colors (Lal=red, Neela=blue, Hara=green, Peela=yellow, Gulabi=pink). Indian motifs: Paisley/Kairi, Lotus, Peacock/Mor, Mango/Kairi, Buta, Jaali, Kalash, Saree/Lehenga borders, Rangoli. Garments: Saree (pallav, border, body), Lehenga (skirt+choli+dupatta), Sherwani, Kurta. Also expert in all global embroidery: all stitch types, Madeira/Isacord/Robison-Anton/Sulky thread codes, machine formats DST/PES/JEF/EXP/VP3/HUS/XXX, underlay, pull compensation, density, digitizing. When helping with Indian designs: suggest specific Indian stitch type, Indian thread codes, mention regional tradition. Be expert, warm, culturally knowledgeable.`,
         messages:aiHistory
@@ -2167,7 +2170,7 @@ async function handleImg(e){
       const res=await fetch('https://api.anthropic.com/v1/messages',{
         method:'POST',
         headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,
+        body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,
           system:'You are an expert embroidery digitizing consultant. Analyze images professionally.',
           messages:aiHistory})
       });
@@ -2565,7 +2568,7 @@ async function convertPhotoToStitch(){
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
+        model:'claude-sonnet-4-6',
         max_tokens:1000,
         system:'You are an embroidery digitizing AI. Analyze photos and return embroidery stitch coordinates as JSON. Return ONLY valid JSON, no markdown.',
         messages:[{role:'user',content:[
@@ -2607,6 +2610,191 @@ Rules: Use ${colors} colors max. Canvas is 400x400. Generate ${detail*20} meanin
 // ═══════════════════════════════════════
 // MULTI BLEND UI — add to Tools menu
 // ═══════════════════════════════════════
+
+
+// ═══════════════════════════════════════
+// AI GENERATE FROM PROMPT
+// ═══════════════════════════════════════
+function showGeneratePrompt(){
+  document.getElementById('gen-modal').classList.add('show');
+  document.getElementById('gen-prompt').focus();
+}
+function closeGenModal(){
+  document.getElementById('gen-modal').classList.remove('show');
+  document.getElementById('gen-progress').style.display='none';
+  document.getElementById('gen-btn').disabled=false;
+  document.getElementById('gen-btn').textContent='✨ Generate design';
+}
+function setGenPrompt(text){
+  document.getElementById('gen-prompt').value=text;
+}
+
+function setGenProgress(text, pct){
+  const prog=document.getElementById('gen-progress');
+  prog.style.display='block';
+  document.getElementById('gen-progress-text').textContent=text;
+  document.getElementById('gen-progress-fill').style.width=pct+'%';
+}
+
+async function generateFromPrompt(){
+  const prompt=document.getElementById('gen-prompt').value.trim();
+  if(!prompt){toast('Enter a design description first');return;}
+
+  const complexity=document.getElementById('gen-complexity').value;
+  const placement=document.getElementById('gen-placement').value;
+  const btn=document.getElementById('gen-btn');
+  btn.disabled=true;
+  btn.textContent='Generating...';
+
+  setGenProgress('Aari is analysing your design prompt...', 15);
+
+  try{
+    // Step 1 — Ask Claude to determine design approach and generate paths
+    const systemPrompt=`You are Aari, an expert Indian and global embroidery designer and digitizer. When given a design prompt, you generate embroidery designs as JSON stitch data.
+
+You must return ONLY valid JSON in this exact format, no markdown, no explanation:
+{
+  "title": "Design name",
+  "stitchType": "one of: zardozi/kantha/phulkari/chikankari/aari/kashmiri/kutch/suf/shisha/running/satin/fill/cross",
+  "primaryColor": "#hexcolor",
+  "secondaryColor": "#hexcolor", 
+  "paths": [
+    {"color": "#hexcolor", "stitch": "stitch_type", "points": [{"x": 0, "y": 0}, {"x": 10, "y": 10}], "name": "element name"}
+  ]
+}
+
+Rules for generating paths:
+- Canvas is 500x500 pixels, center is (250,250)
+- Generate 8-25 paths depending on complexity
+- Each path should have 6-30 points
+- For BORDERS: paths should form a rectangular or circular border around the edges
+- For MOTIFS: paths should form the named motif centered at (250,250)  
+- For GEOMETRIC: use precise mathematical coordinates for patterns
+- For REPEATING: create a tile that repeats across the canvas
+- Make paths that look like the described design when drawn
+- Indian stitch types: zardozi=metallic wire, kantha=running stitch rows, phulkari=dense darning, chikankari=delicate shadow, aari=chain stitch, kashmiri=chain paisley, kutch=geometric+mirrors, suf=diagonal geometric, shisha=mirror circles
+- Use authentic Indian color combinations: gold+maroon for bridal, indigo+white for kantha, red+yellow for phulkari, teal+gold for kashmiri
+- Complexity: simple=5-8 paths, medium=10-18 paths, complex=20-30 paths`;
+
+    setGenProgress('Generating stitch coordinates...', 35);
+
+    const userMsg=`Create an embroidery design for: "${prompt}"
+Complexity: ${complexity}
+Placement: ${placement}
+Canvas size: 500x500, center at (250,250)
+Generate mathematically precise paths that form the described design.`;
+
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-6',
+        max_tokens:4000,
+        system:systemPrompt,
+        messages:[{role:'user',content:userMsg}]
+      })
+    });
+
+    setGenProgress('Processing design paths...', 60);
+
+    const data=await res.json();
+    const rawText=data.content?.[0]?.text||'{}';
+    const cleanText=rawText.replace(/```json|```/g,'').trim();
+
+    let design;
+    try{
+      design=JSON.parse(cleanText);
+    } catch(e){
+      // Try to extract JSON from response
+      const jsonMatch=rawText.match(/\{[\s\S]*\}/);
+      if(jsonMatch) design=JSON.parse(jsonMatch[0]);
+      else throw new Error('Could not parse design JSON');
+    }
+
+    setGenProgress('Placing design on canvas...', 80);
+
+    if(!design.paths||!design.paths.length){
+      throw new Error('No paths generated');
+    }
+
+    // Place paths on canvas
+    saveHist();
+    const cx=cvs.width/2/S.zoom-S.panX/S.zoom;
+    const cy=cvs.height/2/S.zoom-S.panY/S.zoom;
+
+    // Calculate offset to center the design
+    const allGenPts=design.paths.flatMap(p=>p.points||[]);
+    const genMinX=Math.min(...allGenPts.map(p=>p.x));
+    const genMaxX=Math.max(...allGenPts.map(p=>p.x));
+    const genMinY=Math.min(...allGenPts.map(p=>p.y));
+    const genMaxY=Math.max(...allGenPts.map(p=>p.y));
+    const genCX=(genMinX+genMaxX)/2;
+    const genCY=(genMinY+genMaxY)/2;
+    const offsetX=cx-genCX;
+    const offsetY=cy-genCY;
+
+    // Scale to fit canvas nicely
+    const genW=genMaxX-genMinX||1;
+    const genH=genMaxY-genMinY||1;
+    const maxDim=Math.max(genW,genH);
+    const targetSize=Math.min(cvs.width,cvs.height)*.6/S.zoom;
+    const scale=maxDim>targetSize?targetSize/maxDim:1;
+
+    let pathsAdded=0;
+    design.paths.forEach(p=>{
+      if(!p.points||p.points.length<2) return;
+      const scaledPts=p.points.map(pt=>({
+        x:(pt.x-genCX)*scale+cx,
+        y:(pt.y-genCY)*scale+cy,
+        cp1x:(pt.x-genCX)*scale+cx,
+        cp1y:(pt.y-genCY)*scale+cy,
+        cp2x:(pt.x-genCX)*scale+cx,
+        cp2y:(pt.y-genCY)*scale+cy,
+      }));
+      S.paths.push({
+        points:scaledPts,
+        color:p.color||design.primaryColor||S.color,
+        stitch:p.stitch||design.stitchType||S.stitch,
+        layer:S.activeLayer,
+        name:p.name||design.title||'Generated'
+      });
+      pathsAdded++;
+    });
+
+    setGenProgress('Done! '+pathsAdded+' stitch paths placed.', 100);
+
+    // Update canvas
+    document.getElementById('wi').style.opacity='0';
+    updateStats();
+    redraw();
+
+    // Set stitch type to match design
+    if(design.stitchType) setStitch(design.stitchType);
+
+    // Add to AI conversation
+    aiHistory.push({role:'user',content:'Generate: '+prompt});
+    aiHistory.push({role:'assistant',content:'Generated "'+design.title+'" with '+pathsAdded+' stitch paths using '+design.stitchType+' stitch. Design is now on your canvas — you can edit any path with the Node tool (N) or change colors in the Color panel.'});
+
+    setTimeout(()=>{
+      closeGenModal();
+      // Open AI panel to show result
+      const aiPanel=document.getElementById('ai-panel');
+      if(aiPanel.classList.contains('hidden')) toggleAI();
+      addAIMsg('bot','✦ Generated <b>'+design.title+'</b> — '+pathsAdded+' stitch paths placed on canvas using <b>'+design.stitchType+'</b> stitch.<br><br>You can now:<br>• Edit paths with the Node tool (N)<br>• Change colors in the Color panel<br>• Export when ready');
+      toast('✨ Generated: '+design.title);
+    },600);
+
+  } catch(err){
+    console.error('Generate error:',err);
+    console.error('Full error:',JSON.stringify(err));
+    setGenProgress('⚠️ Generation failed — '+err.message,0);
+    document.getElementById('gen-progress').style.display='block';
+    document.getElementById('gen-progress-text').textContent='⚠️ Could not generate design. Try a simpler prompt or check your connection.';
+    btn.disabled=false;
+    btn.textContent='✨ Try again';
+  }
+}
+
 
 // ═══════════════════════════════════════
 // INIT
