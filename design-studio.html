@@ -806,6 +806,239 @@ select.pinput{cursor:pointer;-webkit-appearance:none}
   </div>
 </div>
 
+
+<!-- PATTERN LIBRARY MODAL -->
+<div class="plib-modal" id="plib-modal">
+  <div class="plib-box">
+    <div class="plib-head">
+      <div class="plib-title">🧵 Pattern Library — Ready-made embroidery designs</div>
+      <button onclick="closePatternLibrary()" style="padding:4px 12px;border:1px solid var(--border2);background:transparent;color:var(--text2);border-radius:var(--rs);cursor:pointer;font-family:var(--font);font-size:12px">✕ Close</button>
+    </div>
+    <div class="plib-cats" id="plib-cats">
+      <div class="plib-cat active" onclick="filterPatterns('all',this)">All</div>
+      <div class="plib-cat" onclick="filterPatterns('indian',this)">🇮🇳 Indian</div>
+      <div class="plib-cat" onclick="filterPatterns('bridal',this)">💍 Bridal</div>
+      <div class="plib-cat" onclick="filterPatterns('geometric',this)">◈ Geometric</div>
+      <div class="plib-cat" onclick="filterPatterns('floral',this)">🌸 Floral</div>
+      <div class="plib-cat" onclick="filterPatterns('border',this)">▬ Borders</div>
+      <div class="plib-cat" onclick="filterPatterns('sports',this)">🏆 Sports</div>
+      <div class="plib-cat" onclick="filterPatterns('monogram',this)">✒ Monogram</div>
+    </div>
+    <div class="plib-grid" id="plib-grid"></div>
+    <div class="plib-footer">
+      <div class="plib-size">
+        <span>Size:</span>
+        <input type="range" min="50" max="300" value="120" id="plib-size" style="width:80px;accent-color:var(--purple)">
+        <span id="plib-size-val">120px</span>
+      </div>
+      <div style="font-size:11px;color:var(--text3)" id="plib-count">30 patterns</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- GENERATE FROM PROMPT MODAL -->
+<div class="gen-modal" id="gen-modal">
+  <div class="gen-box">
+    <div class="gen-title">✨ Generate design from prompt</div>
+    <div class="gen-sub">Describe any embroidery design. Aari AI will generate stitch paths on your canvas.</div>
+    <textarea class="gen-textarea" id="gen-prompt" placeholder="e.g. Zardozi lotus border in gold for a bridal lehenga&#10;e.g. Phulkari geometric diamonds in red and yellow"></textarea>
+    <div class="gen-examples">
+      <div class="gen-example" onclick="setGenPrompt('Zardozi lotus border in gold and maroon for a bridal lehenga')">Zardozi bridal</div>
+      <div class="gen-example" onclick="setGenPrompt('Phulkari geometric diamond pattern in red and yellow')">Phulkari</div>
+      <div class="gen-example" onclick="setGenPrompt('Kantha lotus motif in indigo and white for a saree')">Kantha lotus</div>
+      <div class="gen-example" onclick="setGenPrompt('Kashmiri paisley in teal and gold for a shawl')">Kashmiri paisley</div>
+      <div class="gen-example" onclick="setGenPrompt('Rangoli mandala in purple and gold')">Rangoli</div>
+      <div class="gen-example" onclick="setGenPrompt('Peacock feather motif with Aari stitch in blue and green')">Peacock</div>
+    </div>
+    <div class="gen-options">
+      <div><div class="gen-opt-label">Complexity</div>
+        <select class="pinput" id="gen-complexity"><option value="simple">Simple</option><option value="medium" selected>Medium</option><option value="complex">Complex</option></select>
+      </div>
+      <div><div class="gen-opt-label">Placement</div>
+        <select class="pinput" id="gen-placement"><option value="center">Center</option><option value="border">Border</option><option value="corner">Corner</option><option value="repeat">Repeat</option></select>
+      </div>
+    </div>
+    <div class="gen-progress" id="gen-progress">
+      <div class="gen-progress-text" id="gen-progress-text">Generating...</div>
+      <div class="gen-progress-bar"><div class="gen-progress-fill" id="gen-progress-fill"></div></div>
+    </div>
+    <div class="gen-btns">
+      <button class="gen-btn" onclick="closeGenModal()">Cancel</button>
+      <button class="gen-btn primary" id="gen-btn" onclick="generateFromPrompt()">✨ Generate</button>
+    </div>
+  </div>
+</div>
+
+<!-- TEXT ON PATH MODAL -->
+<div class="top-modal" id="top-modal">
+  <div class="top-box">
+    <div class="svg-title" style="margin-bottom:4px">Text on Path</div>
+    <div class="svg-sub" style="margin-bottom:14px">Place text along a curve, circle, or arc.</div>
+    <div class="top-preview"><canvas id="top-preview-cvs" width="460" height="130"></canvas></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+      <div><div class="svg-opt-label">Text</div><input class="pinput" type="text" id="top-text" value="EMBROXIA" oninput="updateTOPPreview()"></div>
+      <div><div class="svg-opt-label">Path shape</div>
+        <select class="pinput" id="top-shape" onchange="updateTOPPreview()">
+          <option value="arc-top">Arc — top</option>
+          <option value="arc-bottom">Arc — bottom</option>
+          <option value="circle">Full circle</option>
+          <option value="wave">Wave</option>
+          <option value="straight">Straight</option>
+        </select>
+      </div>
+      <div><div class="svg-opt-label">Font size</div><input class="pinput" type="number" id="top-size" value="18" min="8" max="72" oninput="updateTOPPreview()"></div>
+      <div><div class="svg-opt-label">Radius</div><input class="pinput" type="range" id="top-radius" min="40" max="200" value="100" oninput="updateTOPPreview()" style="margin-top:8px"></div>
+      <div><div class="svg-opt-label">Letter spacing</div><input class="pinput" type="range" id="top-spacing" min="-5" max="20" value="2" oninput="updateTOPPreview()"></div>
+      <div><div class="svg-opt-label">Start angle</div><input class="pinput" type="range" id="top-start" min="-180" max="180" value="0" oninput="updateTOPPreview()"></div>
+    </div>
+    <div class="svg-btns">
+      <button class="svg-btn" onclick="closeTOP()">Cancel</button>
+      <button class="svg-btn primary" onclick="placeTOP()">Place on canvas</button>
+    </div>
+  </div>
+</div>
+
+<!-- SVG IMPORT MODAL -->
+<div class="svg-modal" id="svg-modal">
+  <div class="svg-box">
+    <div class="svg-title">Import SVG / AI Vector</div>
+    <div class="svg-sub">Upload an SVG file and convert vector paths to embroidery stitch paths.</div>
+    <div class="svg-drop" id="svg-drop">
+      <input type="file" id="svg-file-input" accept=".svg,.ai,.xml" onchange="handleSVGFile(event)">
+      <div class="svg-drop-icon">📐</div>
+      <div class="svg-drop-text">Click to upload or drag & drop</div>
+      <div class="svg-drop-sub">SVG, AI files · Max 5MB</div>
+    </div>
+    <div class="svg-preview" id="svg-preview"></div>
+    <div class="svg-options">
+      <div><div class="svg-opt-label">Stitch type</div>
+        <select class="pinput" id="svg-stitch-type">
+          <option value="auto">Auto detect</option>
+          <option value="running">Running</option>
+          <option value="satin">Satin</option>
+          <option value="fill">Fill</option>
+        </select>
+      </div>
+      <div><div class="svg-opt-label">Scale</div>
+        <select class="pinput" id="svg-scale">
+          <option value="fit">Fit to hoop</option>
+          <option value="original">Original size</option>
+          <option value="50">50%</option>
+          <option value="75">75%</option>
+        </select>
+      </div>
+      <div><div class="svg-opt-label">Color</div>
+        <select class="pinput" id="svg-color">
+          <option value="keep">Keep original</option>
+          <option value="current">Use current color</option>
+        </select>
+      </div>
+      <div><div class="svg-opt-label">Simplify</div>
+        <select class="pinput" id="svg-simplify">
+          <option value="medium">Medium</option>
+          <option value="low">Low</option>
+          <option value="high">High</option>
+        </select>
+      </div>
+    </div>
+    <div id="svg-status" style="font-size:12px;color:var(--text3);margin-bottom:12px;display:none"></div>
+    <div class="svg-btns">
+      <button class="svg-btn" onclick="closeSVGImport()">Cancel</button>
+      <button class="svg-btn primary" id="svg-convert-btn" onclick="convertSVGToStitches()" disabled>Convert to embroidery</button>
+    </div>
+  </div>
+</div>
+
+<!-- SHAPE LIBRARY MODAL -->
+<div class="shape-modal" id="shape-modal">
+  <div class="shape-box">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-shrink:0">
+      <div style="font-size:15px;font-weight:500;color:var(--text)">⬡ Shape Library</div>
+      <button class="svg-btn" onclick="closeShapeLibrary()" style="width:auto;padding:4px 12px">✕</button>
+    </div>
+    <input class="shape-search" id="shape-search" placeholder="Search shapes..." oninput="filterShapes(this.value)">
+    <div class="shape-cats" id="shape-cats">
+      <div class="shape-cat active" onclick="filterShapes('',this)">All</div>
+      <div class="shape-cat" onclick="filterShapes('basic',this)">Basic</div>
+      <div class="shape-cat" onclick="filterShapes('badge',this)">Badges</div>
+      <div class="shape-cat" onclick="filterShapes('floral',this)">Florals</div>
+      <div class="shape-cat" onclick="filterShapes('arrow',this)">Arrows</div>
+      <div class="shape-cat" onclick="filterShapes('sport',this)">Sports</div>
+      <div class="shape-cat" onclick="filterShapes('frame',this)">Frames</div>
+      <div class="shape-cat" onclick="filterShapes('star',this)">Stars</div>
+      <div class="shape-cat" onclick="filterShapes('indian',this)">🇮🇳 Indian</div>
+    </div>
+    <div class="shape-grid" id="shape-grid"></div>
+    <div class="shape-footer">
+      <div style="font-size:11px;color:var(--text3)" id="shape-count">40 shapes</div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <span style="font-size:11px;color:var(--text3)">Stitch:</span>
+        <select class="pinput" id="shape-stitch" style="width:auto;font-size:11px">
+          <option value="running">Running</option>
+          <option value="satin" selected>Satin</option>
+          <option value="fill">Fill</option>
+        </select>
+        <span style="font-size:11px;color:var(--text3)">Size:</span>
+        <input class="pinput" type="number" id="shape-size" value="80" min="20" max="400" style="width:60px;font-size:11px">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PRINT DESIGN SHEET -->
+<div class="print-modal" id="print-modal">
+  <div class="print-box">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+      <div style="font-size:15px;font-weight:500;color:var(--text)">📄 Print Design Sheet</div>
+      <button class="print-btn" onclick="closePrintModal()" style="width:auto;padding:4px 12px">✕</button>
+    </div>
+    <div class="print-preview" id="print-preview-content"></div>
+    <div class="print-btns">
+      <button class="print-btn" onclick="closePrintModal()">Cancel</button>
+      <button class="print-btn" onclick="downloadPrintSheet()">↓ Download</button>
+      <button class="print-btn primary" onclick="printSheet()">🖨 Print</button>
+    </div>
+  </div>
+</div>
+
+<!-- DESIGN LIBRARY MODAL -->
+<div class="library-modal" id="library-modal">
+  <div class="library-box">
+    <div class="library-head">
+      <div class="library-title">📁 Design Library</div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <input class="library-search" id="library-search" placeholder="Search designs..." oninput="filterLibrary(this.value)">
+        <button class="tbtn primary" onclick="saveToLibrary()">+ Save current</button>
+        <button class="tbtn" onclick="closeLibrary()" style="padding:5px 10px">✕</button>
+      </div>
+    </div>
+    <div class="library-grid" id="library-grid"></div>
+    <div class="library-footer">
+      <div class="library-count" id="library-count">0 designs</div>
+      <button class="tbtn" onclick="closeLibrary()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- ONBOARDING TOUR -->
+<div id="tour-overlay" class="tour-overlay" style="display:none">
+  <div class="tour-highlight" id="tour-highlight"></div>
+  <div class="tour-card" id="tour-card">
+    <div class="tour-step-badge"><span>✦</span><span id="tour-step-label">Step 1 of 8</span></div>
+    <div class="tour-title" id="tour-title">Welcome to Embroxia Studio</div>
+    <div class="tour-desc" id="tour-desc">Let us take a quick tour so you can start designing right away.</div>
+    <div class="tour-btns">
+      <button class="tour-skip" onclick="endTour()">Skip tour</button>
+      <div class="tour-dots" id="tour-dots"></div>
+      <div class="tour-nav">
+        <button class="tour-prev" id="tour-prev" onclick="tourStep(-1)">←</button>
+        <button class="tour-next" id="tour-next" onclick="tourStep(1)">Next →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- TOAST -->
 <div class="toast" id="toast"><div class="toast-dot"></div><span id="toast-msg"></span></div>
 
