@@ -2122,7 +2122,7 @@ async function aiSend(override){
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
+        model:'claude-sonnet-4-6',
         max_tokens:1000,
         system:`You are Aari — the world's first AI specialised in Indian and global embroidery. Named after the Aari hook needle. Deep expertise in: Zardozi (metallic gold/silver, Mughal), Kantha (running stitch, Bengal), Phulkari (darning stitch, Punjab), Chikankari (shadow work, Lucknow), Aari work (chain stitch florals), Kashmiri (chain stitch paisley), Kutch (mirror work, Gujarat), Suf (geometric, Rajasthan), Toda (geometric, Tamil Nadu), Shisha/mirror work. Indian threads: Gold Zari ZR-001 to ZR-006, Silver Zari ZR-101+, Resham silk colors (Lal=red, Neela=blue, Hara=green, Peela=yellow, Gulabi=pink). Indian motifs: Paisley/Kairi, Lotus, Peacock/Mor, Mango/Kairi, Buta, Jaali, Kalash, Saree/Lehenga borders, Rangoli. Garments: Saree (pallav, border, body), Lehenga (skirt+choli+dupatta), Sherwani, Kurta. Also expert in all global embroidery: all stitch types, Madeira/Isacord/Robison-Anton/Sulky thread codes, machine formats DST/PES/JEF/EXP/VP3/HUS/XXX, underlay, pull compensation, density, digitizing. When helping with Indian designs: suggest specific Indian stitch type, Indian thread codes, mention regional tradition. Be expert, warm, culturally knowledgeable.`,
         messages:aiHistory
@@ -2170,7 +2170,7 @@ async function handleImg(e){
       const res=await fetch('https://api.anthropic.com/v1/messages',{
         method:'POST',
         headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,
+        body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,
           system:'You are an expert embroidery digitizing consultant. Analyze images professionally.',
           messages:aiHistory})
       });
@@ -2568,7 +2568,7 @@ async function convertPhotoToStitch(){
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
+        model:'claude-sonnet-4-6',
         max_tokens:1000,
         system:'You are an embroidery digitizing AI. Analyze photos and return embroidery stitch coordinates as JSON. Return ONLY valid JSON, no markdown.',
         messages:[{role:'user',content:[
@@ -2688,7 +2688,7 @@ Generate mathematically precise paths that form the described design.`;
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
+        model:'claude-sonnet-4-6',
         max_tokens:4000,
         system:systemPrompt,
         messages:[{role:'user',content:userMsg}]
@@ -2786,12 +2786,491 @@ Generate mathematically precise paths that form the described design.`;
 
   } catch(err){
     console.error('Generate error:',err);
+    console.error('Full error:',JSON.stringify(err));
     setGenProgress('⚠️ Generation failed — '+err.message,0);
     document.getElementById('gen-progress').style.display='block';
     document.getElementById('gen-progress-text').textContent='⚠️ Could not generate design. Try a simpler prompt or check your connection.';
     btn.disabled=false;
     btn.textContent='✨ Try again';
   }
+}
+
+
+
+// ═══════════════════════════════════════
+// PATTERN LIBRARY
+// 60+ ready-made embroidery patterns
+// ═══════════════════════════════════════
+
+const PATTERNS = [
+
+  // ── INDIAN PATTERNS ──
+  {name:'Zardozi Border',cat:'indian',stitch:'zardozi',colors:['#FFD700','#8B0000'],
+   gen:(cx,cy,s)=>{const paths=[];
+     // Outer border
+     const border=[];
+     for(let i=0;i<=40;i++){const t=i/40;border.push({x:cx-s*.5+t*s,y:cy-s*.4});}
+     for(let i=0;i<=20;i++){const t=i/20;border.push({x:cx+s*.5,y:cy-s*.4+t*s*.8});}
+     for(let i=0;i<=40;i++){const t=i/40;border.push({x:cx+s*.5-t*s,y:cy+s*.4});}
+     for(let i=0;i<=20;i++){const t=i/20;border.push({x:cx-s*.5,y:cy+s*.4-t*s*.8});}
+     paths.push({points:border,color:'#FFD700',stitch:'zardozi'});
+     // Inner lotus motifs
+     for(let i=0;i<5;i++){
+       const ox=cx+(i-2)*s*.22;
+       for(let p=0;p<6;p++){
+         const a=p/6*Math.PI*2;const pts=[];
+         for(let j=0;j<=12;j++){const t=j/12*Math.PI*2;const r=s*.07*Math.abs(Math.sin(t/2));pts.push({x:ox+r*Math.cos(t+a)+s*.09*Math.cos(a),y:cy+r*Math.sin(t+a)+s*.09*Math.sin(a)});}
+         paths.push({points:pts,color:'#8B0000',stitch:'zardozi'});
+       }
+     }
+     return paths;}},
+
+  {name:'Kantha Lotus',cat:'indian',stitch:'kantha',colors:['#000080','#FFFFFF'],
+   gen:(cx,cy,s)=>{const paths=[];
+     // 8 petals
+     for(let i=0;i<8;i++){
+       const a=i/8*Math.PI*2;const pts=[];
+       for(let j=0;j<=20;j++){const t=j/20*Math.PI*2;const r=s*.25*Math.abs(Math.sin(t/2));pts.push({x:cx+r*Math.cos(t+a)+s*.2*Math.cos(a),y:cy+r*Math.sin(t+a)+s*.2*Math.sin(a)});}
+       paths.push({points:pts,color:i%2===0?'#000080':'#4169E1',stitch:'kantha'});
+     }
+     // Center
+     const c=[];for(let i=0;i<=24;i++)c.push({x:cx+s*.09*Math.cos(i/24*Math.PI*2),y:cy+s*.09*Math.sin(i/24*Math.PI*2)});
+     paths.push({points:c,color:'#FFD700',stitch:'kantha'});
+     // Running stitch surround
+     const surround=[];for(let i=0;i<=36;i++)surround.push({x:cx+s*.42*Math.cos(i/36*Math.PI*2),y:cy+s*.42*Math.sin(i/36*Math.PI*2)});
+     paths.push({points:surround,color:'#000080',stitch:'kantha'});
+     return paths;}},
+
+  {name:'Phulkari Diamond',cat:'indian',stitch:'phulkari',colors:['#DC143C','#FFD700','#006400'],
+   gen:(cx,cy,s)=>{const paths=[];
+     const colors=['#DC143C','#FFD700','#006400','#FF4500','#8B0000'];
+     for(let row=-2;row<=2;row++){
+       for(let col=-2;col<=2;col++){
+         if(Math.abs(row)+Math.abs(col)>3) continue;
+         const ox=cx+col*s*.2,oy=cy+row*s*.2;
+         const diamond=[{x:ox,y:oy-s*.09},{x:ox+s*.09,y:oy},{x:ox,y:oy+s*.09},{x:ox-s*.09,y:oy},{x:ox,y:oy-s*.09}];
+         paths.push({points:diamond,color:colors[(Math.abs(row)+Math.abs(col))%colors.length],stitch:'phulkari'});
+       }
+     }
+     return paths;}},
+
+  {name:'Chikankari Flower',cat:'indian',stitch:'chikankari',colors:['#FFFFFF','#F0F8FF'],
+   gen:(cx,cy,s)=>{const paths=[];
+     for(let i=0;i<12;i++){
+       const a=i/12*Math.PI*2;const pts=[];
+       for(let j=0;j<=16;j++){const t=j/16*Math.PI*2;const r=s*.12*Math.abs(Math.sin(t/2));pts.push({x:cx+r*Math.cos(t+a)+s*.18*Math.cos(a),y:cy+r*Math.sin(t+a)+s*.18*Math.sin(a)});}
+       paths.push({points:pts,color:'#FFFFFF',stitch:'chikankari'});
+     }
+     const stem=[];for(let i=0;i<=24;i++)stem.push({x:cx+s*.06*Math.cos(i/24*Math.PI*2),y:cy+s*.06*Math.sin(i/24*Math.PI*2)});
+     paths.push({points:stem,color:'#E8E8E8',stitch:'chikankari'});
+     return paths;}},
+
+  {name:'Aari Peacock',cat:'indian',stitch:'aari',colors:['#008080','#FFD700','#006400'],
+   gen:(cx,cy,s)=>{const paths=[];
+     // Feathers
+     for(let i=0;i<7;i++){
+       const a=(i/7-.5)*Math.PI*1.2;const pts=[];
+       for(let j=0;j<=20;j++){const t=j/20;pts.push({x:cx+t*s*.4*Math.sin(a)+Math.sin(t*Math.PI)*s*.08*Math.cos(a),y:cy-t*s*.4*Math.cos(a)+Math.sin(t*Math.PI)*s*.08*Math.sin(a)});}
+       paths.push({points:pts,color:i%3===0?'#008080':i%3===1?'#006400':'#004D40',stitch:'aari'});
+       // Eye
+       const eye=[];for(let j=0;j<=16;j++){eye.push({x:cx+s*.4*Math.sin(a)+s*.06*Math.cos(j/16*Math.PI*2),y:cy-s*.4*Math.cos(a)+s*.06*Math.sin(j/16*Math.PI*2)});}
+       paths.push({points:eye,color:'#FFD700',stitch:'aari'});
+     }
+     // Body
+     const body=[];for(let i=0;i<=24;i++){const a=i/24*Math.PI*2;body.push({x:cx+s*.08*Math.cos(a),y:cy+s*.15+s*.12*Math.sin(a)});}
+     paths.push({points:body,color:'#008080',stitch:'aari'});
+     return paths;}},
+
+  {name:'Kashmiri Paisley',cat:'indian',stitch:'kashmiri',colors:['#1D9E75','#FFD700','#8B0000'],
+   gen:(cx,cy,s)=>{const paths=[];
+     // Main paisley
+     const main=[];
+     for(let i=0;i<=48;i++){const t=i/48*Math.PI*2;const r=s*.3*(1+0.45*Math.cos(t));main.push({x:cx+r*Math.cos(t+0.4*Math.sin(t*2))*0.75,y:cy+r*Math.sin(t+0.4*Math.sin(t*2))*1.4-s*.08});}
+     paths.push({points:main,color:'#1D9E75',stitch:'kashmiri'});
+     // Inner details
+     const inner=[];
+     for(let i=0;i<=32;i++){const t=i/32*Math.PI*2;const r=s*.16*(1+0.3*Math.cos(t));inner.push({x:cx+r*Math.cos(t+0.3*Math.sin(t*2))*0.7,y:cy+r*Math.sin(t+0.3*Math.sin(t*2))*1.3-s*.05});}
+     paths.push({points:inner,color:'#FFD700',stitch:'kashmiri'});
+     // Surrounding flowers
+     for(let i=0;i<6;i++){
+       const a=i/6*Math.PI*2;const pts=[];
+       for(let j=0;j<=16;j++){const t=j/16*Math.PI*2;pts.push({x:cx+s*.35*Math.cos(a)+s*.06*Math.cos(t+a),y:cy+s*.35*Math.sin(a)+s*.06*Math.sin(t+a)});}
+       paths.push({points:pts,color:'#8B0000',stitch:'kashmiri'});
+     }
+     return paths;}},
+
+  {name:'Kutch Geometric',cat:'indian',stitch:'kutch',colors:['#DC143C','#FFD700','#006400','#000080'],
+   gen:(cx,cy,s)=>{const paths=[];
+     const cols=['#DC143C','#FFD700','#006400','#000080','#800080'];
+     // Concentric hexagons
+     for(let r=1;r<=4;r++){
+       const hex=[];
+       for(let i=0;i<=6;i++){const a=i/6*Math.PI*2+Math.PI/6;hex.push({x:cx+r*s*.1*Math.cos(a),y:cy+r*s*.1*Math.sin(a)});}
+       paths.push({points:hex,color:cols[r%cols.length],stitch:'kutch'});
+     }
+     // Radiating lines
+     for(let i=0;i<6;i++){
+       const a=i/6*Math.PI*2+Math.PI/6;
+       paths.push({points:[{x:cx+s*.1*Math.cos(a),y:cy+s*.1*Math.sin(a)},{x:cx+s*.4*Math.cos(a),y:cy+s*.4*Math.sin(a)}],color:'#FFD700',stitch:'kutch'});
+     }
+     // Mirror circles
+     for(let i=0;i<6;i++){
+       const a=i/6*Math.PI*2;const mc=[];
+       for(let j=0;j<=16;j++)mc.push({x:cx+s*.3*Math.cos(a)+s*.06*Math.cos(j/16*Math.PI*2),y:cy+s*.3*Math.sin(a)+s*.06*Math.sin(j/16*Math.PI*2)});
+       paths.push({points:mc,color:'#C0C0C0',stitch:'shisha'});
+     }
+     return paths;}},
+
+  {name:'Shisha Mirror',cat:'indian',stitch:'shisha',colors:['#8B0000','#FFD700','#C0C0C0'],
+   gen:(cx,cy,s)=>{const paths=[];
+     // Central large mirror
+     const c=[];for(let i=0;i<=24;i++)c.push({x:cx+s*.12*Math.cos(i/24*Math.PI*2),y:cy+s*.12*Math.sin(i/24*Math.PI*2)});
+     paths.push({points:c,color:'#C0C0C0',stitch:'shisha'});
+     // 6 surrounding mirrors
+     for(let i=0;i<6;i++){
+       const a=i/6*Math.PI*2;const mc=[];
+       for(let j=0;j<=16;j++)mc.push({x:cx+s*.3*Math.cos(a)+s*.07*Math.cos(j/16*Math.PI*2),y:cy+s*.3*Math.sin(a)+s*.07*Math.sin(j/16*Math.PI*2)});
+       paths.push({points:mc,color:'#C0C0C0',stitch:'shisha'});
+       // Connecting stitches
+       const conn=[];for(let j=0;j<=8;j++){const t=j/8;conn.push({x:cx+(s*.12+(s*.3-s*.12)*t)*Math.cos(a),y:cy+(s*.12+(s*.3-s*.12)*t)*Math.sin(a)});}
+       paths.push({points:conn,color:'#8B0000',stitch:'running'});
+     }
+     // Outer star
+     for(let i=0;i<12;i++){
+       const a=i/12*Math.PI*2;
+       paths.push({points:[{x:cx+s*.38*Math.cos(a),y:cy+s*.38*Math.sin(a)},{x:cx+s*.45*Math.cos(a+Math.PI/12),y:cy+s*.45*Math.sin(a+Math.PI/12)},{x:cx+s*.38*Math.cos(a+Math.PI/6),y:cy+s*.38*Math.sin(a+Math.PI/6)}],color:'#FFD700',stitch:'running'});
+     }
+     return paths;}},
+
+  // ── BRIDAL PATTERNS ──
+  {name:'Bridal Mandala',cat:'bridal',stitch:'zardozi',colors:['#FFD700','#8B0000','#800020'],
+   gen:(cx,cy,s)=>{const paths=[];
+     for(let ring=1;ring<=5;ring++){
+       const pts=[];for(let i=0;i<=36;i++)pts.push({x:cx+ring*s*.08*Math.cos(i/36*Math.PI*2),y:cy+ring*s*.08*Math.sin(i/36*Math.PI*2)});
+       paths.push({points:pts,color:ring%2===0?'#FFD700':'#8B0000',stitch:'zardozi'});
+     }
+     for(let i=0;i<16;i++){
+       const a=i/16*Math.PI*2;
+       paths.push({points:[{x:cx+s*.08*Math.cos(a),y:cy+s*.08*Math.sin(a)},{x:cx+s*.4*Math.cos(a),y:cy+s*.4*Math.sin(a)}],color:i%4===0?'#FFD700':'#8B0000',stitch:'zardozi'});
+     }
+     for(let i=0;i<8;i++){
+       const a=i/8*Math.PI*2;const pts=[];
+       for(let j=0;j<=16;j++){const t=j/16*Math.PI*2;pts.push({x:cx+s*.35*Math.cos(a)+s*.07*Math.cos(t),y:cy+s*.35*Math.sin(a)+s*.07*Math.sin(t)});}
+       paths.push({points:pts,color:'#800020',stitch:'aari'});
+     }
+     return paths;}},
+
+  {name:'Lehenga Border',cat:'bridal',stitch:'zardozi',colors:['#FFD700','#8B0000'],
+   gen:(cx,cy,s)=>{const paths=[];
+     // Main border lines
+     paths.push({points:[{x:cx-s*.5,y:cy-s*.3},{x:cx+s*.5,y:cy-s*.3}],color:'#FFD700',stitch:'zardozi'});
+     paths.push({points:[{x:cx-s*.5,y:cy+s*.3},{x:cx+s*.5,y:cy+s*.3}],color:'#FFD700',stitch:'zardozi'});
+     // Lotus motifs along border
+     for(let i=-2;i<=2;i++){
+       const ox=cx+i*s*.22;
+       for(let p=0;p<6;p++){
+         const a=p/6*Math.PI*2;const pts=[];
+         for(let j=0;j<=12;j++){const t=j/12*Math.PI*2;const r=s*.07*Math.abs(Math.sin(t/2));pts.push({x:ox+r*Math.cos(t+a)+s*.08*Math.cos(a),y:cy+r*Math.sin(t+a)+s*.08*Math.sin(a)});}
+         paths.push({points:pts,color:p%2===0?'#FFD700':'#8B0000',stitch:'zardozi'});
+       }
+     }
+     return paths;}},
+
+  {name:'Bridal Kalash',cat:'bridal',stitch:'aari',colors:['#FFD700','#8B0000','#006400'],
+   gen:(cx,cy,s)=>{const paths=[];
+     // Pot body
+     const pot=[];for(let i=0;i<=32;i++){const t=i/32*Math.PI*2;pot.push({x:cx+(s*.2+s*.06*Math.cos(t*3))*Math.cos(t)*0.85,y:cy+(s*.2+s*.06*Math.cos(t*3))*Math.sin(t)});}
+     paths.push({points:pot,color:'#FFD700',stitch:'aari'});
+     // Neck
+     paths.push({points:[{x:cx-s*.08,y:cy-s*.22},{x:cx-s*.1,y:cy-s*.32},{x:cx+s*.1,y:cy-s*.32},{x:cx+s*.08,y:cy-s*.22}],color:'#8B0000',stitch:'aari'});
+     // Mango leaves
+     for(let i=0;i<5;i++){
+       const a=(i/5)*Math.PI*2-Math.PI/2;const pts=[];
+       for(let j=0;j<=12;j++){const t=j/12*Math.PI*2;pts.push({x:cx+s*.1*Math.cos(a)+s*.05*Math.cos(t),y:cy-s*.33+s*.05*Math.sin(t)*0.6});}
+       paths.push({points:pts,color:'#006400',stitch:'aari'});
+     }
+     // Coconut
+     const coco=[];for(let i=0;i<=16;i++)coco.push({x:cx+s*.07*Math.cos(i/16*Math.PI*2),y:cy-s*.4+s*.07*Math.sin(i/16*Math.PI*2)});
+     paths.push({points:coco,color:'#8B4513',stitch:'fill'});
+     return paths;}},
+
+  // ── GEOMETRIC PATTERNS ──
+  {name:'Mandala Classic',cat:'geometric',stitch:'running',colors:['#534AB7','#EF9F27'],
+   gen:(cx,cy,s)=>{const paths=[];
+     for(let ring=1;ring<=6;ring++){
+       const pts=[];for(let i=0;i<=36;i++)pts.push({x:cx+ring*s*.07*Math.cos(i/36*Math.PI*2),y:cy+ring*s*.07*Math.sin(i/36*Math.PI*2)});
+       paths.push({points:pts,color:ring%2===0?'#534AB7':'#EF9F27',stitch:'running'});
+       if(ring<6){
+         const spokes=ring*4;
+         for(let i=0;i<spokes;i++){
+           const a=i/spokes*Math.PI*2;
+           paths.push({points:[{x:cx+ring*s*.07*Math.cos(a),y:cy+ring*s*.07*Math.sin(a)},{x:cx+(ring+1)*s*.07*Math.cos(a+Math.PI/spokes),y:cy+(ring+1)*s*.07*Math.sin(a+Math.PI/spokes)}],color:'#EF9F27',stitch:'running'});
+         }
+       }
+     }
+     return paths;}},
+
+  {name:'Hexagon Tile',cat:'geometric',stitch:'fill',colors:['#1D9E75','#EF9F27','#534AB7'],
+   gen:(cx,cy,s)=>{const paths=[];
+     const cols=['#1D9E75','#EF9F27','#534AB7','#E24B4A'];
+     const r=s*.14;
+     for(let row=-2;row<=2;row++){
+       for(let col=-2;col<=2;col++){
+         const ox=cx+col*r*1.75+(row%2)*r*.875,oy=cy+row*r*1.52;
+         if(Math.sqrt((ox-cx)**2+(oy-cy)**2)>s*.45) continue;
+         const hex=[];
+         for(let i=0;i<=6;i++){const a=i/6*Math.PI*2+Math.PI/6;hex.push({x:ox+r*.9*Math.cos(a),y:oy+r*.9*Math.sin(a)});}
+         paths.push({points:hex,color:cols[(Math.abs(row*3+col))%cols.length],stitch:'fill'});
+       }
+     }
+     return paths;}},
+
+  {name:'Diamond Grid',cat:'geometric',stitch:'cross',colors:['#534AB7','#EF9F27'],
+   gen:(cx,cy,s)=>{const paths=[];
+     for(let r=-3;r<=3;r++){for(let c=-3;c<=3;c++){
+       if(Math.abs(r)+Math.abs(c)>4) continue;
+       const ox=cx+c*s*.13,oy=cy+r*s*.13;
+       const d=s*.06;
+       paths.push({points:[{x:ox,y:oy-d},{x:ox+d,y:oy},{x:ox,y:oy+d},{x:ox-d,y:oy},{x:ox,y:oy-d}],color:(Math.abs(r+c))%2===0?'#534AB7':'#EF9F27',stitch:'satin'});
+     }}
+     return paths;}},
+
+  {name:'Celtic Knot',cat:'geometric',stitch:'satin',colors:['#1D9E75','#EF9F27'],
+   gen:(cx,cy,s)=>{const paths=[];
+     for(let i=0;i<4;i++){
+       const a=i/4*Math.PI*2;const pts=[];
+       for(let j=0;j<=60;j++){
+         const t=j/60*Math.PI*4;
+         const r=s*.3+s*.1*Math.sin(t*2);
+         pts.push({x:cx+r*Math.cos(t/2+a),y:cy+r*Math.sin(t/2+a)*.8});
+       }
+       paths.push({points:pts,color:i%2===0?'#1D9E75':'#EF9F27',stitch:'satin'});
+     }
+     return paths;}},
+
+  {name:'Star of David',cat:'geometric',stitch:'running',colors:['#000080','#FFD700'],
+   gen:(cx,cy,s)=>{const paths=[];
+     for(let tri=0;tri<2;tri++){
+       const pts=[];
+       for(let i=0;i<=3;i++){const a=i/3*Math.PI*2+(tri?0:Math.PI);pts.push({x:cx+s*.4*Math.cos(a),y:cy+s*.4*Math.sin(a)});}
+       paths.push({points:pts,color:tri===0?'#000080':'#FFD700',stitch:'satin'});
+     }
+     return paths;}},
+
+  // ── FLORAL PATTERNS ──
+  {name:'Rose Garden',cat:'floral',stitch:'satin',colors:['#DC143C','#006400','#FFD700'],
+   gen:(cx,cy,s)=>{const paths=[];
+     for(let rose=0;rose<5;rose++){
+       const ox=rose===0?cx:cx+s*.3*Math.cos((rose-1)/4*Math.PI*2);
+       const oy=rose===0?cy:cy+s*.3*Math.sin((rose-1)/4*Math.PI*2);
+       const sz=rose===0?s*.18:s*.12;
+       for(let p=0;p<5;p++){
+         const a=p/5*Math.PI*2;const pts=[];
+         for(let j=0;j<=16;j++){const t=j/16*Math.PI*2;pts.push({x:ox+sz*Math.cos(t+a)*(.7+.3*Math.cos(t))+sz*.5*Math.cos(a),y:oy+sz*Math.sin(t+a)*(.7+.3*Math.cos(t))+sz*.5*Math.sin(a)});}
+         paths.push({points:pts,color:'#DC143C',stitch:'satin'});
+       }
+       // Leaves
+       for(let l=0;l<3;l++){
+         const la=(l/3)*Math.PI*2+Math.PI/6;const lpts=[];
+         for(let j=0;j<=12;j++){const t=j/12*Math.PI*2;lpts.push({x:ox+sz*.7*Math.cos(la)+sz*.4*Math.cos(t)*Math.cos(la)-sz*.2*Math.sin(t)*Math.sin(la),y:oy+sz*.7*Math.sin(la)+sz*.4*Math.cos(t)*Math.sin(la)+sz*.2*Math.sin(t)*Math.cos(la)});}
+         paths.push({points:lpts,color:'#006400',stitch:'fill'});
+       }
+     }
+     return paths;}},
+
+  {name:'Sunflower',cat:'floral',stitch:'satin',colors:['#FFD700','#8B4513','#006400'],
+   gen:(cx,cy,s)=>{const paths=[];
+     for(let i=0;i<16;i++){
+       const a=i/16*Math.PI*2;const pts=[];
+       for(let j=0;j<=16;j++){const t=j/16*Math.PI*2;const r=s*.15*Math.abs(Math.sin(t/2));pts.push({x:cx+r*Math.cos(t+a)+s*.22*Math.cos(a),y:cy+r*Math.sin(t+a)+s*.22*Math.sin(a)});}
+       paths.push({points:pts,color:'#FFD700',stitch:'satin'});
+     }
+     const center=[];for(let i=0;i<=24;i++)center.push({x:cx+s*.12*Math.cos(i/24*Math.PI*2),y:cy+s*.12*Math.sin(i/24*Math.PI*2)});
+     paths.push({points:center,color:'#8B4513',stitch:'fill'});
+     return paths;}},
+
+  {name:'Cherry Blossom',cat:'floral',stitch:'satin',colors:['#FFB6C1','#FF69B4','#006400'],
+   gen:(cx,cy,s)=>{const paths=[];
+     const branches=[[{x:cx,y:cy},{x:cx-s*.2,y:cy-s*.35}],[{x:cx,y:cy},{x:cx+s*.25,y:cy-s*.3}],[{x:cx,y:cy},{x:cx,y:cy-s*.4}],[{x:cx-s*.2,y:cy-s*.35},{x:cx-s*.35,y:cy-s*.25}]];
+     branches.forEach(b=>paths.push({points:b,color:'#8B4513',stitch:'stemstitch'}));
+     const flowerPos=[[cx-s*.2,cy-s*.35],[cx+s*.25,cy-s*.3],[cx,cy-s*.4],[cx-s*.35,cy-s*.25],[cx+s*.1,cy-s*.18]];
+     flowerPos.forEach(([ox,oy])=>{
+       for(let p=0;p<5;p++){
+         const a=p/5*Math.PI*2;const pts=[];
+         for(let j=0;j<=12;j++){const t=j/12*Math.PI*2;const r=s*.07*Math.abs(Math.sin(t/2));pts.push({x:ox+r*Math.cos(t+a)+s*.08*Math.cos(a),y:oy+r*Math.sin(t+a)+s*.08*Math.sin(a)});}
+         paths.push({points:pts,color:p%2===0?'#FFB6C1':'#FF69B4',stitch:'satin'});
+       }
+       const stamen=[];for(let i=0;i<=12;i++)stamen.push({x:ox+s*.03*Math.cos(i/12*Math.PI*2),y:oy+s*.03*Math.sin(i/12*Math.PI*2)});
+       paths.push({points:stamen,color:'#FFD700',stitch:'fill'});
+     });
+     return paths;}},
+
+  // ── BORDERS ──
+  {name:'Running Border',cat:'border',stitch:'running',colors:['#534AB7','#EF9F27'],
+   gen:(cx,cy,s)=>{const paths=[];
+     const makeRect=(ox,oy,w,h,col,st)=>{const p=[{x:ox-w,y:oy-h},{x:ox+w,y:oy-h},{x:ox+w,y:oy+h},{x:ox-w,y:oy+h},{x:ox-w,y:oy-h}];paths.push({points:p,color:col,stitch:st});};
+     makeRect(cx,cy,s*.48,s*.38,'#534AB7','running');
+     makeRect(cx,cy,s*.42,s*.32,'#EF9F27','running');
+     makeRect(cx,cy,s*.36,s*.26,'#534AB7','running');
+     for(let i=0;i<8;i++){
+       const a=i/8*Math.PI*2;const r=s*.25;
+       const star=[{x:cx+r*Math.cos(a),y:cy+r*Math.sin(a)},{x:cx+(r+s*.06)*Math.cos(a+Math.PI/8),y:cy+(r+s*.06)*Math.sin(a+Math.PI/8)},{x:cx+r*Math.cos(a+Math.PI/4),y:cy+r*Math.sin(a+Math.PI/4)}];
+       paths.push({points:star,color:'#EF9F27',stitch:'running'});
+     }
+     return paths;}},
+
+  {name:'Wave Border',cat:'border',stitch:'stemstitch',colors:['#1D9E75','#EF9F27'],
+   gen:(cx,cy,s)=>{const paths=[];
+     for(let row=-1;row<=1;row+=2){
+       const pts=[];
+       for(let i=0;i<=40;i++){const t=i/40;pts.push({x:cx-s*.5+t*s,y:cy+row*s*.25+s*.08*Math.sin(t*Math.PI*6)});}
+       paths.push({points:pts,color:row<0?'#1D9E75':'#EF9F27',stitch:'stemstitch'});
+     }
+     for(let i=0;i<7;i++){
+       const ox=cx-s*.42+i*s*.14;
+       const diamond=[{x:ox,y:cy-s*.12},{x:ox+s*.06,y:cy},{x:ox,y:cy+s*.12},{x:ox-s*.06,y:cy},{x:ox,y:cy-s*.12}];
+       paths.push({points:diamond,color:i%2===0?'#1D9E75':'#EF9F27',stitch:'satin'});
+     }
+     return paths;}},
+
+  {name:'Greek Key',cat:'border',stitch:'backstitch',colors:['#1a1825','#EF9F27'],
+   gen:(cx,cy,s)=>{const paths=[];
+     const step=s*.08;
+     const key=[];
+     let x=cx-s*.45,y=cy-s*.05;
+     const moves=[[1,0],[0,1],[1,0],[0,-1],[1,0],[0,-1],[-1,0],[0,-1],[1,0]];
+     key.push({x,y});
+     for(let rep=0;rep<5;rep++){
+       moves.forEach(([dx,dy])=>{x+=dx*step;y+=dy*step;key.push({x,y});});
+     }
+     paths.push({points:key,color:'#EF9F27',stitch:'backstitch'});
+     return paths;}},
+
+  // ── SPORTS ──
+  {name:'Team Badge',cat:'sports',stitch:'satin',colors:['#534AB7','#EF9F27','#FFFFFF'],
+   gen:(cx,cy,s)=>{const paths=[];
+     const shield=[{x:cx,y:cy+s*.45},{x:cx-s*.38,y:cy+s*.15},{x:cx-s*.38,y:cy-s*.38},{x:cx+s*.38,y:cy-s*.38},{x:cx+s*.38,y:cy+s*.15},{x:cx,y:cy+s*.45}];
+     paths.push({points:shield,color:'#534AB7',stitch:'fill'});
+     paths.push({points:[...shield],color:'#EF9F27',stitch:'satin'});
+     const star=[];for(let i=0;i<10;i++){const a=i/10*Math.PI*2-Math.PI/2;const r=i%2===0?s*.18:s*.08;star.push({x:cx+r*Math.cos(a),y:cy+r*Math.sin(a)});}
+     star.push(star[0]);
+     paths.push({points:star,color:'#FFFFFF',stitch:'satin'});
+     return paths;}},
+
+  {name:'Varsity Letter',cat:'sports',stitch:'satin',colors:['#534AB7','#EF9F27'],
+   gen:(cx,cy,s)=>{const paths=[];
+     // Block letter E shape
+     const E=[[{x:cx-s*.2,y:cy-s*.35},{x:cx-s*.2,y:cy+s*.35}],[{x:cx-s*.2,y:cy-s*.35},{x:cx+s*.2,y:cy-s*.35}],[{x:cx-s*.2,y:cy},{x:cx+s*.12,y:cy}],[{x:cx-s*.2,y:cy+s*.35},{x:cx+s*.2,y:cy+s*.35}]];
+     E.forEach(seg=>paths.push({points:seg,color:'#534AB7',stitch:'satin'}));
+     // Border
+     const border=[];for(let i=0;i<=36;i++)border.push({x:cx+s*.42*Math.cos(i/36*Math.PI*2),y:cy+s*.42*Math.sin(i/36*Math.PI*2)});
+     paths.push({points:border,color:'#EF9F27',stitch:'running'});
+     return paths;}},
+
+  {name:'Cricket Ball',cat:'sports',stitch:'running',colors:['#DC143C','#FFFFFF'],
+   gen:(cx,cy,s)=>{const paths=[];
+     const ball=[];for(let i=0;i<=36;i++)ball.push({x:cx+s*.4*Math.cos(i/36*Math.PI*2),y:cy+s*.4*Math.sin(i/36*Math.PI*2)});
+     paths.push({points:ball,color:'#DC143C',stitch:'fill'});
+     // Seam curves
+     for(let side=-1;side<=1;side+=2){
+       const seam=[];
+       for(let i=0;i<=20;i++){const t=i/20*Math.PI;seam.push({x:cx+side*s*.1*Math.cos(t),y:cy-s*.3+t*s*.6/Math.PI});}
+       paths.push({points:seam,color:'#FFFFFF',stitch:'running'});
+       for(let i=0;i<6;i++){const y2=cy-s*.22+i*s*.08;paths.push({points:[{x:cx+side*s*.08,y:y2},{x:cx+side*s*.14,y:y2}],color:'#FFFFFF',stitch:'running'});}
+     }
+     return paths;}},
+
+  // ── MONOGRAM ──
+  {name:'Oval Monogram',cat:'monogram',stitch:'satin',colors:['#534AB7','#EF9F27'],
+   gen:(cx,cy,s)=>{const paths=[];
+     const outer=[];for(let i=0;i<=36;i++)outer.push({x:cx+s*.45*Math.cos(i/36*Math.PI*2),y:cy+s*.35*Math.sin(i/36*Math.PI*2)});
+     const inner=[];for(let i=0;i<=36;i++)inner.push({x:cx+s*.38*Math.cos(i/36*Math.PI*2),y:cy+s*.28*Math.sin(i/36*Math.PI*2)});
+     paths.push({points:outer,color:'#534AB7',stitch:'satin'});
+     paths.push({points:inner,color:'#EF9F27',stitch:'running'});
+     for(let i=0;i<8;i++){
+       const a=i/8*Math.PI*2;const pts=[];
+       for(let j=0;j<=12;j++){const t=j/12*Math.PI*2;pts.push({x:cx+s*.41*Math.cos(a)+s*.05*Math.cos(t),y:cy+s*.31*Math.sin(a)+s*.05*Math.sin(t)});}
+       paths.push({points:pts,color:'#EF9F27',stitch:'satin'});
+     }
+     return paths;}},
+
+  {name:'Diamond Monogram',cat:'monogram',stitch:'satin',colors:['#EF9F27','#534AB7'],
+   gen:(cx,cy,s)=>{const paths=[];
+     const sizes=[0.48,0.38,0.28];
+     sizes.forEach((sz,i)=>{
+       const d=[{x:cx,y:cy-sz*s},{x:cx+sz*s*.7,y:cy},{x:cx,y:cy+sz*s},{x:cx-sz*s*.7,y:cy},{x:cx,y:cy-sz*s}];
+       paths.push({points:d,color:i===0?'#EF9F27':'#534AB7',stitch:i===0?'satin':'running'});
+     });
+     for(let i=0;i<4;i++){
+       const a=i/4*Math.PI*2+Math.PI/4;const pts=[];
+       for(let j=0;j<=12;j++){const t=j/12*Math.PI*2;pts.push({x:cx+s*.33*Math.cos(a)+s*.06*Math.cos(t),y:cy+s*.33*Math.sin(a)+s*.06*Math.sin(t)});}
+       paths.push({points:pts,color:'#EF9F27',stitch:'satin'});
+     }
+     return paths;}},
+];
+
+function showPatternLibrary(){
+  renderPatternGrid(PATTERNS);
+  document.getElementById('plib-size').oninput=function(){document.getElementById('plib-size-val').textContent=this.value+'px';};
+  document.getElementById('plib-modal').classList.add('show');
+}
+function closePatternLibrary(){ document.getElementById('plib-modal').classList.remove('show'); }
+
+function renderPatternGrid(patterns){
+  const grid=document.getElementById('plib-grid');
+  const count=document.getElementById('plib-count');
+  count.textContent=patterns.length+' patterns';
+  grid.innerHTML='';
+  patterns.forEach(pat=>{
+    const card=document.createElement('div');
+    card.className='plib-card';
+    // Generate thumbnail
+    const tc=document.createElement('canvas');
+    tc.width=150;tc.height=100;
+    const tctx=tc.getContext('2d');
+    tctx.fillStyle=getComputedStyle(document.documentElement).getPropertyValue('--canvas-bg')||'#13121f';
+    tctx.fillRect(0,0,150,100);
+    try{
+      const paths=pat.gen(75,50,80);
+      paths.forEach(p=>{
+        if(!p.points||p.points.length<2) return;
+        tctx.beginPath();
+        p.points.forEach((pt,i)=>i?tctx.lineTo(pt.x,pt.y):tctx.moveTo(pt.x,pt.y));
+        tctx.strokeStyle=p.color;tctx.lineWidth=1.5;tctx.lineCap='round';tctx.stroke();
+      });
+    } catch(e){}
+    card.innerHTML=`<div class="plib-thumb"></div><div class="plib-info"><div class="plib-name">${pat.name}</div><div class="plib-meta">${pat.stitch} · ${pat.cat}</div></div>`;
+    card.querySelector('.plib-thumb').appendChild(tc);
+    card.onclick=()=>placePattern(pat);
+    grid.appendChild(card);
+  });
+}
+
+function filterPatterns(cat,el){
+  document.querySelectorAll('.plib-cat').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  const filtered=cat==='all'?PATTERNS:PATTERNS.filter(p=>p.cat===cat);
+  renderPatternGrid(filtered);
+}
+
+function placePattern(pat){
+  const size=parseInt(document.getElementById('plib-size').value)||120;
+  const cx=cvs.width/2/S.zoom-S.panX/S.zoom;
+  const cy=cvs.height/2/S.zoom-S.panY/S.zoom;
+  try{
+    const paths=pat.gen(cx,cy,size);
+    saveHist();
+    paths.forEach(p=>{
+      if(!p.points||p.points.length<2) return;
+      const pts=p.points.map(pt=>({x:pt.x,y:pt.y,cp1x:pt.x,cp1y:pt.y,cp2x:pt.x,cp2y:pt.y}));
+      S.paths.push({points:pts,color:p.color||S.color,stitch:p.stitch||S.stitch,layer:S.activeLayer,name:pat.name});
+    });
+    document.getElementById('wi').style.opacity='0';
+    if(pat.stitch) setStitch(pat.stitch);
+    updateStats();redraw();
+    closePatternLibrary();
+    toast('✓ '+pat.name+' placed on canvas');
+  } catch(e){toast('Could not place pattern: '+e.message);}
 }
 
 
