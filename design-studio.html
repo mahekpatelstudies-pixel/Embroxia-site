@@ -275,6 +275,103 @@ select.pinput{cursor:pointer;-webkit-appearance:none}
 .photo-btn.primary:hover{background:var(--pl)}
 .photo-btn.secondary{background:var(--bg4);color:var(--text);border:1px solid var(--border2)}
 *{scrollbar-width:thin;scrollbar-color:var(--border2) transparent}
+
+/* ── ALL MODALS — position:fixed, z-index:800+ ── */
+.modal-overlay,.svg-modal,.gen-modal,.top-modal,.shape-modal,.print-modal,.plib-modal,.library-modal,.tour-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:800;display:none;align-items:center;justify-content:center;backdrop-filter:blur(6px)}
+.modal-overlay.show,.svg-modal.show,.gen-modal.show,.top-modal.show,.shape-modal.show,.print-modal.show,.plib-modal.show,.library-modal.show{display:flex}
+/* Shared box styles */
+.svg-box,.gen-box,.top-box,.shape-box,.print-box,.plib-box,.library-box{background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);padding:22px;width:560px;max-width:95vw;box-shadow:0 24px 64px rgba(0,0,0,.6)}
+.plib-box,.shape-box,.library-box{width:700px;max-height:85vh;display:flex;flex-direction:column}
+.svg-title{font-size:15px;font-weight:500;color:var(--text);margin-bottom:4px}
+.svg-sub{font-size:12px;color:var(--text3);margin-bottom:14px;line-height:1.65}
+.svg-opt-label{font-size:11px;color:var(--text2);margin-bottom:4px}
+.svg-options{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.svg-btns,.gen-btns,.print-btns{display:flex;gap:8px}
+.svg-btn,.gen-btn,.print-btn{flex:1;padding:10px;border-radius:var(--rs);font-family:var(--font);font-size:13px;cursor:pointer;border:1px solid var(--border2);background:transparent;color:var(--text2);transition:all .12s}
+.svg-btn:hover,.gen-btn:hover,.print-btn:hover{color:var(--text)}
+.svg-btn.primary,.gen-btn.primary,.print-btn.primary{background:var(--purple);color:white;border:none}
+/* SVG drop */
+.svg-drop{border:2px dashed var(--border2);border-radius:var(--r);padding:28px;text-align:center;cursor:pointer;position:relative;margin-bottom:12px}
+.svg-drop:hover{border-color:var(--purple)}
+.svg-drop input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.svg-drop-icon{font-size:28px;margin-bottom:6px;opacity:.5}
+.svg-drop-text{font-size:13px;color:var(--text2)}
+.svg-preview{width:100%;height:140px;background:var(--bg4);border-radius:var(--rs);margin-bottom:12px;display:none;align-items:center;justify-content:center;overflow:hidden;border:1px solid var(--border)}
+/* Generate modal */
+.gen-title{font-size:15px;font-weight:500;color:var(--text);margin-bottom:4px}
+.gen-sub{font-size:12px;color:var(--text3);margin-bottom:14px;line-height:1.65}
+.gen-textarea{width:100%;background:var(--bg4);border:1px solid var(--border2);border-radius:var(--r);padding:12px;font-size:13px;font-family:var(--font);color:var(--text);resize:none;outline:none;height:80px;line-height:1.6;transition:border-color .15s;margin-bottom:10px}
+.gen-textarea:focus{border-color:var(--purple)}
+.gen-examples{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.gen-example{font-size:11px;padding:4px 10px;border-radius:20px;background:var(--bg4);border:1px solid var(--border2);color:var(--text2);cursor:pointer;transition:all .12s}
+.gen-example:hover{border-color:var(--purple);color:var(--pl)}
+.gen-options{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.gen-opt-label{font-size:11px;color:var(--text2);margin-bottom:4px}
+.gen-progress{background:var(--bg4);border-radius:var(--r);padding:12px;margin-bottom:12px}
+.gen-progress-text{font-size:12px;color:var(--text2);margin-bottom:6px}
+.gen-progress-bar{height:3px;background:var(--border2);border-radius:2px;overflow:hidden}
+.gen-progress-fill{height:100%;background:linear-gradient(90deg,var(--purple),var(--teal));width:0%;transition:width .4s}
+/* Text on path */
+.top-preview{width:100%;height:130px;background:var(--canvas-bg);border-radius:var(--rs);margin-bottom:14px;display:flex;align-items:center;justify-content:center;overflow:hidden;border:1px solid var(--border)}
+/* Shape library */
+.shape-search{width:100%;background:var(--bg4);border:1px solid var(--border);border-radius:var(--rs);padding:7px 12px;font-size:12px;font-family:var(--font);color:var(--text);outline:none;margin-bottom:10px;flex-shrink:0;transition:border-color .15s}
+.shape-search:focus{border-color:var(--purple)}
+.shape-cats,.plib-cats{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;flex-shrink:0}
+.shape-cat,.plib-cat{font-size:11px;padding:4px 12px;border-radius:20px;background:var(--bg4);border:1px solid var(--border);color:var(--text2);cursor:pointer;transition:all .12s}
+.shape-cat.active,.plib-cat.active,.shape-cat:hover,.plib-cat:hover{background:var(--purple);color:white;border-color:transparent}
+.shape-grid,.plib-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:8px;overflow-y:auto;flex:1}
+.plib-grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}
+.shape-grid::-webkit-scrollbar,.plib-grid::-webkit-scrollbar{width:3px}
+.shape-grid::-webkit-scrollbar-thumb,.plib-grid::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+.shape-item{background:var(--bg4);border:1px solid var(--border);border-radius:var(--rs);padding:10px 6px;cursor:pointer;text-align:center;transition:all .12s;display:flex;flex-direction:column;align-items:center;gap:4px}
+.shape-item:hover{border-color:var(--purple);background:var(--pg);transform:translateY(-1px)}
+.shape-item svg{width:36px;height:36px}
+.shape-name{font-size:9px;color:var(--text3)}
+.shape-footer,.plib-footer{display:flex;align-items:center;justify-content:space-between;margin-top:10px;flex-shrink:0;padding-top:8px;border-top:1px solid var(--border)}
+.plib-card{background:var(--bg4);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;cursor:pointer;transition:all .15s}
+.plib-card:hover{border-color:var(--purple);transform:translateY(-2px)}
+.plib-thumb{width:100%;height:90px;background:var(--canvas-bg);display:flex;align-items:center;justify-content:center}
+.plib-info{padding:8px 10px}
+.plib-name{font-size:11px;font-weight:500;color:var(--text);margin-bottom:1px}
+.plib-meta{font-size:10px;color:var(--text3)}
+.plib-head,.library-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-shrink:0}
+.plib-title,.library-title{font-size:15px;font-weight:500;color:var(--text)}
+.plib-size{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text2)}
+/* Print */
+.print-preview{background:white;border-radius:var(--rs);padding:20px;margin-bottom:12px;color:#1a1825}
+.print-stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:12px}
+.print-stat{background:#f7f5f0;border-radius:6px;padding:8px;text-align:center}
+.print-stat-num{font-size:18px;font-weight:500;color:#534AB7}
+.print-stat-label{font-size:10px;color:#999;margin-top:2px}
+/* Library */
+.library-box{width:800px}
+.library-search{background:var(--bg4);border:1px solid var(--border);border-radius:var(--rs);padding:6px 12px;font-size:12px;font-family:var(--font);color:var(--text);outline:none;width:200px}
+.library-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;overflow-y:auto;flex:1;margin:10px 0}
+.library-card{background:var(--bg4);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;cursor:pointer;transition:all .15s}
+.library-card:hover{border-color:var(--purple);transform:translateY(-2px)}
+.library-thumb{width:100%;height:90px;background:var(--canvas-bg);position:relative}
+.library-info{padding:8px}
+.library-name{font-size:11px;font-weight:500;color:var(--text);margin-bottom:2px}
+.library-date{font-size:10px;color:var(--text3)}
+.library-footer{display:flex;align-items:center;justify-content:space-between;padding-top:8px;border-top:1px solid var(--border);flex-shrink:0}
+.library-count{font-size:11px;color:var(--text3)}
+/* Tour */
+.tour-overlay{background:rgba(0,0,0,.65);pointer-events:none}
+.tour-highlight{position:fixed;box-shadow:0 0 0 9999px rgba(0,0,0,.65);border-radius:var(--r);z-index:901;pointer-events:none;transition:all .35s}
+.tour-card{position:fixed;z-index:902;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);padding:20px;width:290px;box-shadow:0 16px 48px rgba(0,0,0,.5);pointer-events:all;transition:all .35s}
+.tour-step-badge{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--pl);background:var(--pg);border-radius:20px;padding:3px 10px;margin-bottom:8px}
+.tour-title{font-size:14px;font-weight:500;color:var(--text);margin-bottom:5px}
+.tour-desc{font-size:12px;color:var(--text2);line-height:1.6;margin-bottom:14px}
+.tour-btns{display:flex;align-items:center;justify-content:space-between}
+.tour-skip{font-size:11px;color:var(--text3);cursor:pointer;background:none;border:none;font-family:var(--font);padding:0}
+.tour-nav{display:flex;gap:6px}
+.tour-prev,.tour-next{padding:5px 12px;border-radius:var(--rs);font-size:12px;cursor:pointer;font-family:var(--font)}
+.tour-prev{border:1px solid var(--border2);background:transparent;color:var(--text2)}
+.tour-next{border:none;background:var(--purple);color:white}
+.tour-dots{display:flex;gap:4px;align-items:center}
+.tour-dot{width:5px;height:5px;border-radius:50%;background:var(--border2);transition:all .2s}
+.tour-dot.active{background:var(--purple);width:14px;border-radius:3px}
+
 </style>
 </head>
 <body>
@@ -354,9 +451,6 @@ select.pinput{cursor:pointer;-webkit-appearance:none}
     </div>
     <div class="mi" id="m-tools" onclick="toggleMenu('m-tools',event)">Tools
       <div class="dd">
-        <div class="ddi" onclick="showPatternLibrary()">🧵 Pattern library</div>
-        <div class="ddi" onclick="showShapeLibrary()">⬡ Shape library</div>
-        <div class="dd-sep"></div>
         <div class="ddi" onclick="autoUnderlay()">Auto underlay</div>
         <div class="ddi" onclick="pullCompensation()">Pull compensation</div>
         <div class="ddi" onclick="optimizeStitches()">Optimize stitch path</div>
@@ -530,7 +624,6 @@ select.pinput{cursor:pointer;-webkit-appearance:none}
         <div class="brand-tab" onclick="setBrand('isacord',this)">Isacord</div>
         <div class="brand-tab" onclick="setBrand('robison',this)">Robison-Anton</div>
         <div class="brand-tab" onclick="setBrand('sulky',this)">Sulky</div>
-        <div class="brand-tab" onclick="setBrand('indian',this)">🇮🇳 Indian</div>
       </div>
     </div>
     <div class="psec">
@@ -639,28 +732,25 @@ select.pinput{cursor:pointer;-webkit-appearance:none}
   <div class="ai-head">
     <div class="ai-logo-wrap">
       <div class="ai-logo">✦</div>
-      <div><div class="ai-title">Aari ✦</div><div class="ai-sub">Indian &amp; global embroidery AI</div></div>
+      <div><div class="ai-title">Embroxia AI</div><div class="ai-sub">Expert design assistant</div></div>
     </div>
     <span class="ai-x" onclick="toggleAI()">✕</span>
   </div>
   <div class="ai-msgs" id="ai-msgs">
     <div class="ai-msg"><div class="ai-av bot">✦</div>
-      <div class="ai-bubble bot">Namaste! I'm <b>Aari</b> — the world's first AI for Indian &amp; global embroidery.<br><br>I know every tradition:<br>✦ <b>Zardozi, Kantha, Phulkari, Chikankari</b><br>✦ <b>Aari, Kashmiri, Kutch, Shisha</b><br>✦ <b>Saree, lehenga, bridal designs</b><br><br>Tell me what you want to create!</div>
+      <div class="ai-bubble bot">Hi! I'm your Embroxia AI — a professional embroidery expert.<br><br>I can:<br>🖼 <b>Analyze images</b> for digitizing<br>🎨 <b>Suggest colors</b> with exact thread codes<br>✨ <b>Generate designs</b> from text prompts<br>🔧 <b>Fix technical issues</b> — density, underlay, pull compensation<br><br>What would you like to create?</div>
     </div>
   </div>
-  <div style="padding:6px 10px;border-top:1px solid var(--border);flex-shrink:0">
-  <button onclick="showGeneratePrompt()" style="width:100%;padding:8px;border-radius:var(--rs);background:linear-gradient(135deg,#534AB7,#1D9E75);color:white;border:none;font-family:var(--font);font-size:12px;font-weight:500;cursor:pointer;">✨ Generate design from prompt</button>
-</div>
-<div class="ai-upload" onclick="document.getElementById('ai-file').click()">
+  <div class="ai-upload" onclick="document.getElementById('ai-file').click()">
     <input type="file" id="ai-file" accept="image/*" onchange="handleImg(event)">
     <div class="ai-upload-label">📎 <span>Upload image</span> to analyze & digitize</div>
   </div>
   <div class="ai-suggestions">
     <div class="ai-sug" onclick="aiSend('Generate a floral wreath monogram in purple and gold thread')">Floral wreath</div>
     <div class="ai-sug" onclick="aiSend('What stitch type and density for a sports logo on polyester?')">Sports logo tips</div>
-    <div class="ai-sug" onclick="aiSend('Design a Kantha lotus border for a saree in indigo and white')">Reduce stitches</div>
-    <div class="ai-sug" onclick="aiSend('What Kutch mirror work pattern works for a cushion cover?')">Rose color palette</div>
-    <div class="ai-sug" onclick="aiSend('Design an Aari floral motif for a Kashmiri shawl')">Geometric on denim</div>
+    <div class="ai-sug" onclick="aiSend('How do I reduce stitch count by 20% without losing detail?')">Reduce stitches</div>
+    <div class="ai-sug" onclick="aiSend('Suggest thread colors for a vintage rose design with Madeira codes')">Rose color palette</div>
+    <div class="ai-sug" onclick="aiSend('Create a geometric pattern suitable for machine embroidery on denim')">Geometric on denim</div>
   </div>
   <div class="ai-input-wrap">
     <textarea class="ai-input" id="ai-in" placeholder="Ask anything... or describe a design to generate" rows="1"
@@ -745,10 +835,6 @@ select.pinput{cursor:pointer;-webkit-appearance:none}
       <button class="gtab" onclick="setGarment('cap',this)">🧢 Cap</button>
       <button class="gtab" onclick="setGarment('bag',this)">👜 Bag</button>
       <button class="gtab" onclick="setGarment('jacket',this)">🥋 Jacket</button>
-      <button class="gtab" onclick="setGarment('saree',this)">🥻 Saree</button>
-      <button class="gtab" onclick="setGarment('lehenga',this)">👘 Lehenga</button>
-      <button class="gtab" onclick="setGarment('dupatta',this)">🧣 Dupatta</button>
-      <button class="gtab" onclick="setGarment('kurta',this)">👕 Kurta</button>
     </div>
     <div class="garment-canvas-wrap">
       <canvas id="garment-cvs"></canvas>
@@ -806,239 +892,6 @@ select.pinput{cursor:pointer;-webkit-appearance:none}
   </div>
 </div>
 
-
-<!-- PATTERN LIBRARY MODAL -->
-<div class="plib-modal" id="plib-modal">
-  <div class="plib-box">
-    <div class="plib-head">
-      <div class="plib-title">🧵 Pattern Library — Ready-made embroidery designs</div>
-      <button onclick="closePatternLibrary()" style="padding:4px 12px;border:1px solid var(--border2);background:transparent;color:var(--text2);border-radius:var(--rs);cursor:pointer;font-family:var(--font);font-size:12px">✕ Close</button>
-    </div>
-    <div class="plib-cats" id="plib-cats">
-      <div class="plib-cat active" onclick="filterPatterns('all',this)">All</div>
-      <div class="plib-cat" onclick="filterPatterns('indian',this)">🇮🇳 Indian</div>
-      <div class="plib-cat" onclick="filterPatterns('bridal',this)">💍 Bridal</div>
-      <div class="plib-cat" onclick="filterPatterns('geometric',this)">◈ Geometric</div>
-      <div class="plib-cat" onclick="filterPatterns('floral',this)">🌸 Floral</div>
-      <div class="plib-cat" onclick="filterPatterns('border',this)">▬ Borders</div>
-      <div class="plib-cat" onclick="filterPatterns('sports',this)">🏆 Sports</div>
-      <div class="plib-cat" onclick="filterPatterns('monogram',this)">✒ Monogram</div>
-    </div>
-    <div class="plib-grid" id="plib-grid"></div>
-    <div class="plib-footer">
-      <div class="plib-size">
-        <span>Size:</span>
-        <input type="range" min="50" max="300" value="120" id="plib-size" style="width:80px;accent-color:var(--purple)">
-        <span id="plib-size-val">120px</span>
-      </div>
-      <div style="font-size:11px;color:var(--text3)" id="plib-count">30 patterns</div>
-    </div>
-  </div>
-</div>
-
-
-<!-- GENERATE FROM PROMPT MODAL -->
-<div class="gen-modal" id="gen-modal">
-  <div class="gen-box">
-    <div class="gen-title">✨ Generate design from prompt</div>
-    <div class="gen-sub">Describe any embroidery design. Aari AI will generate stitch paths on your canvas.</div>
-    <textarea class="gen-textarea" id="gen-prompt" placeholder="e.g. Zardozi lotus border in gold for a bridal lehenga&#10;e.g. Phulkari geometric diamonds in red and yellow"></textarea>
-    <div class="gen-examples">
-      <div class="gen-example" onclick="setGenPrompt('Zardozi lotus border in gold and maroon for a bridal lehenga')">Zardozi bridal</div>
-      <div class="gen-example" onclick="setGenPrompt('Phulkari geometric diamond pattern in red and yellow')">Phulkari</div>
-      <div class="gen-example" onclick="setGenPrompt('Kantha lotus motif in indigo and white for a saree')">Kantha lotus</div>
-      <div class="gen-example" onclick="setGenPrompt('Kashmiri paisley in teal and gold for a shawl')">Kashmiri paisley</div>
-      <div class="gen-example" onclick="setGenPrompt('Rangoli mandala in purple and gold')">Rangoli</div>
-      <div class="gen-example" onclick="setGenPrompt('Peacock feather motif with Aari stitch in blue and green')">Peacock</div>
-    </div>
-    <div class="gen-options">
-      <div><div class="gen-opt-label">Complexity</div>
-        <select class="pinput" id="gen-complexity"><option value="simple">Simple</option><option value="medium" selected>Medium</option><option value="complex">Complex</option></select>
-      </div>
-      <div><div class="gen-opt-label">Placement</div>
-        <select class="pinput" id="gen-placement"><option value="center">Center</option><option value="border">Border</option><option value="corner">Corner</option><option value="repeat">Repeat</option></select>
-      </div>
-    </div>
-    <div class="gen-progress" id="gen-progress">
-      <div class="gen-progress-text" id="gen-progress-text">Generating...</div>
-      <div class="gen-progress-bar"><div class="gen-progress-fill" id="gen-progress-fill"></div></div>
-    </div>
-    <div class="gen-btns">
-      <button class="gen-btn" onclick="closeGenModal()">Cancel</button>
-      <button class="gen-btn primary" id="gen-btn" onclick="generateFromPrompt()">✨ Generate</button>
-    </div>
-  </div>
-</div>
-
-<!-- TEXT ON PATH MODAL -->
-<div class="top-modal" id="top-modal">
-  <div class="top-box">
-    <div class="svg-title" style="margin-bottom:4px">Text on Path</div>
-    <div class="svg-sub" style="margin-bottom:14px">Place text along a curve, circle, or arc.</div>
-    <div class="top-preview"><canvas id="top-preview-cvs" width="460" height="130"></canvas></div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
-      <div><div class="svg-opt-label">Text</div><input class="pinput" type="text" id="top-text" value="EMBROXIA" oninput="updateTOPPreview()"></div>
-      <div><div class="svg-opt-label">Path shape</div>
-        <select class="pinput" id="top-shape" onchange="updateTOPPreview()">
-          <option value="arc-top">Arc — top</option>
-          <option value="arc-bottom">Arc — bottom</option>
-          <option value="circle">Full circle</option>
-          <option value="wave">Wave</option>
-          <option value="straight">Straight</option>
-        </select>
-      </div>
-      <div><div class="svg-opt-label">Font size</div><input class="pinput" type="number" id="top-size" value="18" min="8" max="72" oninput="updateTOPPreview()"></div>
-      <div><div class="svg-opt-label">Radius</div><input class="pinput" type="range" id="top-radius" min="40" max="200" value="100" oninput="updateTOPPreview()" style="margin-top:8px"></div>
-      <div><div class="svg-opt-label">Letter spacing</div><input class="pinput" type="range" id="top-spacing" min="-5" max="20" value="2" oninput="updateTOPPreview()"></div>
-      <div><div class="svg-opt-label">Start angle</div><input class="pinput" type="range" id="top-start" min="-180" max="180" value="0" oninput="updateTOPPreview()"></div>
-    </div>
-    <div class="svg-btns">
-      <button class="svg-btn" onclick="closeTOP()">Cancel</button>
-      <button class="svg-btn primary" onclick="placeTOP()">Place on canvas</button>
-    </div>
-  </div>
-</div>
-
-<!-- SVG IMPORT MODAL -->
-<div class="svg-modal" id="svg-modal">
-  <div class="svg-box">
-    <div class="svg-title">Import SVG / AI Vector</div>
-    <div class="svg-sub">Upload an SVG file and convert vector paths to embroidery stitch paths.</div>
-    <div class="svg-drop" id="svg-drop">
-      <input type="file" id="svg-file-input" accept=".svg,.ai,.xml" onchange="handleSVGFile(event)">
-      <div class="svg-drop-icon">📐</div>
-      <div class="svg-drop-text">Click to upload or drag & drop</div>
-      <div class="svg-drop-sub">SVG, AI files · Max 5MB</div>
-    </div>
-    <div class="svg-preview" id="svg-preview"></div>
-    <div class="svg-options">
-      <div><div class="svg-opt-label">Stitch type</div>
-        <select class="pinput" id="svg-stitch-type">
-          <option value="auto">Auto detect</option>
-          <option value="running">Running</option>
-          <option value="satin">Satin</option>
-          <option value="fill">Fill</option>
-        </select>
-      </div>
-      <div><div class="svg-opt-label">Scale</div>
-        <select class="pinput" id="svg-scale">
-          <option value="fit">Fit to hoop</option>
-          <option value="original">Original size</option>
-          <option value="50">50%</option>
-          <option value="75">75%</option>
-        </select>
-      </div>
-      <div><div class="svg-opt-label">Color</div>
-        <select class="pinput" id="svg-color">
-          <option value="keep">Keep original</option>
-          <option value="current">Use current color</option>
-        </select>
-      </div>
-      <div><div class="svg-opt-label">Simplify</div>
-        <select class="pinput" id="svg-simplify">
-          <option value="medium">Medium</option>
-          <option value="low">Low</option>
-          <option value="high">High</option>
-        </select>
-      </div>
-    </div>
-    <div id="svg-status" style="font-size:12px;color:var(--text3);margin-bottom:12px;display:none"></div>
-    <div class="svg-btns">
-      <button class="svg-btn" onclick="closeSVGImport()">Cancel</button>
-      <button class="svg-btn primary" id="svg-convert-btn" onclick="convertSVGToStitches()" disabled>Convert to embroidery</button>
-    </div>
-  </div>
-</div>
-
-<!-- SHAPE LIBRARY MODAL -->
-<div class="shape-modal" id="shape-modal">
-  <div class="shape-box">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-shrink:0">
-      <div style="font-size:15px;font-weight:500;color:var(--text)">⬡ Shape Library</div>
-      <button class="svg-btn" onclick="closeShapeLibrary()" style="width:auto;padding:4px 12px">✕</button>
-    </div>
-    <input class="shape-search" id="shape-search" placeholder="Search shapes..." oninput="filterShapes(this.value)">
-    <div class="shape-cats" id="shape-cats">
-      <div class="shape-cat active" onclick="filterShapes('',this)">All</div>
-      <div class="shape-cat" onclick="filterShapes('basic',this)">Basic</div>
-      <div class="shape-cat" onclick="filterShapes('badge',this)">Badges</div>
-      <div class="shape-cat" onclick="filterShapes('floral',this)">Florals</div>
-      <div class="shape-cat" onclick="filterShapes('arrow',this)">Arrows</div>
-      <div class="shape-cat" onclick="filterShapes('sport',this)">Sports</div>
-      <div class="shape-cat" onclick="filterShapes('frame',this)">Frames</div>
-      <div class="shape-cat" onclick="filterShapes('star',this)">Stars</div>
-      <div class="shape-cat" onclick="filterShapes('indian',this)">🇮🇳 Indian</div>
-    </div>
-    <div class="shape-grid" id="shape-grid"></div>
-    <div class="shape-footer">
-      <div style="font-size:11px;color:var(--text3)" id="shape-count">40 shapes</div>
-      <div style="display:flex;gap:8px;align-items:center">
-        <span style="font-size:11px;color:var(--text3)">Stitch:</span>
-        <select class="pinput" id="shape-stitch" style="width:auto;font-size:11px">
-          <option value="running">Running</option>
-          <option value="satin" selected>Satin</option>
-          <option value="fill">Fill</option>
-        </select>
-        <span style="font-size:11px;color:var(--text3)">Size:</span>
-        <input class="pinput" type="number" id="shape-size" value="80" min="20" max="400" style="width:60px;font-size:11px">
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- PRINT DESIGN SHEET -->
-<div class="print-modal" id="print-modal">
-  <div class="print-box">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-      <div style="font-size:15px;font-weight:500;color:var(--text)">📄 Print Design Sheet</div>
-      <button class="print-btn" onclick="closePrintModal()" style="width:auto;padding:4px 12px">✕</button>
-    </div>
-    <div class="print-preview" id="print-preview-content"></div>
-    <div class="print-btns">
-      <button class="print-btn" onclick="closePrintModal()">Cancel</button>
-      <button class="print-btn" onclick="downloadPrintSheet()">↓ Download</button>
-      <button class="print-btn primary" onclick="printSheet()">🖨 Print</button>
-    </div>
-  </div>
-</div>
-
-<!-- DESIGN LIBRARY MODAL -->
-<div class="library-modal" id="library-modal">
-  <div class="library-box">
-    <div class="library-head">
-      <div class="library-title">📁 Design Library</div>
-      <div style="display:flex;align-items:center;gap:10px">
-        <input class="library-search" id="library-search" placeholder="Search designs..." oninput="filterLibrary(this.value)">
-        <button class="tbtn primary" onclick="saveToLibrary()">+ Save current</button>
-        <button class="tbtn" onclick="closeLibrary()" style="padding:5px 10px">✕</button>
-      </div>
-    </div>
-    <div class="library-grid" id="library-grid"></div>
-    <div class="library-footer">
-      <div class="library-count" id="library-count">0 designs</div>
-      <button class="tbtn" onclick="closeLibrary()">Close</button>
-    </div>
-  </div>
-</div>
-
-<!-- ONBOARDING TOUR -->
-<div id="tour-overlay" class="tour-overlay" style="display:none">
-  <div class="tour-highlight" id="tour-highlight"></div>
-  <div class="tour-card" id="tour-card">
-    <div class="tour-step-badge"><span>✦</span><span id="tour-step-label">Step 1 of 8</span></div>
-    <div class="tour-title" id="tour-title">Welcome to Embroxia Studio</div>
-    <div class="tour-desc" id="tour-desc">Let us take a quick tour so you can start designing right away.</div>
-    <div class="tour-btns">
-      <button class="tour-skip" onclick="endTour()">Skip tour</button>
-      <div class="tour-dots" id="tour-dots"></div>
-      <div class="tour-nav">
-        <button class="tour-prev" id="tour-prev" onclick="tourStep(-1)">←</button>
-        <button class="tour-next" id="tour-next" onclick="tourStep(1)">Next →</button>
-      </div>
-    </div>
-  </div>
-</div>
-
 <!-- TOAST -->
 <div class="toast" id="toast"><div class="toast-dot"></div><span id="toast-msg"></span></div>
 
@@ -1083,16 +936,6 @@ const STITCHES = [
   {id:'spiral',icon:'🌀',name:'Spiral',desc:'Spiral fill'},
   {id:'radial',icon:'✳',name:'Radial',desc:'Radial fill pattern'},
   {id:'wave',icon:'∿',name:'Wave',desc:'Wave fill pattern'},
-  {id:'zardozi',icon:'✦✦',name:'Zardozi',desc:'Gold metallic wire work — Mughal tradition',indian:true},
-  {id:'kantha',icon:'⊹⊹',name:'Kantha',desc:'Running stitch patterns — Bengal',indian:true},
-  {id:'phulkari',icon:'❋❋',name:'Phulkari',desc:'Darning stitch florals — Punjab',indian:true},
-  {id:'chikankari',icon:'❀❀',name:'Chikankari',desc:'Shadow work — Lucknow',indian:true},
-  {id:'aari',icon:'◉◉',name:'Aari',desc:'Hook needle chain stitch',indian:true},
-  {id:'kashmiri',icon:'❧❧',name:'Kashmiri',desc:'Chain stitch paisley — Kashmir',indian:true},
-  {id:'kutch',icon:'⬡⬡',name:'Kutch',desc:'Mirror work geometric — Gujarat',indian:true},
-  {id:'suf',icon:'▲▲',name:'Suf',desc:'Counted geometric — Rajasthan',indian:true},
-  {id:'toda',icon:'▥▥',name:'Toda',desc:'Geometric — Tamil Nadu',indian:true},
-  {id:'shisha',icon:'◈◈',name:'Shisha',desc:'Mirror/sitara attachment work',indian:true},
 ];
 
 // ═══════════════════════════════════════
@@ -1211,24 +1054,6 @@ const THREADS = {
     {hex:'#4B5563',name:'Charcoal',code:'2298'},{hex:'#9CA3AF',name:'Silver',code:'2299'},
     {hex:'#880E4F',name:'Maroon',code:'2238'},{hex:'#9C27B0',name:'Orchid',code:'2602'},
     {hex:'#C0A060',name:'Gold Metallic',code:'9001'},{hex:'#A8A8A8',name:'Silver Metallic',code:'9002'},
-  ],
-  indian:[
-    {hex:'#FFD700',name:'Bright Gold Zari',code:'ZR-001'},{hex:'#DAA520',name:'Golden Rod Zari',code:'ZR-002'},
-    {hex:'#B8860B',name:'Dark Gold Zari',code:'ZR-003'},{hex:'#C0C0C0',name:'Pure Silver Zari',code:'ZR-101'},
-    {hex:'#A8A9AD',name:'Steel Silver Zari',code:'ZR-102'},{hex:'#B87333',name:'Copper Tamba',code:'ZR-201'},
-    {hex:'#8B0000',name:'Deep Maroon Resham',code:'RS-001'},{hex:'#DC143C',name:'Crimson Lal',code:'RS-002'},
-    {hex:'#FF4500',name:'Sindoori Orange',code:'RS-003'},{hex:'#FF6347',name:'Kesari Saffron',code:'RS-004'},
-    {hex:'#FFD700',name:'Haldi Yellow',code:'RS-005'},{hex:'#006400',name:'Deep Paan Green',code:'RS-007'},
-    {hex:'#008080',name:'Firozi Teal',code:'RS-008'},{hex:'#00CED1',name:'Peacock Blue',code:'RS-009'},
-    {hex:'#000080',name:'Deep Neela Navy',code:'RS-010'},{hex:'#4B0082',name:'Baingani Violet',code:'RS-011'},
-    {hex:'#800080',name:'Jamuni Purple',code:'RS-012'},{hex:'#FF1493',name:'Gulabi Hot Pink',code:'RS-013'},
-    {hex:'#FFB6C1',name:'Light Gulab Pink',code:'RS-014'},{hex:'#FFFFFF',name:'Safed White',code:'RS-016'},
-    {hex:'#000000',name:'Kala Black',code:'RS-017'},{hex:'#8B4513',name:'Brown Mitti',code:'RS-018'},
-    {hex:'#00827F',name:'Mor Neela Peacock',code:'RS-021'},{hex:'#1B6B3A',name:'Mor Green',code:'RS-022'},
-    {hex:'#722F37',name:'Bridal Maroon',code:'BR-001'},{hex:'#B22222',name:'Bridal Red',code:'BR-002'},
-    {hex:'#FF8C00',name:'Bridal Orange',code:'BR-003'},{hex:'#E0115F',name:'Bridal Ruby',code:'BR-006'},
-    {hex:'#FF7F00',name:'Diwali Orange',code:'FT-001'},{hex:'#008000',name:'Eid Green',code:'FT-004'},
-    {hex:'#FF69B4',name:'Holi Pink',code:'FT-005'},{hex:'#9400D3',name:'Holi Violet',code:'FT-006'},
   ],
   sulky:[
     {hex:'#534AB7',name:'Purple',code:'1193'},{hex:'#7066D4',name:'Lavender',code:'1194'},
@@ -1448,118 +1273,6 @@ function drawPath(p){
         if(i===0) ctx.moveTo(p.points[i].x,p.points[i].y);
         ctx.quadraticCurveTo(cp.x,cp.y,p.points[i+2].x,p.points[i+2].y);
       } ctx.stroke(); break;
-    case 'zardozi':
-      ctx.beginPath(); p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
-      ctx.strokeStyle='rgba(0,0,0,0.25)'; ctx.lineWidth=5/S.zoom; ctx.stroke();
-      ctx.beginPath(); p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
-      ctx.strokeStyle=p.color; ctx.lineWidth=4/S.zoom; ctx.stroke();
-      ctx.fillStyle='rgba(255,255,255,0.7)';
-      p.points.filter((_,i)=>i%3===0).forEach(pt=>{ctx.beginPath();ctx.arc(pt.x,pt.y,1.5/S.zoom,0,Math.PI*2);ctx.fill();});
-      p.points.filter((_,i)=>i%5===0&&i>0).forEach(pt=>{ctx.beginPath();ctx.arc(pt.x,pt.y,3/S.zoom,0,Math.PI*2);ctx.strokeStyle=p.color;ctx.lineWidth=1/S.zoom;ctx.stroke();});
-      break;
-    case 'kantha':
-      ctx.setLineDash([5/S.zoom,3/S.zoom]); threadStroke(p.points,p.color,1.5); ctx.setLineDash([]);
-      ctx.beginPath(); ctx.setLineDash([4/S.zoom,4/S.zoom]);
-      p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x+0,pt.y+3/S.zoom):ctx.moveTo(pt.x,pt.y+3/S.zoom));
-      ctx.strokeStyle=p.color+'99'; ctx.lineWidth=1/S.zoom; ctx.stroke(); ctx.setLineDash([]);
-      break;
-    case 'phulkari':
-      if(p.points.length>3){
-        const bbP=bbox(p.points); ctx.save();
-        ctx.beginPath(); p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
-        ctx.closePath(); ctx.fillStyle=p.color+'22'; ctx.fill(); ctx.clip();
-        const phStep=2/S.zoom; ctx.lineWidth=0.8/S.zoom;
-        for(let y=bbP.minY;y<bbP.maxY;y+=phStep){
-          ctx.beginPath(); ctx.strokeStyle=p.color;
-          if(Math.floor((y-bbP.minY)/phStep)%2===0){ctx.moveTo(bbP.minX,y);ctx.lineTo(bbP.maxX,y);}
-          else{ctx.moveTo(bbP.maxX,y);ctx.lineTo(bbP.minX,y);}
-          ctx.stroke();
-        }
-        ctx.restore();
-        ctx.beginPath(); p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
-        ctx.closePath(); ctx.strokeStyle=p.color; ctx.lineWidth=1.5/S.zoom; ctx.stroke();
-      } break;
-    case 'chikankari':
-      ctx.globalAlpha=0.5; threadStroke(p.points,p.color,1); ctx.globalAlpha=1;
-      p.points.filter((_,i)=>i%4===0).forEach(pt=>{ctx.beginPath();ctx.arc(pt.x,pt.y,1.2/S.zoom,0,Math.PI*2);ctx.fillStyle=p.color+'66';ctx.fill();});
-      p.points.filter((_,i)=>i%6===0&&i>0).forEach(pt=>{ctx.beginPath();ctx.ellipse(pt.x,pt.y,2/S.zoom,1/S.zoom,0,0,Math.PI*2);ctx.strokeStyle=p.color+'99';ctx.lineWidth=0.5/S.zoom;ctx.stroke();});
-      break;
-    case 'aari':
-      ctx.beginPath(); p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
-      ctx.strokeStyle=p.color; ctx.lineWidth=2/S.zoom; ctx.stroke();
-      p.points.filter((_,i)=>i%2===0&&i>0).forEach((pt,idx,arr)=>{
-        const prev=arr[idx-1]||p.points[0];
-        ctx.beginPath(); ctx.ellipse((pt.x+prev.x)/2,(pt.y+prev.y)/2,2/S.zoom,1.5/S.zoom,Math.atan2(pt.y-prev.y,pt.x-prev.x),0,Math.PI*2);
-        ctx.strokeStyle=p.color; ctx.lineWidth=1/S.zoom; ctx.stroke();
-      }); break;
-    case 'kashmiri':
-      p.points.filter((_,i)=>i%3===0&&i>0).forEach((pt,idx,arr)=>{
-        const prev=arr[idx-1]||p.points[0];
-        ctx.beginPath(); ctx.ellipse((pt.x+prev.x)/2,(pt.y+prev.y)/2,3/S.zoom,2/S.zoom,Math.atan2(pt.y-prev.y,pt.x-prev.x),0,Math.PI*2);
-        ctx.strokeStyle=p.color; ctx.lineWidth=1.2/S.zoom; ctx.stroke();
-        ctx.beginPath(); ctx.arc((pt.x+prev.x)/2,(pt.y+prev.y)/2,0.8/S.zoom,0,Math.PI*2);
-        ctx.fillStyle=p.color; ctx.fill();
-      }); break;
-    case 'kutch':
-      if(p.points.length>3){
-        const bbK=bbox(p.points); ctx.save();
-        ctx.beginPath(); p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
-        ctx.closePath(); ctx.fillStyle=p.color+'22'; ctx.fill(); ctx.clip();
-        const kStep=8/S.zoom; ctx.strokeStyle=p.color; ctx.lineWidth=0.6/S.zoom;
-        for(let x=bbK.minX;x<bbK.maxX;x+=kStep){ctx.beginPath();ctx.moveTo(x,bbK.minY);ctx.lineTo(x,bbK.maxY);ctx.stroke();}
-        for(let y=bbK.minY;y<bbK.maxY;y+=kStep){ctx.beginPath();ctx.moveTo(bbK.minX,y);ctx.lineTo(bbK.maxX,y);ctx.stroke();}
-        for(let x=bbK.minX+kStep;x<bbK.maxX;x+=kStep*2){
-          for(let y=bbK.minY+kStep;y<bbK.maxY;y+=kStep*2){
-            const grd=ctx.createRadialGradient(x,y,0,x,y,2.5/S.zoom);
-            grd.addColorStop(0,'rgba(255,255,255,0.9)'); grd.addColorStop(1,'rgba(150,200,220,0.2)');
-            ctx.beginPath(); ctx.arc(x,y,2.5/S.zoom,0,Math.PI*2); ctx.fillStyle=grd; ctx.fill();
-            ctx.strokeStyle=p.color; ctx.lineWidth=0.5/S.zoom; ctx.stroke();
-          }
-        }
-        ctx.restore();
-        ctx.beginPath(); p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
-        ctx.closePath(); ctx.strokeStyle=p.color; ctx.lineWidth=1.5/S.zoom; ctx.stroke();
-      } break;
-    case 'suf':
-      if(p.points.length>3){
-        const bbS=bbox(p.points); ctx.save();
-        ctx.beginPath(); p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
-        ctx.closePath(); ctx.clip();
-        const sufStep=4/S.zoom; ctx.strokeStyle=p.color; ctx.lineWidth=0.8/S.zoom;
-        for(let i=0;i<(bbS.maxX-bbS.minX+bbS.maxY-bbS.minY)/sufStep;i++){
-          ctx.beginPath(); ctx.moveTo(bbS.minX+i*sufStep,bbS.minY); ctx.lineTo(bbS.minX,bbS.minY+i*sufStep); ctx.stroke();
-        }
-        ctx.restore();
-        ctx.beginPath(); p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
-        ctx.closePath(); ctx.strokeStyle=p.color; ctx.lineWidth=1.5/S.zoom; ctx.stroke();
-      } break;
-    case 'toda':
-      if(p.points.length>3){
-        const bbT=bbox(p.points); ctx.save();
-        ctx.beginPath(); p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
-        ctx.closePath(); ctx.clip();
-        const todaStep=5/S.zoom;
-        for(let x=bbT.minX;x<bbT.maxX;x+=todaStep){
-          ctx.fillStyle=Math.floor((x-bbT.minX)/todaStep)%2===0?p.color:p.color+'44';
-          ctx.fillRect(x,bbT.minY,todaStep,bbT.maxY-bbT.minY);
-        }
-        ctx.restore();
-        ctx.beginPath(); p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
-        ctx.closePath(); ctx.strokeStyle=p.color; ctx.lineWidth=1.5/S.zoom; ctx.stroke();
-      } break;
-    case 'shisha':
-      p.points.filter((_,i)=>i%5===0).forEach(pt=>{
-        const r=5/S.zoom;
-        const grd=ctx.createRadialGradient(pt.x-r*.3,pt.y-r*.3,r*.1,pt.x,pt.y,r);
-        grd.addColorStop(0,'rgba(255,255,255,0.95)'); grd.addColorStop(1,'rgba(150,170,200,0.2)');
-        ctx.beginPath(); ctx.arc(pt.x,pt.y,r,0,Math.PI*2); ctx.fillStyle=grd; ctx.fill();
-        for(let i=0;i<8;i++){const a=i/8*Math.PI*2; ctx.beginPath(); ctx.moveTo(pt.x+r*Math.cos(a),pt.y+r*Math.sin(a)); ctx.lineTo(pt.x+(r+3/S.zoom)*Math.cos(a),pt.y+(r+3/S.zoom)*Math.sin(a)); ctx.strokeStyle=p.color; ctx.lineWidth=0.8/S.zoom; ctx.stroke();}
-        ctx.beginPath(); ctx.arc(pt.x,pt.y,r,0,Math.PI*2); ctx.strokeStyle=p.color; ctx.lineWidth=1/S.zoom; ctx.stroke();
-      });
-      ctx.beginPath(); ctx.setLineDash([3/S.zoom,3/S.zoom]);
-      p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
-      ctx.strokeStyle=p.color+'66'; ctx.lineWidth=0.8/S.zoom; ctx.stroke(); ctx.setLineDash([]);
-      break;
     default:
       ctx.beginPath(); ctx.strokeStyle=p.color; ctx.lineWidth=lw;
       p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
@@ -2306,21 +2019,12 @@ function buildFonts(){
 // ═══════════════════════════════════════
 function buildStitchGrid(){
   const grid=document.getElementById('stgrid');
-  let addedDivider=false;
   STITCHES.forEach(s=>{
-    if(s.indian&&!addedDivider){
-      addedDivider=true;
-      const div=document.createElement('div');
-      div.style.cssText='grid-column:1/-1;font-size:9px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--gold);padding:8px 2px 4px;border-top:1px solid var(--border);margin-top:4px';
-      div.textContent='🇮🇳 Indian Traditional';
-      grid.appendChild(div);
-    }
     const d=document.createElement('div');
     d.className='st'+(s.id==='running'?' active':'');
     d.id='st-'+s.id;
     d.title=s.desc;
-    if(s.indian) d.style.borderColor='rgba(239,159,39,0.3)';
-    d.innerHTML='<div class="st-icon">'+s.icon+'</div><div class="st-name">'+s.name+'</div>';
+    d.innerHTML=`<div class="st-icon">${s.icon}</div><div class="st-name">${s.name}</div>`;
     d.onclick=()=>setStitch(s.id);
     grid.appendChild(d);
   });
@@ -2358,9 +2062,9 @@ async function aiSend(override){
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
-        model:'claude-sonnet-4-6',
+        model:'claude-sonnet-4-20250514',
         max_tokens:1000,
-        system:`You are Aari — the world's first AI specialised in Indian and global embroidery. Named after the Aari hook needle. Deep expertise in: Zardozi (metallic gold/silver, Mughal), Kantha (running stitch, Bengal), Phulkari (darning stitch, Punjab), Chikankari (shadow work, Lucknow), Aari work (chain stitch florals), Kashmiri (chain stitch paisley), Kutch (mirror work, Gujarat), Suf (geometric, Rajasthan), Toda (geometric, Tamil Nadu), Shisha/mirror work. Indian threads: Gold Zari ZR-001 to ZR-006, Silver Zari ZR-101+, Resham silk colors (Lal=red, Neela=blue, Hara=green, Peela=yellow, Gulabi=pink). Indian motifs: Paisley/Kairi, Lotus, Peacock/Mor, Mango/Kairi, Buta, Jaali, Kalash, Saree/Lehenga borders, Rangoli. Garments: Saree (pallav, border, body), Lehenga (skirt+choli+dupatta), Sherwani, Kurta. Also expert in all global embroidery: all stitch types, Madeira/Isacord/Robison-Anton/Sulky thread codes, machine formats DST/PES/JEF/EXP/VP3/HUS/XXX, underlay, pull compensation, density, digitizing. When helping with Indian designs: suggest specific Indian stitch type, Indian thread codes, mention regional tradition. Be expert, warm, culturally knowledgeable.`,
+        system:`You are Embroxia AI — a world-class professional embroidery digitizing expert built into the Embroxia Studio. You know everything about: stitch types (running, satin, fill, tatami, cross-stitch, backstitch, stemstitch, appliqué, 3D puff, redwork, accordion fill, contour fill, spiral, radial, wave), thread brands (Madeira, Isacord, Robison-Anton, Sulky) with exact color codes, machine formats (DST/PES/JEF/EXP/VP3/HUS/XXX), fabric types and their settings, underlay techniques, pull compensation, digitizing best practices, stitch density, sequencing, and optimization. When generating design ideas: be specific with exact Madeira thread codes, stitch types, density values, and sequencing. When troubleshooting: give precise technical fixes. Keep responses expert, concise, and actionable. Use line breaks for readability.`,
         messages:aiHistory
       })
     });
@@ -2406,7 +2110,7 @@ async function handleImg(e){
       const res=await fetch('https://api.anthropic.com/v1/messages',{
         method:'POST',
         headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,
+        body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,
           system:'You are an expert embroidery digitizing consultant. Analyze images professionally.',
           messages:aiHistory})
       });
@@ -2674,57 +2378,6 @@ function renderGarment(){
   const designScale=(scale*120)/maxDim;
 
   // Placement center based on garment type
-  if(['saree','lehenga','dupatta','kurta'].includes(currentGarment)){
-    if(currentGarment==='saree'){
-      gctx.beginPath(); gctx.moveTo(cx-130,cy+130); gctx.lineTo(cx-130,cy-60);
-      gctx.quadraticCurveTo(cx,cy-120,cx+100,cy-40); gctx.lineTo(cx+100,cy+130); gctx.closePath();
-      gctx.fillStyle=garmentColor; gctx.fill(); gctx.strokeStyle='rgba(255,255,255,0.15)'; gctx.lineWidth=1.5; gctx.stroke();
-      gctx.beginPath(); gctx.moveTo(cx-130,cy-60); gctx.lineTo(cx-130,cy+130); gctx.lineTo(cx-90,cy+130); gctx.lineTo(cx-90,cy-60); gctx.closePath();
-      gctx.fillStyle=shadeColor(garmentColor,-30); gctx.fill();
-      gctx.strokeStyle='rgba(239,159,39,0.6)'; gctx.lineWidth=3;
-      gctx.beginPath(); gctx.moveTo(cx-130,cy+110); gctx.lineTo(cx+100,cy+110); gctx.stroke();
-    } else if(currentGarment==='lehenga'){
-      gctx.beginPath(); gctx.moveTo(cx-30,cy-120); gctx.lineTo(cx+30,cy-120);
-      gctx.lineTo(cx+150,cy+130); gctx.lineTo(cx-150,cy+130); gctx.closePath();
-      gctx.fillStyle=garmentColor; gctx.fill(); gctx.strokeStyle='rgba(255,255,255,0.15)'; gctx.lineWidth=1.5; gctx.stroke();
-      gctx.strokeStyle='rgba(239,159,39,0.7)'; gctx.lineWidth=4;
-      gctx.beginPath(); gctx.moveTo(cx-150,cy+110); gctx.lineTo(cx+150,cy+110); gctx.stroke();
-      gctx.beginPath(); gctx.moveTo(cx-45,cy-120); gctx.lineTo(cx+45,cy-120); gctx.lineTo(cx+50,cy-60); gctx.lineTo(cx-50,cy-60); gctx.closePath();
-      gctx.fillStyle=shadeColor(garmentColor,-25); gctx.fill();
-    } else if(currentGarment==='dupatta'){
-      gctx.beginPath(); gctx.rect(cx-200,cy-40,400,120);
-      gctx.fillStyle=garmentColor; gctx.fill(); gctx.strokeStyle='rgba(255,255,255,0.15)'; gctx.lineWidth=1; gctx.stroke();
-      gctx.strokeStyle='rgba(239,159,39,0.6)'; gctx.lineWidth=4;
-      gctx.beginPath(); gctx.moveTo(cx-200,cy-28); gctx.lineTo(cx+200,cy-28); gctx.stroke();
-      gctx.beginPath(); gctx.moveTo(cx-200,cy+68); gctx.lineTo(cx+200,cy+68); gctx.stroke();
-    } else if(currentGarment==='kurta'){
-      gctx.beginPath();
-      gctx.moveTo(cx-90,cy-100); gctx.lineTo(cx-130,cy-80); gctx.lineTo(cx-100,cy+130);
-      gctx.lineTo(cx+100,cy+130); gctx.lineTo(cx+130,cy-80); gctx.lineTo(cx+90,cy-100);
-      gctx.quadraticCurveTo(cx,cy-125,cx-90,cy-100); gctx.closePath();
-      gctx.fillStyle=garmentColor; gctx.fill(); gctx.strokeStyle='rgba(255,255,255,0.15)'; gctx.lineWidth=1.5; gctx.stroke();
-      gctx.strokeStyle='rgba(239,159,39,0.5)'; gctx.lineWidth=2;
-      gctx.beginPath(); gctx.moveTo(cx,cy-125); gctx.lineTo(cx,cy-60); gctx.stroke();
-    }
-    if(!S.paths.length){
-      gctx.fillStyle='rgba(255,255,255,0.15)'; gctx.font='13px DM Sans'; gctx.textAlign='center';
-      gctx.fillText('Draw a design to see it here',cx,cy+160);
-    } else {
-      const allPts2=S.paths.flatMap(p=>p.points);
-      if(allPts2.length){
-        const minX2=Math.min(...allPts2.map(p=>p.x)),maxX2=Math.max(...allPts2.map(p=>p.x));
-        const minY2=Math.min(...allPts2.map(p=>p.y)),maxY2=Math.max(...allPts2.map(p=>p.y));
-        const dW2=maxX2-minX2||1,dH2=maxY2-minY2||1;
-        const sc2=(scale*100)/Math.max(dW2,dH2);
-        gctx.save(); gctx.translate(cx+px,cy+py); gctx.scale(sc2,sc2); gctx.translate(-(minX2+dW2/2),-(minY2+dH2/2));
-        S.paths.forEach(p=>{if(!p.points||p.points.length<2)return;gctx.beginPath();p.points.forEach((pt,i)=>i?gctx.lineTo(pt.x,pt.y):gctx.moveTo(pt.x,pt.y));gctx.strokeStyle=p.color;gctx.lineWidth=1.5;gctx.stroke();});
-        gctx.restore();
-      }
-    }
-    gctx.fillStyle='rgba(255,255,255,0.2)'; gctx.font='11px DM Mono'; gctx.textAlign='right';
-    gctx.fillText(labels[currentGarment]||currentGarment,W-12,H-10);
-    return;
-  }
   const placements={tshirt:{x:cx+px,y:cy-10+py},polo:{x:cx+px,y:cy-30+py},
     hoodie:{x:cx+px,y:cy-20+py},cap:{x:cx+px,y:cy-30+py},
     bag:{x:cx+px,y:cy+20+py},jacket:{x:cx-60+px,y:cy-20+py}};
@@ -2754,7 +2407,7 @@ function renderGarment(){
   gctx.fillStyle='rgba(255,255,255,0.25)';
   gctx.font='11px DM Mono';
   gctx.textAlign='right';
-  const labels={tshirt:'T-Shirt',polo:'Polo Shirt',hoodie:'Hoodie',cap:'Baseball Cap',bag:'Tote Bag',jacket:'Jacket',saree:'Saree',lehenga:'Lehenga',dupatta:'Dupatta',kurta:'Kurta'};
+  const labels={tshirt:'T-Shirt',polo:'Polo Shirt',hoodie:'Hoodie',cap:'Baseball Cap',bag:'Tote Bag',jacket:'Jacket'};
   gctx.fillText(labels[currentGarment]||currentGarment, W-12, H-10);
 }
 
@@ -2804,7 +2457,7 @@ async function convertPhotoToStitch(){
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
-        model:'claude-sonnet-4-6',
+        model:'claude-sonnet-4-20250514',
         max_tokens:1000,
         system:'You are an embroidery digitizing AI. Analyze photos and return embroidery stitch coordinates as JSON. Return ONLY valid JSON, no markdown.',
         messages:[{role:'user',content:[
@@ -2847,669 +2500,6 @@ Rules: Use ${colors} colors max. Canvas is 400x400. Generate ${detail*20} meanin
 // MULTI BLEND UI — add to Tools menu
 // ═══════════════════════════════════════
 
-
-// ═══════════════════════════════════════
-// AI GENERATE FROM PROMPT
-// ═══════════════════════════════════════
-function showGeneratePrompt(){
-  document.getElementById('gen-modal').classList.add('show');
-  document.getElementById('gen-prompt').focus();
-}
-function closeGenModal(){
-  document.getElementById('gen-modal').classList.remove('show');
-  document.getElementById('gen-progress').style.display='none';
-  document.getElementById('gen-btn').disabled=false;
-  document.getElementById('gen-btn').textContent='✨ Generate design';
-}
-function setGenPrompt(text){
-  document.getElementById('gen-prompt').value=text;
-}
-
-function setGenProgress(text, pct){
-  const prog=document.getElementById('gen-progress');
-  prog.style.display='block';
-  document.getElementById('gen-progress-text').textContent=text;
-  document.getElementById('gen-progress-fill').style.width=pct+'%';
-}
-
-async function generateFromPrompt(){
-  const prompt=document.getElementById('gen-prompt').value.trim();
-  if(!prompt){toast('Enter a design description first');return;}
-
-  const complexity=document.getElementById('gen-complexity').value;
-  const placement=document.getElementById('gen-placement').value;
-  const btn=document.getElementById('gen-btn');
-  btn.disabled=true;
-  btn.textContent='Generating...';
-
-  setGenProgress('Aari is analysing your design prompt...', 15);
-
-  try{
-    // Step 1 — Ask Claude to determine design approach and generate paths
-    const systemPrompt=`You are Aari, an expert Indian and global embroidery designer and digitizer. When given a design prompt, you generate embroidery designs as JSON stitch data.
-
-You must return ONLY valid JSON in this exact format, no markdown, no explanation:
-{
-  "title": "Design name",
-  "stitchType": "one of: zardozi/kantha/phulkari/chikankari/aari/kashmiri/kutch/suf/shisha/running/satin/fill/cross",
-  "primaryColor": "#hexcolor",
-  "secondaryColor": "#hexcolor", 
-  "paths": [
-    {"color": "#hexcolor", "stitch": "stitch_type", "points": [{"x": 0, "y": 0}, {"x": 10, "y": 10}], "name": "element name"}
-  ]
-}
-
-Rules for generating paths:
-- Canvas is 500x500 pixels, center is (250,250)
-- Generate 8-25 paths depending on complexity
-- Each path should have 6-30 points
-- For BORDERS: paths should form a rectangular or circular border around the edges
-- For MOTIFS: paths should form the named motif centered at (250,250)  
-- For GEOMETRIC: use precise mathematical coordinates for patterns
-- For REPEATING: create a tile that repeats across the canvas
-- Make paths that look like the described design when drawn
-- Indian stitch types: zardozi=metallic wire, kantha=running stitch rows, phulkari=dense darning, chikankari=delicate shadow, aari=chain stitch, kashmiri=chain paisley, kutch=geometric+mirrors, suf=diagonal geometric, shisha=mirror circles
-- Use authentic Indian color combinations: gold+maroon for bridal, indigo+white for kantha, red+yellow for phulkari, teal+gold for kashmiri
-- Complexity: simple=5-8 paths, medium=10-18 paths, complex=20-30 paths`;
-
-    setGenProgress('Generating stitch coordinates...', 35);
-
-    const userMsg=`Create an embroidery design for: "${prompt}"
-Complexity: ${complexity}
-Placement: ${placement}
-Canvas size: 500x500, center at (250,250)
-Generate mathematically precise paths that form the described design.`;
-
-    const res=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        model:'claude-sonnet-4-6',
-        max_tokens:4000,
-        system:systemPrompt,
-        messages:[{role:'user',content:userMsg}]
-      })
-    });
-
-    setGenProgress('Processing design paths...', 60);
-
-    const data=await res.json();
-    const rawText=data.content?.[0]?.text||'{}';
-    const cleanText=rawText.replace(/```json|```/g,'').trim();
-
-    let design;
-    try{
-      design=JSON.parse(cleanText);
-    } catch(e){
-      // Try to extract JSON from response
-      const jsonMatch=rawText.match(/\{[\s\S]*\}/);
-      if(jsonMatch) design=JSON.parse(jsonMatch[0]);
-      else throw new Error('Could not parse design JSON');
-    }
-
-    setGenProgress('Placing design on canvas...', 80);
-
-    if(!design.paths||!design.paths.length){
-      throw new Error('No paths generated');
-    }
-
-    // Place paths on canvas
-    saveHist();
-    const cx=cvs.width/2/S.zoom-S.panX/S.zoom;
-    const cy=cvs.height/2/S.zoom-S.panY/S.zoom;
-
-    // Calculate offset to center the design
-    const allGenPts=design.paths.flatMap(p=>p.points||[]);
-    const genMinX=Math.min(...allGenPts.map(p=>p.x));
-    const genMaxX=Math.max(...allGenPts.map(p=>p.x));
-    const genMinY=Math.min(...allGenPts.map(p=>p.y));
-    const genMaxY=Math.max(...allGenPts.map(p=>p.y));
-    const genCX=(genMinX+genMaxX)/2;
-    const genCY=(genMinY+genMaxY)/2;
-    const offsetX=cx-genCX;
-    const offsetY=cy-genCY;
-
-    // Scale to fit canvas nicely
-    const genW=genMaxX-genMinX||1;
-    const genH=genMaxY-genMinY||1;
-    const maxDim=Math.max(genW,genH);
-    const targetSize=Math.min(cvs.width,cvs.height)*.6/S.zoom;
-    const scale=maxDim>targetSize?targetSize/maxDim:1;
-
-    let pathsAdded=0;
-    design.paths.forEach(p=>{
-      if(!p.points||p.points.length<2) return;
-      const scaledPts=p.points.map(pt=>({
-        x:(pt.x-genCX)*scale+cx,
-        y:(pt.y-genCY)*scale+cy,
-        cp1x:(pt.x-genCX)*scale+cx,
-        cp1y:(pt.y-genCY)*scale+cy,
-        cp2x:(pt.x-genCX)*scale+cx,
-        cp2y:(pt.y-genCY)*scale+cy,
-      }));
-      S.paths.push({
-        points:scaledPts,
-        color:p.color||design.primaryColor||S.color,
-        stitch:p.stitch||design.stitchType||S.stitch,
-        layer:S.activeLayer,
-        name:p.name||design.title||'Generated'
-      });
-      pathsAdded++;
-    });
-
-    setGenProgress('Done! '+pathsAdded+' stitch paths placed.', 100);
-
-    // Update canvas
-    document.getElementById('wi').style.opacity='0';
-    updateStats();
-    redraw();
-
-    // Set stitch type to match design
-    if(design.stitchType) setStitch(design.stitchType);
-
-    // Add to AI conversation
-    aiHistory.push({role:'user',content:'Generate: '+prompt});
-    aiHistory.push({role:'assistant',content:'Generated "'+design.title+'" with '+pathsAdded+' stitch paths using '+design.stitchType+' stitch. Design is now on your canvas — you can edit any path with the Node tool (N) or change colors in the Color panel.'});
-
-    setTimeout(()=>{
-      closeGenModal();
-      // Open AI panel to show result
-      const aiPanel=document.getElementById('ai-panel');
-      if(aiPanel.classList.contains('hidden')) toggleAI();
-      addAIMsg('bot','✦ Generated <b>'+design.title+'</b> — '+pathsAdded+' stitch paths placed on canvas using <b>'+design.stitchType+'</b> stitch.<br><br>You can now:<br>• Edit paths with the Node tool (N)<br>• Change colors in the Color panel<br>• Export when ready');
-      toast('✨ Generated: '+design.title);
-    },600);
-
-  } catch(err){
-    console.error('Generate error:',err);
-    console.error('Full error:',JSON.stringify(err));
-    setGenProgress('⚠️ Generation failed — '+err.message,0);
-    document.getElementById('gen-progress').style.display='block';
-    document.getElementById('gen-progress-text').textContent='⚠️ Could not generate design. Try a simpler prompt or check your connection.';
-    btn.disabled=false;
-    btn.textContent='✨ Try again';
-  }
-}
-
-
-
-// ═══════════════════════════════════════
-// PATTERN LIBRARY
-// 60+ ready-made embroidery patterns
-// ═══════════════════════════════════════
-
-const PATTERNS = [
-
-  // ── INDIAN PATTERNS ──
-  {name:'Zardozi Border',cat:'indian',stitch:'zardozi',colors:['#FFD700','#8B0000'],
-   gen:(cx,cy,s)=>{const paths=[];
-     // Outer border
-     const border=[];
-     for(let i=0;i<=40;i++){const t=i/40;border.push({x:cx-s*.5+t*s,y:cy-s*.4});}
-     for(let i=0;i<=20;i++){const t=i/20;border.push({x:cx+s*.5,y:cy-s*.4+t*s*.8});}
-     for(let i=0;i<=40;i++){const t=i/40;border.push({x:cx+s*.5-t*s,y:cy+s*.4});}
-     for(let i=0;i<=20;i++){const t=i/20;border.push({x:cx-s*.5,y:cy+s*.4-t*s*.8});}
-     paths.push({points:border,color:'#FFD700',stitch:'zardozi'});
-     // Inner lotus motifs
-     for(let i=0;i<5;i++){
-       const ox=cx+(i-2)*s*.22;
-       for(let p=0;p<6;p++){
-         const a=p/6*Math.PI*2;const pts=[];
-         for(let j=0;j<=12;j++){const t=j/12*Math.PI*2;const r=s*.07*Math.abs(Math.sin(t/2));pts.push({x:ox+r*Math.cos(t+a)+s*.09*Math.cos(a),y:cy+r*Math.sin(t+a)+s*.09*Math.sin(a)});}
-         paths.push({points:pts,color:'#8B0000',stitch:'zardozi'});
-       }
-     }
-     return paths;}},
-
-  {name:'Kantha Lotus',cat:'indian',stitch:'kantha',colors:['#000080','#FFFFFF'],
-   gen:(cx,cy,s)=>{const paths=[];
-     // 8 petals
-     for(let i=0;i<8;i++){
-       const a=i/8*Math.PI*2;const pts=[];
-       for(let j=0;j<=20;j++){const t=j/20*Math.PI*2;const r=s*.25*Math.abs(Math.sin(t/2));pts.push({x:cx+r*Math.cos(t+a)+s*.2*Math.cos(a),y:cy+r*Math.sin(t+a)+s*.2*Math.sin(a)});}
-       paths.push({points:pts,color:i%2===0?'#000080':'#4169E1',stitch:'kantha'});
-     }
-     // Center
-     const c=[];for(let i=0;i<=24;i++)c.push({x:cx+s*.09*Math.cos(i/24*Math.PI*2),y:cy+s*.09*Math.sin(i/24*Math.PI*2)});
-     paths.push({points:c,color:'#FFD700',stitch:'kantha'});
-     // Running stitch surround
-     const surround=[];for(let i=0;i<=36;i++)surround.push({x:cx+s*.42*Math.cos(i/36*Math.PI*2),y:cy+s*.42*Math.sin(i/36*Math.PI*2)});
-     paths.push({points:surround,color:'#000080',stitch:'kantha'});
-     return paths;}},
-
-  {name:'Phulkari Diamond',cat:'indian',stitch:'phulkari',colors:['#DC143C','#FFD700','#006400'],
-   gen:(cx,cy,s)=>{const paths=[];
-     const colors=['#DC143C','#FFD700','#006400','#FF4500','#8B0000'];
-     for(let row=-2;row<=2;row++){
-       for(let col=-2;col<=2;col++){
-         if(Math.abs(row)+Math.abs(col)>3) continue;
-         const ox=cx+col*s*.2,oy=cy+row*s*.2;
-         const diamond=[{x:ox,y:oy-s*.09},{x:ox+s*.09,y:oy},{x:ox,y:oy+s*.09},{x:ox-s*.09,y:oy},{x:ox,y:oy-s*.09}];
-         paths.push({points:diamond,color:colors[(Math.abs(row)+Math.abs(col))%colors.length],stitch:'phulkari'});
-       }
-     }
-     return paths;}},
-
-  {name:'Chikankari Flower',cat:'indian',stitch:'chikankari',colors:['#FFFFFF','#F0F8FF'],
-   gen:(cx,cy,s)=>{const paths=[];
-     for(let i=0;i<12;i++){
-       const a=i/12*Math.PI*2;const pts=[];
-       for(let j=0;j<=16;j++){const t=j/16*Math.PI*2;const r=s*.12*Math.abs(Math.sin(t/2));pts.push({x:cx+r*Math.cos(t+a)+s*.18*Math.cos(a),y:cy+r*Math.sin(t+a)+s*.18*Math.sin(a)});}
-       paths.push({points:pts,color:'#FFFFFF',stitch:'chikankari'});
-     }
-     const stem=[];for(let i=0;i<=24;i++)stem.push({x:cx+s*.06*Math.cos(i/24*Math.PI*2),y:cy+s*.06*Math.sin(i/24*Math.PI*2)});
-     paths.push({points:stem,color:'#E8E8E8',stitch:'chikankari'});
-     return paths;}},
-
-  {name:'Aari Peacock',cat:'indian',stitch:'aari',colors:['#008080','#FFD700','#006400'],
-   gen:(cx,cy,s)=>{const paths=[];
-     // Feathers
-     for(let i=0;i<7;i++){
-       const a=(i/7-.5)*Math.PI*1.2;const pts=[];
-       for(let j=0;j<=20;j++){const t=j/20;pts.push({x:cx+t*s*.4*Math.sin(a)+Math.sin(t*Math.PI)*s*.08*Math.cos(a),y:cy-t*s*.4*Math.cos(a)+Math.sin(t*Math.PI)*s*.08*Math.sin(a)});}
-       paths.push({points:pts,color:i%3===0?'#008080':i%3===1?'#006400':'#004D40',stitch:'aari'});
-       // Eye
-       const eye=[];for(let j=0;j<=16;j++){eye.push({x:cx+s*.4*Math.sin(a)+s*.06*Math.cos(j/16*Math.PI*2),y:cy-s*.4*Math.cos(a)+s*.06*Math.sin(j/16*Math.PI*2)});}
-       paths.push({points:eye,color:'#FFD700',stitch:'aari'});
-     }
-     // Body
-     const body=[];for(let i=0;i<=24;i++){const a=i/24*Math.PI*2;body.push({x:cx+s*.08*Math.cos(a),y:cy+s*.15+s*.12*Math.sin(a)});}
-     paths.push({points:body,color:'#008080',stitch:'aari'});
-     return paths;}},
-
-  {name:'Kashmiri Paisley',cat:'indian',stitch:'kashmiri',colors:['#1D9E75','#FFD700','#8B0000'],
-   gen:(cx,cy,s)=>{const paths=[];
-     // Main paisley
-     const main=[];
-     for(let i=0;i<=48;i++){const t=i/48*Math.PI*2;const r=s*.3*(1+0.45*Math.cos(t));main.push({x:cx+r*Math.cos(t+0.4*Math.sin(t*2))*0.75,y:cy+r*Math.sin(t+0.4*Math.sin(t*2))*1.4-s*.08});}
-     paths.push({points:main,color:'#1D9E75',stitch:'kashmiri'});
-     // Inner details
-     const inner=[];
-     for(let i=0;i<=32;i++){const t=i/32*Math.PI*2;const r=s*.16*(1+0.3*Math.cos(t));inner.push({x:cx+r*Math.cos(t+0.3*Math.sin(t*2))*0.7,y:cy+r*Math.sin(t+0.3*Math.sin(t*2))*1.3-s*.05});}
-     paths.push({points:inner,color:'#FFD700',stitch:'kashmiri'});
-     // Surrounding flowers
-     for(let i=0;i<6;i++){
-       const a=i/6*Math.PI*2;const pts=[];
-       for(let j=0;j<=16;j++){const t=j/16*Math.PI*2;pts.push({x:cx+s*.35*Math.cos(a)+s*.06*Math.cos(t+a),y:cy+s*.35*Math.sin(a)+s*.06*Math.sin(t+a)});}
-       paths.push({points:pts,color:'#8B0000',stitch:'kashmiri'});
-     }
-     return paths;}},
-
-  {name:'Kutch Geometric',cat:'indian',stitch:'kutch',colors:['#DC143C','#FFD700','#006400','#000080'],
-   gen:(cx,cy,s)=>{const paths=[];
-     const cols=['#DC143C','#FFD700','#006400','#000080','#800080'];
-     // Concentric hexagons
-     for(let r=1;r<=4;r++){
-       const hex=[];
-       for(let i=0;i<=6;i++){const a=i/6*Math.PI*2+Math.PI/6;hex.push({x:cx+r*s*.1*Math.cos(a),y:cy+r*s*.1*Math.sin(a)});}
-       paths.push({points:hex,color:cols[r%cols.length],stitch:'kutch'});
-     }
-     // Radiating lines
-     for(let i=0;i<6;i++){
-       const a=i/6*Math.PI*2+Math.PI/6;
-       paths.push({points:[{x:cx+s*.1*Math.cos(a),y:cy+s*.1*Math.sin(a)},{x:cx+s*.4*Math.cos(a),y:cy+s*.4*Math.sin(a)}],color:'#FFD700',stitch:'kutch'});
-     }
-     // Mirror circles
-     for(let i=0;i<6;i++){
-       const a=i/6*Math.PI*2;const mc=[];
-       for(let j=0;j<=16;j++)mc.push({x:cx+s*.3*Math.cos(a)+s*.06*Math.cos(j/16*Math.PI*2),y:cy+s*.3*Math.sin(a)+s*.06*Math.sin(j/16*Math.PI*2)});
-       paths.push({points:mc,color:'#C0C0C0',stitch:'shisha'});
-     }
-     return paths;}},
-
-  {name:'Shisha Mirror',cat:'indian',stitch:'shisha',colors:['#8B0000','#FFD700','#C0C0C0'],
-   gen:(cx,cy,s)=>{const paths=[];
-     // Central large mirror
-     const c=[];for(let i=0;i<=24;i++)c.push({x:cx+s*.12*Math.cos(i/24*Math.PI*2),y:cy+s*.12*Math.sin(i/24*Math.PI*2)});
-     paths.push({points:c,color:'#C0C0C0',stitch:'shisha'});
-     // 6 surrounding mirrors
-     for(let i=0;i<6;i++){
-       const a=i/6*Math.PI*2;const mc=[];
-       for(let j=0;j<=16;j++)mc.push({x:cx+s*.3*Math.cos(a)+s*.07*Math.cos(j/16*Math.PI*2),y:cy+s*.3*Math.sin(a)+s*.07*Math.sin(j/16*Math.PI*2)});
-       paths.push({points:mc,color:'#C0C0C0',stitch:'shisha'});
-       // Connecting stitches
-       const conn=[];for(let j=0;j<=8;j++){const t=j/8;conn.push({x:cx+(s*.12+(s*.3-s*.12)*t)*Math.cos(a),y:cy+(s*.12+(s*.3-s*.12)*t)*Math.sin(a)});}
-       paths.push({points:conn,color:'#8B0000',stitch:'running'});
-     }
-     // Outer star
-     for(let i=0;i<12;i++){
-       const a=i/12*Math.PI*2;
-       paths.push({points:[{x:cx+s*.38*Math.cos(a),y:cy+s*.38*Math.sin(a)},{x:cx+s*.45*Math.cos(a+Math.PI/12),y:cy+s*.45*Math.sin(a+Math.PI/12)},{x:cx+s*.38*Math.cos(a+Math.PI/6),y:cy+s*.38*Math.sin(a+Math.PI/6)}],color:'#FFD700',stitch:'running'});
-     }
-     return paths;}},
-
-  // ── BRIDAL PATTERNS ──
-  {name:'Bridal Mandala',cat:'bridal',stitch:'zardozi',colors:['#FFD700','#8B0000','#800020'],
-   gen:(cx,cy,s)=>{const paths=[];
-     for(let ring=1;ring<=5;ring++){
-       const pts=[];for(let i=0;i<=36;i++)pts.push({x:cx+ring*s*.08*Math.cos(i/36*Math.PI*2),y:cy+ring*s*.08*Math.sin(i/36*Math.PI*2)});
-       paths.push({points:pts,color:ring%2===0?'#FFD700':'#8B0000',stitch:'zardozi'});
-     }
-     for(let i=0;i<16;i++){
-       const a=i/16*Math.PI*2;
-       paths.push({points:[{x:cx+s*.08*Math.cos(a),y:cy+s*.08*Math.sin(a)},{x:cx+s*.4*Math.cos(a),y:cy+s*.4*Math.sin(a)}],color:i%4===0?'#FFD700':'#8B0000',stitch:'zardozi'});
-     }
-     for(let i=0;i<8;i++){
-       const a=i/8*Math.PI*2;const pts=[];
-       for(let j=0;j<=16;j++){const t=j/16*Math.PI*2;pts.push({x:cx+s*.35*Math.cos(a)+s*.07*Math.cos(t),y:cy+s*.35*Math.sin(a)+s*.07*Math.sin(t)});}
-       paths.push({points:pts,color:'#800020',stitch:'aari'});
-     }
-     return paths;}},
-
-  {name:'Lehenga Border',cat:'bridal',stitch:'zardozi',colors:['#FFD700','#8B0000'],
-   gen:(cx,cy,s)=>{const paths=[];
-     // Main border lines
-     paths.push({points:[{x:cx-s*.5,y:cy-s*.3},{x:cx+s*.5,y:cy-s*.3}],color:'#FFD700',stitch:'zardozi'});
-     paths.push({points:[{x:cx-s*.5,y:cy+s*.3},{x:cx+s*.5,y:cy+s*.3}],color:'#FFD700',stitch:'zardozi'});
-     // Lotus motifs along border
-     for(let i=-2;i<=2;i++){
-       const ox=cx+i*s*.22;
-       for(let p=0;p<6;p++){
-         const a=p/6*Math.PI*2;const pts=[];
-         for(let j=0;j<=12;j++){const t=j/12*Math.PI*2;const r=s*.07*Math.abs(Math.sin(t/2));pts.push({x:ox+r*Math.cos(t+a)+s*.08*Math.cos(a),y:cy+r*Math.sin(t+a)+s*.08*Math.sin(a)});}
-         paths.push({points:pts,color:p%2===0?'#FFD700':'#8B0000',stitch:'zardozi'});
-       }
-     }
-     return paths;}},
-
-  {name:'Bridal Kalash',cat:'bridal',stitch:'aari',colors:['#FFD700','#8B0000','#006400'],
-   gen:(cx,cy,s)=>{const paths=[];
-     // Pot body
-     const pot=[];for(let i=0;i<=32;i++){const t=i/32*Math.PI*2;pot.push({x:cx+(s*.2+s*.06*Math.cos(t*3))*Math.cos(t)*0.85,y:cy+(s*.2+s*.06*Math.cos(t*3))*Math.sin(t)});}
-     paths.push({points:pot,color:'#FFD700',stitch:'aari'});
-     // Neck
-     paths.push({points:[{x:cx-s*.08,y:cy-s*.22},{x:cx-s*.1,y:cy-s*.32},{x:cx+s*.1,y:cy-s*.32},{x:cx+s*.08,y:cy-s*.22}],color:'#8B0000',stitch:'aari'});
-     // Mango leaves
-     for(let i=0;i<5;i++){
-       const a=(i/5)*Math.PI*2-Math.PI/2;const pts=[];
-       for(let j=0;j<=12;j++){const t=j/12*Math.PI*2;pts.push({x:cx+s*.1*Math.cos(a)+s*.05*Math.cos(t),y:cy-s*.33+s*.05*Math.sin(t)*0.6});}
-       paths.push({points:pts,color:'#006400',stitch:'aari'});
-     }
-     // Coconut
-     const coco=[];for(let i=0;i<=16;i++)coco.push({x:cx+s*.07*Math.cos(i/16*Math.PI*2),y:cy-s*.4+s*.07*Math.sin(i/16*Math.PI*2)});
-     paths.push({points:coco,color:'#8B4513',stitch:'fill'});
-     return paths;}},
-
-  // ── GEOMETRIC PATTERNS ──
-  {name:'Mandala Classic',cat:'geometric',stitch:'running',colors:['#534AB7','#EF9F27'],
-   gen:(cx,cy,s)=>{const paths=[];
-     for(let ring=1;ring<=6;ring++){
-       const pts=[];for(let i=0;i<=36;i++)pts.push({x:cx+ring*s*.07*Math.cos(i/36*Math.PI*2),y:cy+ring*s*.07*Math.sin(i/36*Math.PI*2)});
-       paths.push({points:pts,color:ring%2===0?'#534AB7':'#EF9F27',stitch:'running'});
-       if(ring<6){
-         const spokes=ring*4;
-         for(let i=0;i<spokes;i++){
-           const a=i/spokes*Math.PI*2;
-           paths.push({points:[{x:cx+ring*s*.07*Math.cos(a),y:cy+ring*s*.07*Math.sin(a)},{x:cx+(ring+1)*s*.07*Math.cos(a+Math.PI/spokes),y:cy+(ring+1)*s*.07*Math.sin(a+Math.PI/spokes)}],color:'#EF9F27',stitch:'running'});
-         }
-       }
-     }
-     return paths;}},
-
-  {name:'Hexagon Tile',cat:'geometric',stitch:'fill',colors:['#1D9E75','#EF9F27','#534AB7'],
-   gen:(cx,cy,s)=>{const paths=[];
-     const cols=['#1D9E75','#EF9F27','#534AB7','#E24B4A'];
-     const r=s*.14;
-     for(let row=-2;row<=2;row++){
-       for(let col=-2;col<=2;col++){
-         const ox=cx+col*r*1.75+(row%2)*r*.875,oy=cy+row*r*1.52;
-         if(Math.sqrt((ox-cx)**2+(oy-cy)**2)>s*.45) continue;
-         const hex=[];
-         for(let i=0;i<=6;i++){const a=i/6*Math.PI*2+Math.PI/6;hex.push({x:ox+r*.9*Math.cos(a),y:oy+r*.9*Math.sin(a)});}
-         paths.push({points:hex,color:cols[(Math.abs(row*3+col))%cols.length],stitch:'fill'});
-       }
-     }
-     return paths;}},
-
-  {name:'Diamond Grid',cat:'geometric',stitch:'cross',colors:['#534AB7','#EF9F27'],
-   gen:(cx,cy,s)=>{const paths=[];
-     for(let r=-3;r<=3;r++){for(let c=-3;c<=3;c++){
-       if(Math.abs(r)+Math.abs(c)>4) continue;
-       const ox=cx+c*s*.13,oy=cy+r*s*.13;
-       const d=s*.06;
-       paths.push({points:[{x:ox,y:oy-d},{x:ox+d,y:oy},{x:ox,y:oy+d},{x:ox-d,y:oy},{x:ox,y:oy-d}],color:(Math.abs(r+c))%2===0?'#534AB7':'#EF9F27',stitch:'satin'});
-     }}
-     return paths;}},
-
-  {name:'Celtic Knot',cat:'geometric',stitch:'satin',colors:['#1D9E75','#EF9F27'],
-   gen:(cx,cy,s)=>{const paths=[];
-     for(let i=0;i<4;i++){
-       const a=i/4*Math.PI*2;const pts=[];
-       for(let j=0;j<=60;j++){
-         const t=j/60*Math.PI*4;
-         const r=s*.3+s*.1*Math.sin(t*2);
-         pts.push({x:cx+r*Math.cos(t/2+a),y:cy+r*Math.sin(t/2+a)*.8});
-       }
-       paths.push({points:pts,color:i%2===0?'#1D9E75':'#EF9F27',stitch:'satin'});
-     }
-     return paths;}},
-
-  {name:'Star of David',cat:'geometric',stitch:'running',colors:['#000080','#FFD700'],
-   gen:(cx,cy,s)=>{const paths=[];
-     for(let tri=0;tri<2;tri++){
-       const pts=[];
-       for(let i=0;i<=3;i++){const a=i/3*Math.PI*2+(tri?0:Math.PI);pts.push({x:cx+s*.4*Math.cos(a),y:cy+s*.4*Math.sin(a)});}
-       paths.push({points:pts,color:tri===0?'#000080':'#FFD700',stitch:'satin'});
-     }
-     return paths;}},
-
-  // ── FLORAL PATTERNS ──
-  {name:'Rose Garden',cat:'floral',stitch:'satin',colors:['#DC143C','#006400','#FFD700'],
-   gen:(cx,cy,s)=>{const paths=[];
-     for(let rose=0;rose<5;rose++){
-       const ox=rose===0?cx:cx+s*.3*Math.cos((rose-1)/4*Math.PI*2);
-       const oy=rose===0?cy:cy+s*.3*Math.sin((rose-1)/4*Math.PI*2);
-       const sz=rose===0?s*.18:s*.12;
-       for(let p=0;p<5;p++){
-         const a=p/5*Math.PI*2;const pts=[];
-         for(let j=0;j<=16;j++){const t=j/16*Math.PI*2;pts.push({x:ox+sz*Math.cos(t+a)*(.7+.3*Math.cos(t))+sz*.5*Math.cos(a),y:oy+sz*Math.sin(t+a)*(.7+.3*Math.cos(t))+sz*.5*Math.sin(a)});}
-         paths.push({points:pts,color:'#DC143C',stitch:'satin'});
-       }
-       // Leaves
-       for(let l=0;l<3;l++){
-         const la=(l/3)*Math.PI*2+Math.PI/6;const lpts=[];
-         for(let j=0;j<=12;j++){const t=j/12*Math.PI*2;lpts.push({x:ox+sz*.7*Math.cos(la)+sz*.4*Math.cos(t)*Math.cos(la)-sz*.2*Math.sin(t)*Math.sin(la),y:oy+sz*.7*Math.sin(la)+sz*.4*Math.cos(t)*Math.sin(la)+sz*.2*Math.sin(t)*Math.cos(la)});}
-         paths.push({points:lpts,color:'#006400',stitch:'fill'});
-       }
-     }
-     return paths;}},
-
-  {name:'Sunflower',cat:'floral',stitch:'satin',colors:['#FFD700','#8B4513','#006400'],
-   gen:(cx,cy,s)=>{const paths=[];
-     for(let i=0;i<16;i++){
-       const a=i/16*Math.PI*2;const pts=[];
-       for(let j=0;j<=16;j++){const t=j/16*Math.PI*2;const r=s*.15*Math.abs(Math.sin(t/2));pts.push({x:cx+r*Math.cos(t+a)+s*.22*Math.cos(a),y:cy+r*Math.sin(t+a)+s*.22*Math.sin(a)});}
-       paths.push({points:pts,color:'#FFD700',stitch:'satin'});
-     }
-     const center=[];for(let i=0;i<=24;i++)center.push({x:cx+s*.12*Math.cos(i/24*Math.PI*2),y:cy+s*.12*Math.sin(i/24*Math.PI*2)});
-     paths.push({points:center,color:'#8B4513',stitch:'fill'});
-     return paths;}},
-
-  {name:'Cherry Blossom',cat:'floral',stitch:'satin',colors:['#FFB6C1','#FF69B4','#006400'],
-   gen:(cx,cy,s)=>{const paths=[];
-     const branches=[[{x:cx,y:cy},{x:cx-s*.2,y:cy-s*.35}],[{x:cx,y:cy},{x:cx+s*.25,y:cy-s*.3}],[{x:cx,y:cy},{x:cx,y:cy-s*.4}],[{x:cx-s*.2,y:cy-s*.35},{x:cx-s*.35,y:cy-s*.25}]];
-     branches.forEach(b=>paths.push({points:b,color:'#8B4513',stitch:'stemstitch'}));
-     const flowerPos=[[cx-s*.2,cy-s*.35],[cx+s*.25,cy-s*.3],[cx,cy-s*.4],[cx-s*.35,cy-s*.25],[cx+s*.1,cy-s*.18]];
-     flowerPos.forEach(([ox,oy])=>{
-       for(let p=0;p<5;p++){
-         const a=p/5*Math.PI*2;const pts=[];
-         for(let j=0;j<=12;j++){const t=j/12*Math.PI*2;const r=s*.07*Math.abs(Math.sin(t/2));pts.push({x:ox+r*Math.cos(t+a)+s*.08*Math.cos(a),y:oy+r*Math.sin(t+a)+s*.08*Math.sin(a)});}
-         paths.push({points:pts,color:p%2===0?'#FFB6C1':'#FF69B4',stitch:'satin'});
-       }
-       const stamen=[];for(let i=0;i<=12;i++)stamen.push({x:ox+s*.03*Math.cos(i/12*Math.PI*2),y:oy+s*.03*Math.sin(i/12*Math.PI*2)});
-       paths.push({points:stamen,color:'#FFD700',stitch:'fill'});
-     });
-     return paths;}},
-
-  // ── BORDERS ──
-  {name:'Running Border',cat:'border',stitch:'running',colors:['#534AB7','#EF9F27'],
-   gen:(cx,cy,s)=>{const paths=[];
-     const makeRect=(ox,oy,w,h,col,st)=>{const p=[{x:ox-w,y:oy-h},{x:ox+w,y:oy-h},{x:ox+w,y:oy+h},{x:ox-w,y:oy+h},{x:ox-w,y:oy-h}];paths.push({points:p,color:col,stitch:st});};
-     makeRect(cx,cy,s*.48,s*.38,'#534AB7','running');
-     makeRect(cx,cy,s*.42,s*.32,'#EF9F27','running');
-     makeRect(cx,cy,s*.36,s*.26,'#534AB7','running');
-     for(let i=0;i<8;i++){
-       const a=i/8*Math.PI*2;const r=s*.25;
-       const star=[{x:cx+r*Math.cos(a),y:cy+r*Math.sin(a)},{x:cx+(r+s*.06)*Math.cos(a+Math.PI/8),y:cy+(r+s*.06)*Math.sin(a+Math.PI/8)},{x:cx+r*Math.cos(a+Math.PI/4),y:cy+r*Math.sin(a+Math.PI/4)}];
-       paths.push({points:star,color:'#EF9F27',stitch:'running'});
-     }
-     return paths;}},
-
-  {name:'Wave Border',cat:'border',stitch:'stemstitch',colors:['#1D9E75','#EF9F27'],
-   gen:(cx,cy,s)=>{const paths=[];
-     for(let row=-1;row<=1;row+=2){
-       const pts=[];
-       for(let i=0;i<=40;i++){const t=i/40;pts.push({x:cx-s*.5+t*s,y:cy+row*s*.25+s*.08*Math.sin(t*Math.PI*6)});}
-       paths.push({points:pts,color:row<0?'#1D9E75':'#EF9F27',stitch:'stemstitch'});
-     }
-     for(let i=0;i<7;i++){
-       const ox=cx-s*.42+i*s*.14;
-       const diamond=[{x:ox,y:cy-s*.12},{x:ox+s*.06,y:cy},{x:ox,y:cy+s*.12},{x:ox-s*.06,y:cy},{x:ox,y:cy-s*.12}];
-       paths.push({points:diamond,color:i%2===0?'#1D9E75':'#EF9F27',stitch:'satin'});
-     }
-     return paths;}},
-
-  {name:'Greek Key',cat:'border',stitch:'backstitch',colors:['#1a1825','#EF9F27'],
-   gen:(cx,cy,s)=>{const paths=[];
-     const step=s*.08;
-     const key=[];
-     let x=cx-s*.45,y=cy-s*.05;
-     const moves=[[1,0],[0,1],[1,0],[0,-1],[1,0],[0,-1],[-1,0],[0,-1],[1,0]];
-     key.push({x,y});
-     for(let rep=0;rep<5;rep++){
-       moves.forEach(([dx,dy])=>{x+=dx*step;y+=dy*step;key.push({x,y});});
-     }
-     paths.push({points:key,color:'#EF9F27',stitch:'backstitch'});
-     return paths;}},
-
-  // ── SPORTS ──
-  {name:'Team Badge',cat:'sports',stitch:'satin',colors:['#534AB7','#EF9F27','#FFFFFF'],
-   gen:(cx,cy,s)=>{const paths=[];
-     const shield=[{x:cx,y:cy+s*.45},{x:cx-s*.38,y:cy+s*.15},{x:cx-s*.38,y:cy-s*.38},{x:cx+s*.38,y:cy-s*.38},{x:cx+s*.38,y:cy+s*.15},{x:cx,y:cy+s*.45}];
-     paths.push({points:shield,color:'#534AB7',stitch:'fill'});
-     paths.push({points:[...shield],color:'#EF9F27',stitch:'satin'});
-     const star=[];for(let i=0;i<10;i++){const a=i/10*Math.PI*2-Math.PI/2;const r=i%2===0?s*.18:s*.08;star.push({x:cx+r*Math.cos(a),y:cy+r*Math.sin(a)});}
-     star.push(star[0]);
-     paths.push({points:star,color:'#FFFFFF',stitch:'satin'});
-     return paths;}},
-
-  {name:'Varsity Letter',cat:'sports',stitch:'satin',colors:['#534AB7','#EF9F27'],
-   gen:(cx,cy,s)=>{const paths=[];
-     // Block letter E shape
-     const E=[[{x:cx-s*.2,y:cy-s*.35},{x:cx-s*.2,y:cy+s*.35}],[{x:cx-s*.2,y:cy-s*.35},{x:cx+s*.2,y:cy-s*.35}],[{x:cx-s*.2,y:cy},{x:cx+s*.12,y:cy}],[{x:cx-s*.2,y:cy+s*.35},{x:cx+s*.2,y:cy+s*.35}]];
-     E.forEach(seg=>paths.push({points:seg,color:'#534AB7',stitch:'satin'}));
-     // Border
-     const border=[];for(let i=0;i<=36;i++)border.push({x:cx+s*.42*Math.cos(i/36*Math.PI*2),y:cy+s*.42*Math.sin(i/36*Math.PI*2)});
-     paths.push({points:border,color:'#EF9F27',stitch:'running'});
-     return paths;}},
-
-  {name:'Cricket Ball',cat:'sports',stitch:'running',colors:['#DC143C','#FFFFFF'],
-   gen:(cx,cy,s)=>{const paths=[];
-     const ball=[];for(let i=0;i<=36;i++)ball.push({x:cx+s*.4*Math.cos(i/36*Math.PI*2),y:cy+s*.4*Math.sin(i/36*Math.PI*2)});
-     paths.push({points:ball,color:'#DC143C',stitch:'fill'});
-     // Seam curves
-     for(let side=-1;side<=1;side+=2){
-       const seam=[];
-       for(let i=0;i<=20;i++){const t=i/20*Math.PI;seam.push({x:cx+side*s*.1*Math.cos(t),y:cy-s*.3+t*s*.6/Math.PI});}
-       paths.push({points:seam,color:'#FFFFFF',stitch:'running'});
-       for(let i=0;i<6;i++){const y2=cy-s*.22+i*s*.08;paths.push({points:[{x:cx+side*s*.08,y:y2},{x:cx+side*s*.14,y:y2}],color:'#FFFFFF',stitch:'running'});}
-     }
-     return paths;}},
-
-  // ── MONOGRAM ──
-  {name:'Oval Monogram',cat:'monogram',stitch:'satin',colors:['#534AB7','#EF9F27'],
-   gen:(cx,cy,s)=>{const paths=[];
-     const outer=[];for(let i=0;i<=36;i++)outer.push({x:cx+s*.45*Math.cos(i/36*Math.PI*2),y:cy+s*.35*Math.sin(i/36*Math.PI*2)});
-     const inner=[];for(let i=0;i<=36;i++)inner.push({x:cx+s*.38*Math.cos(i/36*Math.PI*2),y:cy+s*.28*Math.sin(i/36*Math.PI*2)});
-     paths.push({points:outer,color:'#534AB7',stitch:'satin'});
-     paths.push({points:inner,color:'#EF9F27',stitch:'running'});
-     for(let i=0;i<8;i++){
-       const a=i/8*Math.PI*2;const pts=[];
-       for(let j=0;j<=12;j++){const t=j/12*Math.PI*2;pts.push({x:cx+s*.41*Math.cos(a)+s*.05*Math.cos(t),y:cy+s*.31*Math.sin(a)+s*.05*Math.sin(t)});}
-       paths.push({points:pts,color:'#EF9F27',stitch:'satin'});
-     }
-     return paths;}},
-
-  {name:'Diamond Monogram',cat:'monogram',stitch:'satin',colors:['#EF9F27','#534AB7'],
-   gen:(cx,cy,s)=>{const paths=[];
-     const sizes=[0.48,0.38,0.28];
-     sizes.forEach((sz,i)=>{
-       const d=[{x:cx,y:cy-sz*s},{x:cx+sz*s*.7,y:cy},{x:cx,y:cy+sz*s},{x:cx-sz*s*.7,y:cy},{x:cx,y:cy-sz*s}];
-       paths.push({points:d,color:i===0?'#EF9F27':'#534AB7',stitch:i===0?'satin':'running'});
-     });
-     for(let i=0;i<4;i++){
-       const a=i/4*Math.PI*2+Math.PI/4;const pts=[];
-       for(let j=0;j<=12;j++){const t=j/12*Math.PI*2;pts.push({x:cx+s*.33*Math.cos(a)+s*.06*Math.cos(t),y:cy+s*.33*Math.sin(a)+s*.06*Math.sin(t)});}
-       paths.push({points:pts,color:'#EF9F27',stitch:'satin'});
-     }
-     return paths;}},
-];
-
-function showPatternLibrary(){
-  renderPatternGrid(PATTERNS);
-  document.getElementById('plib-size').oninput=function(){document.getElementById('plib-size-val').textContent=this.value+'px';};
-  document.getElementById('plib-modal').classList.add('show');
-}
-function closePatternLibrary(){ document.getElementById('plib-modal').classList.remove('show'); }
-
-function renderPatternGrid(patterns){
-  const grid=document.getElementById('plib-grid');
-  const count=document.getElementById('plib-count');
-  count.textContent=patterns.length+' patterns';
-  grid.innerHTML='';
-  patterns.forEach(pat=>{
-    const card=document.createElement('div');
-    card.className='plib-card';
-    // Generate thumbnail
-    const tc=document.createElement('canvas');
-    tc.width=150;tc.height=100;
-    const tctx=tc.getContext('2d');
-    tctx.fillStyle=getComputedStyle(document.documentElement).getPropertyValue('--canvas-bg')||'#13121f';
-    tctx.fillRect(0,0,150,100);
-    try{
-      const paths=pat.gen(75,50,80);
-      paths.forEach(p=>{
-        if(!p.points||p.points.length<2) return;
-        tctx.beginPath();
-        p.points.forEach((pt,i)=>i?tctx.lineTo(pt.x,pt.y):tctx.moveTo(pt.x,pt.y));
-        tctx.strokeStyle=p.color;tctx.lineWidth=1.5;tctx.lineCap='round';tctx.stroke();
-      });
-    } catch(e){}
-    card.innerHTML=`<div class="plib-thumb"></div><div class="plib-info"><div class="plib-name">${pat.name}</div><div class="plib-meta">${pat.stitch} · ${pat.cat}</div></div>`;
-    card.querySelector('.plib-thumb').appendChild(tc);
-    card.onclick=()=>placePattern(pat);
-    grid.appendChild(card);
-  });
-}
-
-function filterPatterns(cat,el){
-  document.querySelectorAll('.plib-cat').forEach(c=>c.classList.remove('active'));
-  el.classList.add('active');
-  const filtered=cat==='all'?PATTERNS:PATTERNS.filter(p=>p.cat===cat);
-  renderPatternGrid(filtered);
-}
-
-function placePattern(pat){
-  const size=parseInt(document.getElementById('plib-size').value)||120;
-  const cx=cvs.width/2/S.zoom-S.panX/S.zoom;
-  const cy=cvs.height/2/S.zoom-S.panY/S.zoom;
-  try{
-    const paths=pat.gen(cx,cy,size);
-    saveHist();
-    paths.forEach(p=>{
-      if(!p.points||p.points.length<2) return;
-      const pts=p.points.map(pt=>({x:pt.x,y:pt.y,cp1x:pt.x,cp1y:pt.y,cp2x:pt.x,cp2y:pt.y}));
-      S.paths.push({points:pts,color:p.color||S.color,stitch:p.stitch||S.stitch,layer:S.activeLayer,name:pat.name});
-    });
-    document.getElementById('wi').style.opacity='0';
-    if(pat.stitch) setStitch(pat.stitch);
-    updateStats();redraw();
-    closePatternLibrary();
-    toast('✓ '+pat.name+' placed on canvas');
-  } catch(e){toast('Could not place pattern: '+e.message);}
-}
-
-
 // ═══════════════════════════════════════
 // INIT
 // ═══════════════════════════════════════
@@ -3521,5 +2511,192 @@ saveHist();
 updateStats();
 toast('✦ Embroxia Studio v2 ready');
 </script>
+
+<!-- ════ ALL MODALS ════ -->
+
+<!-- PATTERN LIBRARY -->
+<div class="plib-modal" id="plib-modal">
+  <div class="plib-box">
+    <div class="plib-head">
+      <div class="plib-title">🧵 Pattern Library</div>
+      <button onclick="closePatternLibrary()" style="padding:4px 12px;border:1px solid var(--border2);background:transparent;color:var(--text2);border-radius:var(--rs);cursor:pointer;font-family:var(--font);font-size:12px">✕</button>
+    </div>
+    <div class="plib-cats">
+      <div class="plib-cat active" onclick="filterPatterns('all',this)">All</div>
+      <div class="plib-cat" onclick="filterPatterns('indian',this)">🇮🇳 Indian</div>
+      <div class="plib-cat" onclick="filterPatterns('bridal',this)">💍 Bridal</div>
+      <div class="plib-cat" onclick="filterPatterns('geometric',this)">◈ Geometric</div>
+      <div class="plib-cat" onclick="filterPatterns('floral',this)">🌸 Floral</div>
+      <div class="plib-cat" onclick="filterPatterns('border',this)">▬ Borders</div>
+      <div class="plib-cat" onclick="filterPatterns('sports',this)">🏆 Sports</div>
+      <div class="plib-cat" onclick="filterPatterns('monogram',this)">✒ Monogram</div>
+    </div>
+    <div class="plib-grid" id="plib-grid"></div>
+    <div class="plib-footer">
+      <div class="plib-size"><span>Size:</span><input type="range" min="50" max="300" value="120" id="plib-size" style="width:80px;accent-color:var(--purple)"><span id="plib-size-val">120px</span></div>
+      <div style="font-size:11px;color:var(--text3)" id="plib-count">30 patterns</div>
+    </div>
+  </div>
+</div>
+
+<!-- SHAPE LIBRARY -->
+<div class="shape-modal" id="shape-modal">
+  <div class="shape-box">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-shrink:0">
+      <div style="font-size:15px;font-weight:500;color:var(--text)">⬡ Shape Library</div>
+      <button onclick="closeShapeLibrary()" style="padding:4px 12px;border:1px solid var(--border2);background:transparent;color:var(--text2);border-radius:var(--rs);cursor:pointer;font-family:var(--font);font-size:12px">✕</button>
+    </div>
+    <input class="shape-search" id="shape-search" placeholder="Search shapes..." oninput="filterShapes(this.value)">
+    <div class="shape-cats">
+      <div class="shape-cat active" onclick="filterShapes('',this)">All</div>
+      <div class="shape-cat" onclick="filterShapes('basic',this)">Basic</div>
+      <div class="shape-cat" onclick="filterShapes('badge',this)">Badges</div>
+      <div class="shape-cat" onclick="filterShapes('floral',this)">Florals</div>
+      <div class="shape-cat" onclick="filterShapes('arrow',this)">Arrows</div>
+      <div class="shape-cat" onclick="filterShapes('sport',this)">Sports</div>
+      <div class="shape-cat" onclick="filterShapes('frame',this)">Frames</div>
+      <div class="shape-cat" onclick="filterShapes('star',this)">Stars</div>
+      <div class="shape-cat" onclick="filterShapes('indian',this)">🇮🇳 Indian</div>
+    </div>
+    <div class="shape-grid" id="shape-grid"></div>
+    <div class="shape-footer">
+      <div style="font-size:11px;color:var(--text3)" id="shape-count">40 shapes</div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <span style="font-size:11px;color:var(--text3)">Stitch:</span>
+        <select class="pinput" id="shape-stitch" style="width:auto;font-size:11px"><option value="running">Running</option><option value="satin" selected>Satin</option><option value="fill">Fill</option></select>
+        <span style="font-size:11px;color:var(--text3)">Size:</span>
+        <input class="pinput" type="number" id="shape-size" value="80" min="20" max="400" style="width:60px;font-size:11px">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- GENERATE FROM PROMPT -->
+<div class="gen-modal" id="gen-modal">
+  <div class="gen-box">
+    <div class="gen-title">✨ Generate design from prompt</div>
+    <div class="gen-sub">Describe any embroidery design. Aari AI generates stitch paths on your canvas.</div>
+    <textarea class="gen-textarea" id="gen-prompt" placeholder="e.g. Zardozi lotus border in gold for a bridal lehenga&#10;e.g. Phulkari geometric diamonds in red and yellow for a dupatta"></textarea>
+    <div class="gen-examples">
+      <div class="gen-example" onclick="setGenPrompt('Zardozi lotus border in gold and maroon for a bridal lehenga')">Zardozi bridal</div>
+      <div class="gen-example" onclick="setGenPrompt('Phulkari geometric diamond pattern in red and yellow')">Phulkari</div>
+      <div class="gen-example" onclick="setGenPrompt('Kantha lotus motif in indigo and white for a saree')">Kantha lotus</div>
+      <div class="gen-example" onclick="setGenPrompt('Kashmiri paisley in teal and gold for a shawl')">Kashmiri</div>
+      <div class="gen-example" onclick="setGenPrompt('Rangoli mandala in purple and gold')">Rangoli</div>
+      <div class="gen-example" onclick="setGenPrompt('Peacock feather with Aari stitch in blue and green')">Peacock</div>
+    </div>
+    <div class="gen-options">
+      <div><div class="gen-opt-label">Complexity</div><select class="pinput" id="gen-complexity"><option value="simple">Simple</option><option value="medium" selected>Medium</option><option value="complex">Complex</option></select></div>
+      <div><div class="gen-opt-label">Placement</div><select class="pinput" id="gen-placement"><option value="center">Center</option><option value="border">Border</option><option value="corner">Corner</option></select></div>
+    </div>
+    <div class="gen-progress" id="gen-progress" style="display:none">
+      <div class="gen-progress-text" id="gen-progress-text">Generating...</div>
+      <div class="gen-progress-bar"><div class="gen-progress-fill" id="gen-progress-fill"></div></div>
+    </div>
+    <div class="gen-btns">
+      <button class="gen-btn" onclick="closeGenModal()">Cancel</button>
+      <button class="gen-btn primary" id="gen-btn" onclick="generateFromPrompt()">✨ Generate</button>
+    </div>
+  </div>
+</div>
+
+<!-- TEXT ON PATH -->
+<div class="top-modal" id="top-modal">
+  <div class="top-box" style="width:520px">
+    <div style="font-size:15px;font-weight:500;color:var(--text);margin-bottom:4px">Text on Path</div>
+    <div style="font-size:12px;color:var(--text3);margin-bottom:12px">Place text along a curve, circle, or arc.</div>
+    <div class="top-preview"><canvas id="top-preview-cvs" width="460" height="120"></canvas></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+      <div><div class="svg-opt-label">Text</div><input class="pinput" type="text" id="top-text" value="EMBROXIA" oninput="updateTOPPreview()"></div>
+      <div><div class="svg-opt-label">Shape</div><select class="pinput" id="top-shape" onchange="updateTOPPreview()"><option value="arc-top">Arc top</option><option value="arc-bottom">Arc bottom</option><option value="circle">Circle</option><option value="wave">Wave</option><option value="straight">Straight</option></select></div>
+      <div><div class="svg-opt-label">Size</div><input class="pinput" type="number" id="top-size" value="18" min="8" max="72" oninput="updateTOPPreview()"></div>
+      <div><div class="svg-opt-label">Radius</div><input class="pinput" type="range" id="top-radius" min="40" max="200" value="100" oninput="updateTOPPreview()" style="margin-top:8px"></div>
+      <div><div class="svg-opt-label">Spacing</div><input class="pinput" type="range" id="top-spacing" min="-5" max="20" value="2" oninput="updateTOPPreview()"></div>
+      <div><div class="svg-opt-label">Start angle</div><input class="pinput" type="range" id="top-start" min="-180" max="180" value="0" oninput="updateTOPPreview()"></div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="svg-btn" onclick="closeTOP()">Cancel</button>
+      <button class="svg-btn primary" onclick="placeTOP()">Place on canvas</button>
+    </div>
+  </div>
+</div>
+
+<!-- SVG IMPORT -->
+<div class="svg-modal" id="svg-modal">
+  <div class="svg-box">
+    <div class="svg-title">Import SVG / Vector</div>
+    <div class="svg-sub">Upload an SVG and convert vector paths to embroidery stitches.</div>
+    <div class="svg-drop" id="svg-drop">
+      <input type="file" id="svg-file-input" accept=".svg,.ai" onchange="handleSVGFile(event)">
+      <div class="svg-drop-icon">📐</div>
+      <div class="svg-drop-text">Click to upload or drag & drop SVG</div>
+    </div>
+    <div class="svg-preview" id="svg-preview"></div>
+    <div class="svg-options">
+      <div><div class="svg-opt-label">Stitch type</div><select class="pinput" id="svg-stitch-type"><option value="auto">Auto detect</option><option value="running">Running</option><option value="satin">Satin</option><option value="fill">Fill</option></select></div>
+      <div><div class="svg-opt-label">Scale</div><select class="pinput" id="svg-scale"><option value="fit">Fit to hoop</option><option value="original">Original</option><option value="50">50%</option></select></div>
+      <div><div class="svg-opt-label">Color</div><select class="pinput" id="svg-color"><option value="keep">Keep original</option><option value="current">Use current</option></select></div>
+      <div><div class="svg-opt-label">Simplify</div><select class="pinput" id="svg-simplify"><option value="medium">Medium</option><option value="low">Low detail</option><option value="high">High</option></select></div>
+    </div>
+    <div id="svg-status" style="font-size:12px;color:var(--text3);margin-bottom:10px;display:none"></div>
+    <div class="svg-btns">
+      <button class="svg-btn" onclick="closeSVGImport()">Cancel</button>
+      <button class="svg-btn primary" id="svg-convert-btn" onclick="convertSVGToStitches()" disabled>Convert to embroidery</button>
+    </div>
+  </div>
+</div>
+
+<!-- PRINT DESIGN SHEET -->
+<div class="print-modal" id="print-modal">
+  <div class="print-box" style="width:560px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+      <div style="font-size:15px;font-weight:500;color:var(--text)">📄 Print Design Sheet</div>
+      <button onclick="closePrintModal()" style="padding:4px 12px;border:1px solid var(--border2);background:transparent;color:var(--text2);border-radius:var(--rs);cursor:pointer;font-family:var(--font);font-size:12px">✕</button>
+    </div>
+    <div class="print-preview" id="print-preview-content" style="max-height:400px;overflow-y:auto"></div>
+    <div style="display:flex;gap:8px;margin-top:10px">
+      <button class="svg-btn" onclick="closePrintModal()">Cancel</button>
+      <button class="svg-btn" onclick="downloadPrintSheet()">↓ Download</button>
+      <button class="svg-btn primary" onclick="printSheet()">🖨 Print</button>
+    </div>
+  </div>
+</div>
+
+<!-- DESIGN LIBRARY -->
+<div class="library-modal" id="library-modal">
+  <div class="library-box">
+    <div class="library-head">
+      <div class="library-title">📁 Design Library</div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <input class="library-search" id="library-search" placeholder="Search..." oninput="filterLibrary(this.value)">
+        <button class="tbtn primary" onclick="saveToLibrary()">+ Save</button>
+        <button class="tbtn" onclick="closeLibrary()" style="padding:5px 10px">✕</button>
+      </div>
+    </div>
+    <div class="library-grid" id="library-grid"></div>
+    <div class="library-footer">
+      <div class="library-count" id="library-count">0 designs</div>
+    </div>
+  </div>
+</div>
+
+<!-- ONBOARDING TOUR -->
+<div id="tour-overlay" class="tour-overlay" style="display:none">
+  <div class="tour-highlight" id="tour-highlight"></div>
+  <div class="tour-card" id="tour-card">
+    <div class="tour-step-badge"><span>✦</span><span id="tour-step-label">Step 1 of 8</span></div>
+    <div class="tour-title" id="tour-title">Welcome to Embroxia Studio</div>
+    <div class="tour-desc" id="tour-desc">Let us take a quick tour so you can start designing in under 2 minutes.</div>
+    <div class="tour-btns">
+      <button class="tour-skip" onclick="endTour()">Skip tour</button>
+      <div class="tour-dots" id="tour-dots"></div>
+      <div class="tour-nav">
+        <button class="tour-prev" id="tour-prev" onclick="tourStep(-1)">←</button>
+        <button class="tour-next" id="tour-next" onclick="tourStep(1)">Next →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
