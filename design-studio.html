@@ -275,103 +275,6 @@ select.pinput{cursor:pointer;-webkit-appearance:none}
 .photo-btn.primary:hover{background:var(--pl)}
 .photo-btn.secondary{background:var(--bg4);color:var(--text);border:1px solid var(--border2)}
 *{scrollbar-width:thin;scrollbar-color:var(--border2) transparent}
-
-/* ── ALL MODALS — position:fixed, z-index:800+ ── */
-.modal-overlay,.svg-modal,.gen-modal,.top-modal,.shape-modal,.print-modal,.plib-modal,.library-modal,.tour-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:800;display:none;align-items:center;justify-content:center;backdrop-filter:blur(6px)}
-.modal-overlay.show,.svg-modal.show,.gen-modal.show,.top-modal.show,.shape-modal.show,.print-modal.show,.plib-modal.show,.library-modal.show{display:flex}
-/* Shared box styles */
-.svg-box,.gen-box,.top-box,.shape-box,.print-box,.plib-box,.library-box{background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);padding:22px;width:560px;max-width:95vw;box-shadow:0 24px 64px rgba(0,0,0,.6)}
-.plib-box,.shape-box,.library-box{width:700px;max-height:85vh;display:flex;flex-direction:column}
-.svg-title{font-size:15px;font-weight:500;color:var(--text);margin-bottom:4px}
-.svg-sub{font-size:12px;color:var(--text3);margin-bottom:14px;line-height:1.65}
-.svg-opt-label{font-size:11px;color:var(--text2);margin-bottom:4px}
-.svg-options{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
-.svg-btns,.gen-btns,.print-btns{display:flex;gap:8px}
-.svg-btn,.gen-btn,.print-btn{flex:1;padding:10px;border-radius:var(--rs);font-family:var(--font);font-size:13px;cursor:pointer;border:1px solid var(--border2);background:transparent;color:var(--text2);transition:all .12s}
-.svg-btn:hover,.gen-btn:hover,.print-btn:hover{color:var(--text)}
-.svg-btn.primary,.gen-btn.primary,.print-btn.primary{background:var(--purple);color:white;border:none}
-/* SVG drop */
-.svg-drop{border:2px dashed var(--border2);border-radius:var(--r);padding:28px;text-align:center;cursor:pointer;position:relative;margin-bottom:12px}
-.svg-drop:hover{border-color:var(--purple)}
-.svg-drop input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
-.svg-drop-icon{font-size:28px;margin-bottom:6px;opacity:.5}
-.svg-drop-text{font-size:13px;color:var(--text2)}
-.svg-preview{width:100%;height:140px;background:var(--bg4);border-radius:var(--rs);margin-bottom:12px;display:none;align-items:center;justify-content:center;overflow:hidden;border:1px solid var(--border)}
-/* Generate modal */
-.gen-title{font-size:15px;font-weight:500;color:var(--text);margin-bottom:4px}
-.gen-sub{font-size:12px;color:var(--text3);margin-bottom:14px;line-height:1.65}
-.gen-textarea{width:100%;background:var(--bg4);border:1px solid var(--border2);border-radius:var(--r);padding:12px;font-size:13px;font-family:var(--font);color:var(--text);resize:none;outline:none;height:80px;line-height:1.6;transition:border-color .15s;margin-bottom:10px}
-.gen-textarea:focus{border-color:var(--purple)}
-.gen-examples{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
-.gen-example{font-size:11px;padding:4px 10px;border-radius:20px;background:var(--bg4);border:1px solid var(--border2);color:var(--text2);cursor:pointer;transition:all .12s}
-.gen-example:hover{border-color:var(--purple);color:var(--pl)}
-.gen-options{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
-.gen-opt-label{font-size:11px;color:var(--text2);margin-bottom:4px}
-.gen-progress{background:var(--bg4);border-radius:var(--r);padding:12px;margin-bottom:12px}
-.gen-progress-text{font-size:12px;color:var(--text2);margin-bottom:6px}
-.gen-progress-bar{height:3px;background:var(--border2);border-radius:2px;overflow:hidden}
-.gen-progress-fill{height:100%;background:linear-gradient(90deg,var(--purple),var(--teal));width:0%;transition:width .4s}
-/* Text on path */
-.top-preview{width:100%;height:130px;background:var(--canvas-bg);border-radius:var(--rs);margin-bottom:14px;display:flex;align-items:center;justify-content:center;overflow:hidden;border:1px solid var(--border)}
-/* Shape library */
-.shape-search{width:100%;background:var(--bg4);border:1px solid var(--border);border-radius:var(--rs);padding:7px 12px;font-size:12px;font-family:var(--font);color:var(--text);outline:none;margin-bottom:10px;flex-shrink:0;transition:border-color .15s}
-.shape-search:focus{border-color:var(--purple)}
-.shape-cats,.plib-cats{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;flex-shrink:0}
-.shape-cat,.plib-cat{font-size:11px;padding:4px 12px;border-radius:20px;background:var(--bg4);border:1px solid var(--border);color:var(--text2);cursor:pointer;transition:all .12s}
-.shape-cat.active,.plib-cat.active,.shape-cat:hover,.plib-cat:hover{background:var(--purple);color:white;border-color:transparent}
-.shape-grid,.plib-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:8px;overflow-y:auto;flex:1}
-.plib-grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}
-.shape-grid::-webkit-scrollbar,.plib-grid::-webkit-scrollbar{width:3px}
-.shape-grid::-webkit-scrollbar-thumb,.plib-grid::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
-.shape-item{background:var(--bg4);border:1px solid var(--border);border-radius:var(--rs);padding:10px 6px;cursor:pointer;text-align:center;transition:all .12s;display:flex;flex-direction:column;align-items:center;gap:4px}
-.shape-item:hover{border-color:var(--purple);background:var(--pg);transform:translateY(-1px)}
-.shape-item svg{width:36px;height:36px}
-.shape-name{font-size:9px;color:var(--text3)}
-.shape-footer,.plib-footer{display:flex;align-items:center;justify-content:space-between;margin-top:10px;flex-shrink:0;padding-top:8px;border-top:1px solid var(--border)}
-.plib-card{background:var(--bg4);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;cursor:pointer;transition:all .15s}
-.plib-card:hover{border-color:var(--purple);transform:translateY(-2px)}
-.plib-thumb{width:100%;height:90px;background:var(--canvas-bg);display:flex;align-items:center;justify-content:center}
-.plib-info{padding:8px 10px}
-.plib-name{font-size:11px;font-weight:500;color:var(--text);margin-bottom:1px}
-.plib-meta{font-size:10px;color:var(--text3)}
-.plib-head,.library-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-shrink:0}
-.plib-title,.library-title{font-size:15px;font-weight:500;color:var(--text)}
-.plib-size{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text2)}
-/* Print */
-.print-preview{background:white;border-radius:var(--rs);padding:20px;margin-bottom:12px;color:#1a1825}
-.print-stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:12px}
-.print-stat{background:#f7f5f0;border-radius:6px;padding:8px;text-align:center}
-.print-stat-num{font-size:18px;font-weight:500;color:#534AB7}
-.print-stat-label{font-size:10px;color:#999;margin-top:2px}
-/* Library */
-.library-box{width:800px}
-.library-search{background:var(--bg4);border:1px solid var(--border);border-radius:var(--rs);padding:6px 12px;font-size:12px;font-family:var(--font);color:var(--text);outline:none;width:200px}
-.library-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;overflow-y:auto;flex:1;margin:10px 0}
-.library-card{background:var(--bg4);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;cursor:pointer;transition:all .15s}
-.library-card:hover{border-color:var(--purple);transform:translateY(-2px)}
-.library-thumb{width:100%;height:90px;background:var(--canvas-bg);position:relative}
-.library-info{padding:8px}
-.library-name{font-size:11px;font-weight:500;color:var(--text);margin-bottom:2px}
-.library-date{font-size:10px;color:var(--text3)}
-.library-footer{display:flex;align-items:center;justify-content:space-between;padding-top:8px;border-top:1px solid var(--border);flex-shrink:0}
-.library-count{font-size:11px;color:var(--text3)}
-/* Tour */
-.tour-overlay{background:rgba(0,0,0,.65);pointer-events:none}
-.tour-highlight{position:fixed;box-shadow:0 0 0 9999px rgba(0,0,0,.65);border-radius:var(--r);z-index:901;pointer-events:none;transition:all .35s}
-.tour-card{position:fixed;z-index:902;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);padding:20px;width:290px;box-shadow:0 16px 48px rgba(0,0,0,.5);pointer-events:all;transition:all .35s}
-.tour-step-badge{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--pl);background:var(--pg);border-radius:20px;padding:3px 10px;margin-bottom:8px}
-.tour-title{font-size:14px;font-weight:500;color:var(--text);margin-bottom:5px}
-.tour-desc{font-size:12px;color:var(--text2);line-height:1.6;margin-bottom:14px}
-.tour-btns{display:flex;align-items:center;justify-content:space-between}
-.tour-skip{font-size:11px;color:var(--text3);cursor:pointer;background:none;border:none;font-family:var(--font);padding:0}
-.tour-nav{display:flex;gap:6px}
-.tour-prev,.tour-next{padding:5px 12px;border-radius:var(--rs);font-size:12px;cursor:pointer;font-family:var(--font)}
-.tour-prev{border:1px solid var(--border2);background:transparent;color:var(--text2)}
-.tour-next{border:none;background:var(--purple);color:white}
-.tour-dots{display:flex;gap:4px;align-items:center}
-.tour-dot{width:5px;height:5px;border-radius:50%;background:var(--border2);transition:all .2s}
-.tour-dot.active{background:var(--purple);width:14px;border-radius:3px}
-
 </style>
 </head>
 <body>
@@ -451,6 +354,9 @@ select.pinput{cursor:pointer;-webkit-appearance:none}
     </div>
     <div class="mi" id="m-tools" onclick="toggleMenu('m-tools',event)">Tools
       <div class="dd">
+        <div class="ddi" onclick="showPatternLibrary()">🧵 Pattern library</div>
+        <div class="ddi" onclick="showShapeLibrary()">⬡ Shape library</div>
+        <div class="dd-sep"></div>
         <div class="ddi" onclick="autoUnderlay()">Auto underlay</div>
         <div class="ddi" onclick="pullCompensation()">Pull compensation</div>
         <div class="ddi" onclick="optimizeStitches()">Optimize stitch path</div>
@@ -624,6 +530,7 @@ select.pinput{cursor:pointer;-webkit-appearance:none}
         <div class="brand-tab" onclick="setBrand('isacord',this)">Isacord</div>
         <div class="brand-tab" onclick="setBrand('robison',this)">Robison-Anton</div>
         <div class="brand-tab" onclick="setBrand('sulky',this)">Sulky</div>
+        <div class="brand-tab" onclick="setBrand('indian',this)">🇮🇳 Indian</div>
       </div>
     </div>
     <div class="psec">
@@ -732,16 +639,17 @@ select.pinput{cursor:pointer;-webkit-appearance:none}
   <div class="ai-head">
     <div class="ai-logo-wrap">
       <div class="ai-logo">✦</div>
-      <div><div class="ai-title">Embroxia AI</div><div class="ai-sub">Expert design assistant</div></div>
+      <div><div class="ai-title">Aari ✦</div><div class="ai-sub">Indian &amp; global embroidery AI</div></div>
     </div>
     <span class="ai-x" onclick="toggleAI()">✕</span>
   </div>
   <div class="ai-msgs" id="ai-msgs">
     <div class="ai-msg"><div class="ai-av bot">✦</div>
-      <div class="ai-bubble bot">Hi! I'm your Embroxia AI — a professional embroidery expert.<br><br>I can:<br>🖼 <b>Analyze images</b> for digitizing<br>🎨 <b>Suggest colors</b> with exact thread codes<br>✨ <b>Generate designs</b> from text prompts<br>🔧 <b>Fix technical issues</b> — density, underlay, pull compensation<br><br>What would you like to create?</div>
+      <div class="ai-bubble bot">Namaste! I'm <b>Aari</b> — the world's first AI for Indian &amp; global embroidery.<br><br>✦ Zardozi, Kantha, Phulkari, Chikankari<br>✦ Aari, Kashmiri, Kutch, Shisha<br>✦ Saree, lehenga, bridal designs<br>✦ All stitch types &amp; machine formats<br><br>What would you like to create?</div>
     </div>
   </div>
-  <div class="ai-upload" onclick="document.getElementById('ai-file').click()">
+  <div style="padding:6px 10px;border-top:1px solid var(--border);flex-shrink:0"><button onclick="showGeneratePrompt()" style="width:100%;padding:8px;border-radius:var(--rs);background:linear-gradient(135deg,#534AB7,#1D9E75);color:white;border:none;font-family:var(--font);font-size:12px;font-weight:500;cursor:pointer">✨ Generate from prompt</button></div>
+<div class="ai-upload" onclick="document.getElementById('ai-file').click()">
     <input type="file" id="ai-file" accept="image/*" onchange="handleImg(event)">
     <div class="ai-upload-label">📎 <span>Upload image</span> to analyze & digitize</div>
   </div>
@@ -835,6 +743,10 @@ select.pinput{cursor:pointer;-webkit-appearance:none}
       <button class="gtab" onclick="setGarment('cap',this)">🧢 Cap</button>
       <button class="gtab" onclick="setGarment('bag',this)">👜 Bag</button>
       <button class="gtab" onclick="setGarment('jacket',this)">🥋 Jacket</button>
+      <button class="gtab" onclick="setGarment('saree',this)">🥻 Saree</button>
+      <button class="gtab" onclick="setGarment('lehenga',this)">👘 Lehenga</button>
+      <button class="gtab" onclick="setGarment('dupatta',this)">🧣 Dupatta</button>
+      <button class="gtab" onclick="setGarment('kurta',this)">👕 Kurta</button>
     </div>
     <div class="garment-canvas-wrap">
       <canvas id="garment-cvs"></canvas>
@@ -936,6 +848,16 @@ const STITCHES = [
   {id:'spiral',icon:'🌀',name:'Spiral',desc:'Spiral fill'},
   {id:'radial',icon:'✳',name:'Radial',desc:'Radial fill pattern'},
   {id:'wave',icon:'∿',name:'Wave',desc:'Wave fill pattern'},
+  {id:'zardozi',icon:'✦✦',name:'Zardozi',desc:'Gold metallic wire — Mughal tradition',indian:true},
+  {id:'kantha',icon:'⊹⊹',name:'Kantha',desc:'Running stitch rows — Bengal',indian:true},
+  {id:'phulkari',icon:'❋❋',name:'Phulkari',desc:'Darning stitch florals — Punjab',indian:true},
+  {id:'chikankari',icon:'❀❀',name:'Chikankari',desc:'Shadow work — Lucknow',indian:true},
+  {id:'aari',icon:'◉◉',name:'Aari',desc:'Hook needle chain stitch',indian:true},
+  {id:'kashmiri',icon:'❧❧',name:'Kashmiri',desc:'Chain stitch paisley — Kashmir',indian:true},
+  {id:'kutch',icon:'⬡⬡',name:'Kutch',desc:'Mirror work geometric — Gujarat',indian:true},
+  {id:'suf',icon:'▲▲',name:'Suf',desc:'Counted geometric — Rajasthan',indian:true},
+  {id:'toda',icon:'▥▥',name:'Toda',desc:'Geometric — Tamil Nadu',indian:true},
+  {id:'shisha',icon:'◈◈',name:'Shisha',desc:'Mirror/sitara attachment work',indian:true},
 ];
 
 // ═══════════════════════════════════════
@@ -1055,6 +977,21 @@ const THREADS = {
     {hex:'#880E4F',name:'Maroon',code:'2238'},{hex:'#9C27B0',name:'Orchid',code:'2602'},
     {hex:'#C0A060',name:'Gold Metallic',code:'9001'},{hex:'#A8A8A8',name:'Silver Metallic',code:'9002'},
   ],
+  indian:[
+    {hex:'#FFD700',name:'Bright Gold Zari',code:'ZR-001'},{hex:'#DAA520',name:'Golden Rod Zari',code:'ZR-002'},
+    {hex:'#B8860B',name:'Dark Gold Zari',code:'ZR-003'},{hex:'#C0C0C0',name:'Pure Silver Zari',code:'ZR-101'},
+    {hex:'#A8A9AD',name:'Steel Silver Zari',code:'ZR-102'},{hex:'#B87333',name:'Copper Tamba',code:'ZR-201'},
+    {hex:'#8B0000',name:'Deep Maroon Resham',code:'RS-001'},{hex:'#DC143C',name:'Crimson Lal',code:'RS-002'},
+    {hex:'#FF4500',name:'Sindoori Orange',code:'RS-003'},{hex:'#FF6347',name:'Kesari Saffron',code:'RS-004'},
+    {hex:'#FFD700',name:'Haldi Yellow',code:'RS-005'},{hex:'#006400',name:'Deep Paan Green',code:'RS-007'},
+    {hex:'#008080',name:'Firozi Teal',code:'RS-008'},{hex:'#00CED1',name:'Peacock Blue',code:'RS-009'},
+    {hex:'#000080',name:'Deep Neela Navy',code:'RS-010'},{hex:'#4B0082',name:'Baingani Violet',code:'RS-011'},
+    {hex:'#FF1493',name:'Gulabi Hot Pink',code:'RS-013'},{hex:'#FFFFFF',name:'Safed White',code:'RS-016'},
+    {hex:'#000000',name:'Kala Black',code:'RS-017'},{hex:'#722F37',name:'Bridal Maroon',code:'BR-001'},
+    {hex:'#B22222',name:'Bridal Red',code:'BR-002'},{hex:'#E0115F',name:'Bridal Ruby',code:'BR-006'},
+    {hex:'#FF7F00',name:'Diwali Orange',code:'FT-001'},{hex:'#008000',name:'Eid Green',code:'FT-004'},
+    {hex:'#FF69B4',name:'Holi Pink',code:'FT-005'},{hex:'#9400D3',name:'Holi Violet',code:'FT-006'},
+  ],
   sulky:[
     {hex:'#534AB7',name:'Purple',code:'1193'},{hex:'#7066D4',name:'Lavender',code:'1194'},
     {hex:'#1E40AF',name:'Royal Blue',code:'1196'},{hex:'#2563EB',name:'Bluebell',code:'1197'},
@@ -1163,124 +1100,354 @@ function redraw(){
 function drawPath(p){
   if(!p.points||p.points.length<2) return;
   ctx.globalAlpha = p.opacity||1;
-  const lw = 1.5/S.zoom;
-  ctx.lineCap='round'; ctx.lineJoin='round';
+  ctx.save();
+  ctx.translate(S.panX,S.panY);
+  ctx.scale(S.zoom,S.zoom);
+  ctx.lineCap='round';ctx.lineJoin='round';
+  const lw=1.8/S.zoom;
 
   switch(p.stitch){
+
     case 'running':
-      ctx.beginPath(); ctx.setLineDash([4/S.zoom,3/S.zoom]);
-      ctx.strokeStyle=p.color; ctx.lineWidth=lw;
-      p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
-      ctx.stroke(); ctx.setLineDash([]);
+      ctx.beginPath();p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
+      ctx.strokeStyle='rgba(0,0,0,0.15)';ctx.lineWidth=2/S.zoom;ctx.setLineDash([7/S.zoom,4/S.zoom]);ctx.stroke();
+      ctx.beginPath();p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
+      ctx.strokeStyle=p.color;ctx.lineWidth=1.6/S.zoom;ctx.setLineDash([7/S.zoom,4/S.zoom]);ctx.stroke();
+      ctx.setLineDash([]);
       break;
+
     case 'triple':
-      [-2,0,2].forEach(off=>{
-        ctx.beginPath(); ctx.setLineDash([3/S.zoom,2/S.zoom]);
-        ctx.strokeStyle=p.color; ctx.lineWidth=lw*.8;
-        p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x+off/S.zoom,pt.y):ctx.moveTo(pt.x+off/S.zoom,pt.y));
-        ctx.stroke();
-      }); ctx.setLineDash([]); break;
-    case 'satin':
-      ctx.beginPath(); ctx.strokeStyle=p.color; ctx.lineWidth=5/S.zoom;
-      p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
-      ctx.stroke();
-      for(let i=0;i<p.points.length-1;i+=3){
-        ctx.beginPath(); ctx.strokeStyle=p.color+'99'; ctx.lineWidth=.5/S.zoom;
-        ctx.moveTo(p.points[i].x-4/S.zoom,p.points[i].y);
-        ctx.lineTo(p.points[i].x+4/S.zoom,p.points[i].y); ctx.stroke();
-      } break;
-    case 'fill': case 'accordion': case 'contour':
-      if(p.points.length>3){
+      for(let off=-1.5;off<=1.5;off+=1.5){
         ctx.beginPath();
-        p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
-        ctx.closePath(); ctx.fillStyle=p.color+'44'; ctx.fill();
-        ctx.strokeStyle=p.color; ctx.lineWidth=lw; ctx.stroke();
-        const bb=bbox(p.points); const step=4/S.zoom;
-        ctx.save(); ctx.clip();
-        ctx.strokeStyle=p.color+'88'; ctx.lineWidth=.5/S.zoom;
-        for(let y=bb.minY;y<bb.maxY;y+=step){
-          ctx.beginPath(); ctx.moveTo(bb.minX,y); ctx.lineTo(bb.maxX,y); ctx.stroke();
-        } ctx.restore();
-      } break;
-    case 'cross':
-      for(let i=0;i<p.points.length-1;i+=2){
-        const sz=4/S.zoom; const pt=p.points[i];
-        ctx.beginPath(); ctx.strokeStyle=p.color; ctx.lineWidth=lw;
-        ctx.moveTo(pt.x-sz,pt.y-sz); ctx.lineTo(pt.x+sz,pt.y+sz);
-        ctx.moveTo(pt.x+sz,pt.y-sz); ctx.lineTo(pt.x-sz,pt.y+sz);
-        ctx.stroke();
-      } break;
-    case 'backstitch':
-      ctx.beginPath(); ctx.strokeStyle=p.color; ctx.lineWidth=lw*1.5; ctx.setLineDash([6/S.zoom,2/S.zoom]);
-      p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
-      ctx.stroke(); ctx.setLineDash([]); break;
-    case 'stemstitch':
-      ctx.beginPath(); ctx.strokeStyle=p.color; ctx.lineWidth=lw*2;
-      for(let i=0;i<p.points.length-1;i++){
-        ctx.moveTo(p.points[i].x,p.points[i].y);
-        const mx=(p.points[i].x+p.points[i+1].x)/2+2/S.zoom;
-        const my=(p.points[i].y+p.points[i+1].y)/2;
-        ctx.quadraticCurveTo(mx,my,p.points[i+1].x,p.points[i+1].y);
-      } ctx.stroke(); break;
-    case 'applique':
-      if(p.points.length>3){
-        ctx.beginPath();
-        p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
-        ctx.closePath(); ctx.fillStyle=p.color+'33'; ctx.fill();
-        ctx.setLineDash([6/S.zoom,3/S.zoom]); ctx.strokeStyle=p.color; ctx.lineWidth=lw*2; ctx.stroke();
-        ctx.setLineDash([]);
-      } break;
-    case 'puff':
-      if(p.points.length>3){
-        const bb2=bbox(p.points);
-        const grd=ctx.createRadialGradient(
-          (bb2.minX+bb2.maxX)/2,(bb2.minY+bb2.maxY)/2,0,
-          (bb2.minX+bb2.maxX)/2,(bb2.minY+bb2.maxY)/2,
-          Math.max(bb2.maxX-bb2.minX,bb2.maxY-bb2.minY)/2
-        );
-        grd.addColorStop(0,p.color+'ff'); grd.addColorStop(1,p.color+'88');
-        ctx.beginPath();
-        p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
-        ctx.closePath(); ctx.fillStyle=grd; ctx.fill();
-        ctx.strokeStyle=p.color; ctx.lineWidth=lw; ctx.stroke();
-      } break;
-    case 'redwork':
-      ctx.beginPath(); ctx.strokeStyle='#CC0000'; ctx.lineWidth=lw*1.2;
-      p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
-      ctx.stroke(); break;
-    case 'spiral':
-      ctx.beginPath(); ctx.strokeStyle=p.color; ctx.lineWidth=lw;
-      let angle=0, radius=0;
-      const cx2=p.points[0]?.x||0, cy2=p.points[0]?.y||0;
-      for(let i=0;i<p.points.length;i++){
-        const r=i*1.5/S.zoom; const a=i*.5;
-        if(i===0) ctx.moveTo(cx2+r*Math.cos(a),cy2+r*Math.sin(a));
-        else ctx.lineTo(cx2+r*Math.cos(a),cy2+r*Math.sin(a));
-      } ctx.stroke(); break;
-    case 'radial':
-      if(p.points.length>3){
-        const cxr=(bbox(p.points).minX+bbox(p.points).maxX)/2;
-        const cyr=(bbox(p.points).minY+bbox(p.points).maxY)/2;
-        ctx.strokeStyle=p.color; ctx.lineWidth=lw*.7;
-        p.points.filter((_,i)=>i%4===0).forEach(pt=>{
-          ctx.beginPath(); ctx.moveTo(cxr,cyr); ctx.lineTo(pt.x,pt.y); ctx.stroke();
+        p.points.forEach((pt,i,arr)=>{
+          if(i===0){ctx.moveTo(pt.x,pt.y);return;}
+          const prev=arr[i-1];
+          const dx=pt.x-prev.x,dy=pt.y-prev.y;
+          const len=Math.sqrt(dx*dx+dy*dy)||1;
+          const nx=-dy/len*off/S.zoom,ny=dx/len*off/S.zoom;
+          ctx.lineTo(pt.x+nx,pt.y+ny);
         });
+        ctx.strokeStyle=p.color;ctx.lineWidth=1.2/S.zoom;ctx.setLineDash([5/S.zoom,2/S.zoom]);ctx.stroke();
+      }
+      ctx.setLineDash([]);
+      break;
+
+    case 'satin':
+      if(p.points.length>1){
+        const bbSat=bbox(p.points);
+        const satAngle=((p.angle)||45)*Math.PI/180;
+        const satDensity=Math.max(1.5,(p.density||4));
+        const satStep=satDensity/S.zoom;
+        const satW=Math.sqrt(Math.pow(bbSat.maxX-bbSat.minX,2)+Math.pow(bbSat.maxY-bbSat.minY,2))*0.8+12/S.zoom;
+        const sCX=(bbSat.minX+bbSat.maxX)/2,sCY=(bbSat.minY+bbSat.maxY)/2;
+        ctx.save();
+        ctx.beginPath();
+        p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
+        ctx.closePath();ctx.fillStyle=p.color+'12';ctx.fill();ctx.clip();
+        const spCos=Math.cos(satAngle+Math.PI/2),spSin=Math.sin(satAngle+Math.PI/2);
+        const slCos=Math.cos(satAngle),slSin=Math.sin(satAngle);
+        let sRow=0;
+        for(let d=-satW;d<=satW;d+=satStep){
+          sRow++;
+          const bx=sCX+d*spCos,by=sCY+d*spSin;
+          ctx.beginPath();ctx.moveTo(bx-slCos*satW,by-slSin*satW);ctx.lineTo(bx+slCos*satW,by+slSin*satW);
+          ctx.strokeStyle='rgba(0,0,0,0.1)';ctx.lineWidth=1.1/S.zoom;ctx.stroke();
+          ctx.beginPath();ctx.moveTo(bx-slCos*satW,by-slSin*satW);ctx.lineTo(bx+slCos*satW,by+slSin*satW);
+          ctx.strokeStyle=p.color;ctx.lineWidth=0.85/S.zoom;ctx.stroke();
+          if(sRow%4===0){
+            ctx.beginPath();ctx.moveTo(bx-slCos*satW,by-slSin*satW);ctx.lineTo(bx+slCos*satW,by+slSin*satW);
+            ctx.strokeStyle='rgba(255,255,255,0.18)';ctx.lineWidth=0.3/S.zoom;ctx.stroke();
+          }
+        }
+        ctx.restore();
+        ctx.beginPath();p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
+        ctx.closePath();ctx.strokeStyle=p.color+'66';ctx.lineWidth=0.4/S.zoom;ctx.stroke();
       } break;
+
+    case 'fill':
+      if(p.points.length>2){
+        const bbFill=bbox(p.points);
+        const fAngle=(p.angle||0)*Math.PI/180;
+        const fDensity=Math.max(1.5,p.density||4);
+        const fStep=fDensity/S.zoom;
+        const fCX=(bbFill.minX+bbFill.maxX)/2,fCY=(bbFill.minY+bbFill.maxY)/2;
+        const fDiag=Math.sqrt(Math.pow(bbFill.maxX-bbFill.minX,2)+Math.pow(bbFill.maxY-bbFill.minY,2))+20/S.zoom;
+        ctx.save();
+        ctx.beginPath();p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
+        ctx.closePath();ctx.fillStyle=p.color+'12';ctx.fill();ctx.clip();
+        const fpCos=Math.cos(fAngle+Math.PI/2),fpSin=Math.sin(fAngle+Math.PI/2);
+        const flCos=Math.cos(fAngle),flSin=Math.sin(fAngle);
+        let fRow=0;
+        for(let d=-fDiag;d<=fDiag;d+=fStep){
+          fRow++;
+          const tOff=(fRow%3)*(fStep/3);
+          const bx=fCX+d*fpCos,by=fCY+d*fpSin;
+          ctx.beginPath();
+          ctx.moveTo(bx-flCos*fDiag+tOff*flCos,by-flSin*fDiag+tOff*flSin);
+          ctx.lineTo(bx+flCos*fDiag+tOff*flCos,by+flSin*fDiag+tOff*flSin);
+          ctx.strokeStyle=p.color;ctx.lineWidth=fRow%6===0?0.95/S.zoom:0.75/S.zoom;
+          ctx.globalAlpha=(p.opacity||1)*(fRow%6===0?0.95:0.8);ctx.stroke();
+          ctx.globalAlpha=p.opacity||1;
+        }
+        ctx.restore();
+        ctx.beginPath();p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
+        ctx.closePath();ctx.strokeStyle=p.color+'55';ctx.lineWidth=0.4/S.zoom;ctx.stroke();
+      } break;
+
+    case 'cross':
+      const cSz=5/S.zoom;
+      p.points.filter((_,i)=>i%4===0).forEach(pt=>{
+        [[pt.x-cSz,pt.y+cSz,pt.x+cSz,pt.y-cSz],[pt.x-cSz,pt.y-cSz,pt.x+cSz,pt.y+cSz]].forEach(([x1,y1,x2,y2])=>{
+          ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);
+          ctx.strokeStyle='rgba(0,0,0,0.18)';ctx.lineWidth=1.5/S.zoom;ctx.stroke();
+          ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);
+          ctx.strokeStyle=p.color;ctx.lineWidth=1.1/S.zoom;ctx.stroke();
+        });
+      }); break;
+
+    case 'backstitch':
+      for(let i=1;i<p.points.length;i++){
+        ctx.beginPath();ctx.moveTo(p.points[i-1].x,p.points[i-1].y);ctx.lineTo(p.points[i].x,p.points[i].y);
+        ctx.strokeStyle='rgba(0,0,0,0.18)';ctx.lineWidth=2.2/S.zoom;ctx.lineCap='round';ctx.stroke();
+        ctx.beginPath();ctx.moveTo(p.points[i-1].x,p.points[i-1].y);ctx.lineTo(p.points[i].x,p.points[i].y);
+        ctx.strokeStyle=p.color;ctx.lineWidth=1.8/S.zoom;ctx.stroke();
+        if(i%2===0){
+          const mx=(p.points[i-1].x+p.points[i].x)/2,my=(p.points[i-1].y+p.points[i].y)/2;
+          ctx.beginPath();ctx.arc(mx,my,1.2/S.zoom,0,Math.PI*2);ctx.fillStyle=p.color;ctx.fill();
+        }
+      } break;
+
+    case 'stemstitch':
+      for(let i=2;i<p.points.length;i+=2){
+        ctx.beginPath();ctx.moveTo(p.points[i-2].x,p.points[i-2].y);ctx.lineTo(p.points[i].x,p.points[i].y);
+        ctx.strokeStyle='rgba(0,0,0,0.18)';ctx.lineWidth=2/S.zoom;ctx.lineCap='round';ctx.stroke();
+        ctx.beginPath();ctx.moveTo(p.points[i-2].x,p.points[i-2].y);ctx.lineTo(p.points[i].x,p.points[i].y);
+        ctx.strokeStyle=p.color;ctx.lineWidth=1.6/S.zoom;ctx.stroke();
+      } break;
+
+    case 'applique':
+      if(p.points.length>2){
+        ctx.beginPath();p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
+        ctx.closePath();ctx.fillStyle=p.color+'30';ctx.fill();
+        // Tack-down stitches
+        ctx.setLineDash([3/S.zoom,3/S.zoom]);
+        ctx.strokeStyle=p.color;ctx.lineWidth=1.5/S.zoom;ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.beginPath();p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
+        ctx.closePath();ctx.strokeStyle=p.color;ctx.lineWidth=0.8/S.zoom;ctx.stroke();
+      } break;
+
+    case 'puff':
+      if(p.points.length>2){
+        const bbPuff=bbox(p.points);
+        ctx.beginPath();p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
+        ctx.closePath();
+        const puffGrad=ctx.createLinearGradient(bbPuff.minX,bbPuff.minY,bbPuff.maxX,bbPuff.maxY);
+        puffGrad.addColorStop(0,p.color+'cc');puffGrad.addColorStop(0.5,p.color);puffGrad.addColorStop(1,p.color+'88');
+        ctx.fillStyle=puffGrad;ctx.fill();
+        ctx.strokeStyle=p.color;ctx.lineWidth=2/S.zoom;ctx.stroke();
+        // 3D highlight
+        ctx.beginPath();p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
+        ctx.closePath();ctx.strokeStyle='rgba(255,255,255,0.25)';ctx.lineWidth=1/S.zoom;ctx.stroke();
+      } break;
+
+    case 'redwork':
+      ctx.beginPath();p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
+      ctx.strokeStyle='rgba(0,0,0,0.2)';ctx.lineWidth=2.5/S.zoom;ctx.stroke();
+      ctx.beginPath();p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
+      ctx.strokeStyle=p.color||'#DC143C';ctx.lineWidth=2/S.zoom;ctx.stroke();
+      break;
+
+    case 'accordion':
+      if(p.points.length>1){
+        const accStep=6/S.zoom;
+        for(let i=0;i<p.points.length-1;i++){
+          const a=p.points[i],b=p.points[i+1];
+          const angle=Math.atan2(b.y-a.y,b.x-a.x);
+          const perp=angle+Math.PI/2;
+          const dist=Math.sqrt((b.x-a.x)**2+(b.y-a.y)**2);
+          for(let t=0;t<dist;t+=accStep){
+            const tx=a.x+(b.x-a.x)*t/dist,ty=a.y+(b.y-a.y)*t/dist;
+            const amp=4/S.zoom*(Math.floor(t/accStep)%2===0?1:-1);
+            if(t>0){
+              ctx.beginPath();ctx.moveTo(prevX,prevY);ctx.lineTo(tx+Math.cos(perp)*amp,ty+Math.sin(perp)*amp);
+              ctx.strokeStyle=p.color;ctx.lineWidth=1.2/S.zoom;ctx.stroke();
+            }
+            var prevX=tx+Math.cos(perp)*amp,prevY=ty+Math.sin(perp)*amp;
+          }
+        }
+      } break;
+
+    case 'contour':
+      if(p.points.length>2){
+        const bb=bbox(p.points);
+        const center={x:(bb.minX+bb.maxX)/2,y:(bb.minY+bb.maxY)/2};
+        for(let scale=1;scale>0.2;scale-=0.15){
+          const scaled=p.points.map(pt=>({x:center.x+(pt.x-center.x)*scale,y:center.y+(pt.y-center.y)*scale}));
+          ctx.beginPath();scaled.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
+          ctx.strokeStyle=p.color;ctx.lineWidth=0.8/S.zoom;ctx.globalAlpha=(p.opacity||1)*0.8;ctx.stroke();
+          ctx.globalAlpha=p.opacity||1;
+        }
+      } break;
+
+    case 'spiral':
+      {const sp=[];const spCX=(p.points[0]?.x||0),spCY=(p.points[0]?.y||0);const spR=p.points.length>1?Math.sqrt((p.points[p.points.length-1].x-spCX)**2+(p.points[p.points.length-1].y-spCY)**2):40/S.zoom;
+      for(let i=0;i<=60;i++){const a=i/60*Math.PI*6;const r=i/60*spR;sp.push({x:spCX+r*Math.cos(a),y:spCY+r*Math.sin(a)});}
+      ctx.beginPath();sp.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
+      ctx.strokeStyle=p.color;ctx.lineWidth=lw;ctx.stroke();} break;
+
+    case 'radial':
+      {const rCX=(p.points[0]?.x||0),rCY=(p.points[0]?.y||0);
+      const rR=p.points.length>1?Math.sqrt((p.points[p.points.length-1].x-rCX)**2+(p.points[p.points.length-1].y-rCY)**2):40/S.zoom;
+      for(let i=0;i<24;i++){const a=i/24*Math.PI*2;
+        ctx.beginPath();ctx.moveTo(rCX,rCY);ctx.lineTo(rCX+rR*Math.cos(a),rCY+rR*Math.sin(a));
+        ctx.strokeStyle=p.color;ctx.lineWidth=i%4===0?1.2/S.zoom:0.7/S.zoom;ctx.stroke();}
+      } break;
+
     case 'wave':
-      ctx.beginPath(); ctx.strokeStyle=p.color; ctx.lineWidth=lw;
-      for(let i=0;i<p.points.length-2;i+=2){
-        const cp={x:(p.points[i].x+p.points[i+2].x)/2,y:p.points[i].y-8/S.zoom};
-        if(i===0) ctx.moveTo(p.points[i].x,p.points[i].y);
-        ctx.quadraticCurveTo(cp.x,cp.y,p.points[i+2].x,p.points[i+2].y);
-      } ctx.stroke(); break;
-    default:
-      ctx.beginPath(); ctx.strokeStyle=p.color; ctx.lineWidth=lw;
+      if(p.points.length>1){
+        const wvPts=[];
+        for(let i=0;i<p.points.length-1;i++){
+          const a=p.points[i],b=p.points[i+1];
+          const segs=8;
+          for(let j=0;j<segs;j++){
+            const t=j/segs,t2=(j+1)/segs;
+            const amp=5/S.zoom;
+            wvPts.push({x:a.x+(b.x-a.x)*t,y:a.y+(b.y-a.y)*t+Math.sin(t*Math.PI*2)*amp});
+          }
+        }
+        wvPts.push(p.points[p.points.length-1]);
+        ctx.beginPath();wvPts.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
+        ctx.strokeStyle=p.color;ctx.lineWidth=lw;ctx.stroke();
+      } break;
+
+    case 'zardozi':
+      ctx.beginPath();p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
+      ctx.strokeStyle='rgba(0,0,0,0.25)';ctx.lineWidth=5/S.zoom;ctx.stroke();
+      ctx.beginPath();p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
+      ctx.strokeStyle=p.color;ctx.lineWidth=4/S.zoom;ctx.stroke();
+      ctx.fillStyle='rgba(255,255,255,0.7)';
+      p.points.filter((_,i)=>i%3===0).forEach(pt=>{ctx.beginPath();ctx.arc(pt.x,pt.y,1.5/S.zoom,0,Math.PI*2);ctx.fill();});
+      p.points.filter((_,i)=>i%5===0&&i>0).forEach(pt=>{ctx.beginPath();ctx.arc(pt.x,pt.y,3/S.zoom,0,Math.PI*2);ctx.strokeStyle=p.color;ctx.lineWidth=1/S.zoom;ctx.stroke();});
+      break;
+
+    case 'kantha':
+      ctx.setLineDash([5/S.zoom,3/S.zoom]);threadStroke(p.points,p.color,1.5);ctx.setLineDash([]);
+      ctx.beginPath();ctx.setLineDash([4/S.zoom,4/S.zoom]);
+      p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y+3/S.zoom):ctx.moveTo(pt.x,pt.y+3/S.zoom));
+      ctx.strokeStyle=p.color+'99';ctx.lineWidth=1/S.zoom;ctx.stroke();ctx.setLineDash([]);
+      break;
+
+    case 'phulkari':
+      if(p.points.length>3){
+        const bbPh=bbox(p.points);ctx.save();
+        ctx.beginPath();p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
+        ctx.closePath();ctx.fillStyle=p.color+'22';ctx.fill();ctx.clip();
+        const phStep=2/S.zoom;ctx.lineWidth=0.8/S.zoom;
+        for(let y=bbPh.minY;y<bbPh.maxY;y+=phStep){
+          ctx.beginPath();ctx.strokeStyle=p.color;
+          if(Math.floor((y-bbPh.minY)/phStep)%2===0){ctx.moveTo(bbPh.minX,y);ctx.lineTo(bbPh.maxX,y);}
+          else{ctx.moveTo(bbPh.maxX,y);ctx.lineTo(bbPh.minX,y);}
+          ctx.stroke();
+        }
+        ctx.restore();
+        ctx.beginPath();p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
+        ctx.closePath();ctx.strokeStyle=p.color;ctx.lineWidth=1.5/S.zoom;ctx.stroke();
+      } break;
+
+    case 'chikankari':
+      ctx.globalAlpha=0.5;threadStroke(p.points,p.color,1);ctx.globalAlpha=1;
+      p.points.filter((_,i)=>i%4===0).forEach(pt=>{ctx.beginPath();ctx.arc(pt.x,pt.y,1.2/S.zoom,0,Math.PI*2);ctx.fillStyle=p.color+'66';ctx.fill();});
+      break;
+
+    case 'aari':
+      ctx.beginPath();p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
+      ctx.strokeStyle=p.color;ctx.lineWidth=2/S.zoom;ctx.stroke();
+      p.points.filter((_,i)=>i%2===0&&i>0).forEach((pt,idx,arr)=>{
+        const prev=arr[idx-1]||p.points[0];
+        ctx.beginPath();ctx.ellipse((pt.x+prev.x)/2,(pt.y+prev.y)/2,2/S.zoom,1.5/S.zoom,Math.atan2(pt.y-prev.y,pt.x-prev.x),0,Math.PI*2);
+        ctx.strokeStyle=p.color;ctx.lineWidth=1/S.zoom;ctx.stroke();
+      }); break;
+
+    case 'kashmiri':
+      p.points.filter((_,i)=>i%3===0&&i>0).forEach((pt,idx,arr)=>{
+        const prev=arr[idx-1]||p.points[0];
+        ctx.beginPath();ctx.ellipse((pt.x+prev.x)/2,(pt.y+prev.y)/2,3/S.zoom,2/S.zoom,Math.atan2(pt.y-prev.y,pt.x-prev.x),0,Math.PI*2);
+        ctx.strokeStyle=p.color;ctx.lineWidth=1.2/S.zoom;ctx.stroke();
+        ctx.beginPath();ctx.arc((pt.x+prev.x)/2,(pt.y+prev.y)/2,0.8/S.zoom,0,Math.PI*2);ctx.fillStyle=p.color;ctx.fill();
+      }); break;
+
+    case 'kutch':
+      if(p.points.length>3){
+        const bbK=bbox(p.points);ctx.save();
+        ctx.beginPath();p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
+        ctx.closePath();ctx.fillStyle=p.color+'22';ctx.fill();ctx.clip();
+        const kStep=8/S.zoom;ctx.strokeStyle=p.color;ctx.lineWidth=0.6/S.zoom;
+        for(let x=bbK.minX;x<bbK.maxX;x+=kStep){ctx.beginPath();ctx.moveTo(x,bbK.minY);ctx.lineTo(x,bbK.maxY);ctx.stroke();}
+        for(let y=bbK.minY;y<bbK.maxY;y+=kStep){ctx.beginPath();ctx.moveTo(bbK.minX,y);ctx.lineTo(bbK.maxX,y);ctx.stroke();}
+        for(let x=bbK.minX+kStep;x<bbK.maxX;x+=kStep*2){
+          for(let y=bbK.minY+kStep;y<bbK.maxY;y+=kStep*2){
+            const gr=ctx.createRadialGradient(x,y,0,x,y,2.5/S.zoom);
+            gr.addColorStop(0,'rgba(255,255,255,0.9)');gr.addColorStop(1,'rgba(150,200,220,0.2)');
+            ctx.beginPath();ctx.arc(x,y,2.5/S.zoom,0,Math.PI*2);ctx.fillStyle=gr;ctx.fill();
+            ctx.strokeStyle=p.color;ctx.lineWidth=0.5/S.zoom;ctx.stroke();
+          }
+        }
+        ctx.restore();
+        ctx.beginPath();p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
+        ctx.closePath();ctx.strokeStyle=p.color;ctx.lineWidth=1.5/S.zoom;ctx.stroke();
+      } break;
+
+    case 'suf':
+      if(p.points.length>3){
+        const bbSuf=bbox(p.points);ctx.save();
+        ctx.beginPath();p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
+        ctx.closePath();ctx.clip();
+        const sufStep=4/S.zoom;ctx.strokeStyle=p.color;ctx.lineWidth=0.8/S.zoom;
+        for(let i=0;i<(bbSuf.maxX-bbSuf.minX+bbSuf.maxY-bbSuf.minY)/sufStep;i++){
+          ctx.beginPath();ctx.moveTo(bbSuf.minX+i*sufStep,bbSuf.minY);ctx.lineTo(bbSuf.minX,bbSuf.minY+i*sufStep);ctx.stroke();
+        }
+        ctx.restore();
+        ctx.beginPath();p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
+        ctx.closePath();ctx.strokeStyle=p.color;ctx.lineWidth=1.5/S.zoom;ctx.stroke();
+      } break;
+
+    case 'toda':
+      if(p.points.length>3){
+        const bbToda=bbox(p.points);ctx.save();
+        ctx.beginPath();p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
+        ctx.closePath();ctx.clip();
+        const todaStep=5/S.zoom;
+        for(let x=bbToda.minX;x<bbToda.maxX;x+=todaStep){
+          ctx.fillStyle=Math.floor((x-bbToda.minX)/todaStep)%2===0?p.color:p.color+'44';
+          ctx.fillRect(x,bbToda.minY,todaStep,bbToda.maxY-bbToda.minY);
+        }
+        ctx.restore();
+        ctx.beginPath();p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
+        ctx.closePath();ctx.strokeStyle=p.color;ctx.lineWidth=1.5/S.zoom;ctx.stroke();
+      } break;
+
+    case 'shisha':
+      p.points.filter((_,i)=>i%5===0).forEach(pt=>{
+        const r=5/S.zoom;
+        const gr=ctx.createRadialGradient(pt.x-r*.3,pt.y-r*.3,r*.1,pt.x,pt.y,r);
+        gr.addColorStop(0,'rgba(255,255,255,0.95)');gr.addColorStop(1,'rgba(150,170,200,0.2)');
+        ctx.beginPath();ctx.arc(pt.x,pt.y,r,0,Math.PI*2);ctx.fillStyle=gr;ctx.fill();
+        for(let i=0;i<8;i++){const a=i/8*Math.PI*2;ctx.beginPath();ctx.moveTo(pt.x+r*Math.cos(a),pt.y+r*Math.sin(a));ctx.lineTo(pt.x+(r+3/S.zoom)*Math.cos(a),pt.y+(r+3/S.zoom)*Math.sin(a));ctx.strokeStyle=p.color;ctx.lineWidth=0.8/S.zoom;ctx.stroke();}
+        ctx.beginPath();ctx.arc(pt.x,pt.y,r,0,Math.PI*2);ctx.strokeStyle=p.color;ctx.lineWidth=1/S.zoom;ctx.stroke();
+      });
+      ctx.beginPath();ctx.setLineDash([3/S.zoom,3/S.zoom]);
       p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
-      ctx.stroke();
+      ctx.strokeStyle=p.color+'66';ctx.lineWidth=0.8/S.zoom;ctx.stroke();ctx.setLineDash([]);
+      break;
+
+    default:
+      threadStroke(p.points,p.color,1.8);
   }
+
+  ctx.restore();
   ctx.globalAlpha=1;
 }
-
 function bbox(pts){
   return {
     minX:Math.min(...pts.map(p=>p.x)), maxX:Math.max(...pts.map(p=>p.x)),
@@ -2019,12 +2186,20 @@ function buildFonts(){
 // ═══════════════════════════════════════
 function buildStitchGrid(){
   const grid=document.getElementById('stgrid');
+  let addedDivider=false;
   STITCHES.forEach(s=>{
+    if(s.indian&&!addedDivider){
+      addedDivider=true;
+      const div=document.createElement('div');
+      div.style.cssText='grid-column:1/-1;font-size:9px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--gold);padding:8px 2px 4px;border-top:1px solid var(--border);margin-top:4px';
+      div.textContent='🇮🇳 Indian Traditional';
+      grid.appendChild(div);
+    }
     const d=document.createElement('div');
     d.className='st'+(s.id==='running'?' active':'');
-    d.id='st-'+s.id;
-    d.title=s.desc;
-    d.innerHTML=`<div class="st-icon">${s.icon}</div><div class="st-name">${s.name}</div>`;
+    d.id='st-'+s.id;d.title=s.desc;
+    if(s.indian) d.style.borderColor='rgba(239,159,39,0.3)';
+    d.innerHTML='<div class="st-icon">'+s.icon+'</div><div class="st-name">'+s.name+'</div>';
     d.onclick=()=>setStitch(s.id);
     grid.appendChild(d);
   });
@@ -2407,7 +2582,7 @@ function renderGarment(){
   gctx.fillStyle='rgba(255,255,255,0.25)';
   gctx.font='11px DM Mono';
   gctx.textAlign='right';
-  const labels={tshirt:'T-Shirt',polo:'Polo Shirt',hoodie:'Hoodie',cap:'Baseball Cap',bag:'Tote Bag',jacket:'Jacket'};
+  const labels={tshirt:'T-Shirt',polo:'Polo Shirt',hoodie:'Hoodie',cap:'Baseball Cap',bag:'Tote Bag',jacket:'Jacket',saree:'Saree',lehenga:'Lehenga',dupatta:'Dupatta',kurta:'Kurta'};
   gctx.fillText(labels[currentGarment]||currentGarment, W-12, H-10);
 }
 
@@ -2500,6 +2675,504 @@ Rules: Use ${colors} colors max. Canvas is 400x400. Generate ${detail*20} meanin
 // MULTI BLEND UI — add to Tools menu
 // ═══════════════════════════════════════
 
+
+// ═══════════════════════════════════════════════════
+// PATTERN LIBRARY
+// ═══════════════════════════════════════════════════
+const PATTERNS = [
+  {name:'Zardozi Border',cat:'indian',stitch:'zardozi',gen:(cx,cy,s)=>{const paths=[];const b=[];for(let i=0;i<=40;i++){const t=i/40;b.push({x:cx-s*.5+t*s,y:cy-s*.4});}for(let i=0;i<=20;i++){const t=i/20;b.push({x:cx+s*.5,y:cy-s*.4+t*s*.8});}for(let i=0;i<=40;i++){const t=i/40;b.push({x:cx+s*.5-t*s,y:cy+s*.4});}for(let i=0;i<=20;i++){const t=i/20;b.push({x:cx-s*.5,y:cy+s*.4-t*s*.8});}paths.push({points:b,color:'#FFD700',stitch:'zardozi'});for(let i=-2;i<=2;i++){const ox=cx+i*s*.22;for(let p=0;p<6;p++){const a=p/6*Math.PI*2;const pts=[];for(let j=0;j<=12;j++){const t=j/12*Math.PI*2;const r=s*.07*Math.abs(Math.sin(t/2));pts.push({x:ox+r*Math.cos(t+a)+s*.09*Math.cos(a),y:cy+r*Math.sin(t+a)+s*.09*Math.sin(a)});}paths.push({points:pts,color:'#8B0000',stitch:'zardozi'});}}return paths;}},
+  {name:'Kantha Lotus',cat:'indian',stitch:'kantha',gen:(cx,cy,s)=>{const paths=[];for(let i=0;i<8;i++){const a=i/8*Math.PI*2;const pts=[];for(let j=0;j<=20;j++){const t=j/20*Math.PI*2;const r=s*.25*Math.abs(Math.sin(t/2));pts.push({x:cx+r*Math.cos(t+a)+s*.2*Math.cos(a),y:cy+r*Math.sin(t+a)+s*.2*Math.sin(a)});}paths.push({points:pts,color:i%2===0?'#000080':'#4169E1',stitch:'kantha'});}const c=[];for(let i=0;i<=24;i++)c.push({x:cx+s*.09*Math.cos(i/24*Math.PI*2),y:cy+s*.09*Math.sin(i/24*Math.PI*2)});paths.push({points:c,color:'#FFD700',stitch:'kantha'});const sur=[];for(let i=0;i<=36;i++)sur.push({x:cx+s*.42*Math.cos(i/36*Math.PI*2),y:cy+s*.42*Math.sin(i/36*Math.PI*2)});paths.push({points:sur,color:'#000080',stitch:'kantha'});return paths;}},
+  {name:'Phulkari Diamond',cat:'indian',stitch:'phulkari',gen:(cx,cy,s)=>{const paths=[];const cols=['#DC143C','#FFD700','#006400','#FF4500','#8B0000'];for(let row=-2;row<=2;row++){for(let col=-2;col<=2;col++){if(Math.abs(row)+Math.abs(col)>3)continue;const ox=cx+col*s*.2,oy=cy+row*s*.2;const d=[{x:ox,y:oy-s*.09},{x:ox+s*.09,y:oy},{x:ox,y:oy+s*.09},{x:ox-s*.09,y:oy},{x:ox,y:oy-s*.09}];paths.push({points:d,color:cols[(Math.abs(row)+Math.abs(col))%cols.length],stitch:'phulkari'});}}return paths;}},
+  {name:'Kashmiri Paisley',cat:'indian',stitch:'kashmiri',gen:(cx,cy,s)=>{const paths=[];const main=[];for(let i=0;i<=48;i++){const t=i/48*Math.PI*2;const r=s*.3*(1+0.45*Math.cos(t));main.push({x:cx+r*Math.cos(t+0.4*Math.sin(t*2))*0.75,y:cy+r*Math.sin(t+0.4*Math.sin(t*2))*1.4-s*.08});}paths.push({points:main,color:'#1D9E75',stitch:'kashmiri'});const inner=[];for(let i=0;i<=32;i++){const t=i/32*Math.PI*2;const r=s*.16*(1+0.3*Math.cos(t));inner.push({x:cx+r*Math.cos(t+0.3*Math.sin(t*2))*0.7,y:cy+r*Math.sin(t+0.3*Math.sin(t*2))*1.3-s*.05});}paths.push({points:inner,color:'#FFD700',stitch:'kashmiri'});return paths;}},
+  {name:'Kutch Mirror Work',cat:'indian',stitch:'kutch',gen:(cx,cy,s)=>{const paths=[];const cols=['#DC143C','#FFD700','#006400','#000080'];for(let r=1;r<=4;r++){const hex=[];for(let i=0;i<=6;i++){const a=i/6*Math.PI*2+Math.PI/6;hex.push({x:cx+r*s*.1*Math.cos(a),y:cy+r*s*.1*Math.sin(a)});}paths.push({points:hex,color:cols[r%cols.length],stitch:'kutch'});}for(let i=0;i<6;i++){const a=i/6*Math.PI*2;const mc=[];for(let j=0;j<=16;j++)mc.push({x:cx+s*.3*Math.cos(a)+s*.06*Math.cos(j/16*Math.PI*2),y:cy+s*.3*Math.sin(a)+s*.06*Math.sin(j/16*Math.PI*2)});paths.push({points:mc,color:'#C0C0C0',stitch:'shisha'});}return paths;}},
+  {name:'Aari Peacock',cat:'indian',stitch:'aari',gen:(cx,cy,s)=>{const paths=[];for(let i=0;i<7;i++){const a=(i/7-.5)*Math.PI*1.2;const pts=[];for(let j=0;j<=20;j++){const t=j/20;pts.push({x:cx+t*s*.4*Math.sin(a),y:cy-t*s*.4*Math.cos(a)});}paths.push({points:pts,color:i%2===0?'#008080':'#006400',stitch:'aari'});const eye=[];for(let j=0;j<=16;j++)eye.push({x:cx+s*.4*Math.sin(a)+s*.06*Math.cos(j/16*Math.PI*2),y:cy-s*.4*Math.cos(a)+s*.06*Math.sin(j/16*Math.PI*2)});paths.push({points:eye,color:'#FFD700',stitch:'aari'});}const body=[];for(let i=0;i<=24;i++)body.push({x:cx+s*.08*Math.cos(i/24*Math.PI*2),y:cy+s*.15+s*.12*Math.sin(i/24*Math.PI*2)});paths.push({points:body,color:'#008080',stitch:'aari'});return paths;}},
+  {name:'Shisha Mirrors',cat:'indian',stitch:'shisha',gen:(cx,cy,s)=>{const paths=[];const c=[];for(let i=0;i<=24;i++)c.push({x:cx+s*.12*Math.cos(i/24*Math.PI*2),y:cy+s*.12*Math.sin(i/24*Math.PI*2)});paths.push({points:c,color:'#C0C0C0',stitch:'shisha'});for(let i=0;i<6;i++){const a=i/6*Math.PI*2;const mc=[];for(let j=0;j<=16;j++)mc.push({x:cx+s*.3*Math.cos(a)+s*.07*Math.cos(j/16*Math.PI*2),y:cy+s*.3*Math.sin(a)+s*.07*Math.sin(j/16*Math.PI*2)});paths.push({points:mc,color:'#C0C0C0',stitch:'shisha'});paths.push({points:[{x:cx+s*.12*Math.cos(a),y:cy+s*.12*Math.sin(a)},{x:cx+s*.23*Math.cos(a),y:cy+s*.23*Math.sin(a)}],color:'#8B0000',stitch:'running'});}return paths;}},
+  {name:'Bridal Mandala',cat:'bridal',stitch:'zardozi',gen:(cx,cy,s)=>{const paths=[];for(let ring=1;ring<=5;ring++){const pts=[];for(let i=0;i<=36;i++)pts.push({x:cx+ring*s*.08*Math.cos(i/36*Math.PI*2),y:cy+ring*s*.08*Math.sin(i/36*Math.PI*2)});paths.push({points:pts,color:ring%2===0?'#FFD700':'#8B0000',stitch:'zardozi'});}for(let i=0;i<16;i++){const a=i/16*Math.PI*2;paths.push({points:[{x:cx+s*.08*Math.cos(a),y:cy+s*.08*Math.sin(a)},{x:cx+s*.4*Math.cos(a),y:cy+s*.4*Math.sin(a)}],color:i%4===0?'#FFD700':'#8B0000',stitch:'zardozi'});}return paths;}},
+  {name:'Lehenga Border',cat:'bridal',stitch:'zardozi',gen:(cx,cy,s)=>{const paths=[];paths.push({points:[{x:cx-s*.5,y:cy-s*.3},{x:cx+s*.5,y:cy-s*.3}],color:'#FFD700',stitch:'zardozi'});paths.push({points:[{x:cx-s*.5,y:cy+s*.3},{x:cx+s*.5,y:cy+s*.3}],color:'#FFD700',stitch:'zardozi'});for(let i=-2;i<=2;i++){const ox=cx+i*s*.22;for(let p=0;p<6;p++){const a=p/6*Math.PI*2;const pts=[];for(let j=0;j<=12;j++){const t=j/12*Math.PI*2;const r=s*.07*Math.abs(Math.sin(t/2));pts.push({x:ox+r*Math.cos(t+a)+s*.08*Math.cos(a),y:cy+r*Math.sin(t+a)+s*.08*Math.sin(a)});}paths.push({points:pts,color:p%2===0?'#FFD700':'#8B0000',stitch:'zardozi'});}}return paths;}},
+  {name:'Mandala Classic',cat:'geometric',stitch:'running',gen:(cx,cy,s)=>{const paths=[];for(let ring=1;ring<=6;ring++){const pts=[];for(let i=0;i<=36;i++)pts.push({x:cx+ring*s*.07*Math.cos(i/36*Math.PI*2),y:cy+ring*s*.07*Math.sin(i/36*Math.PI*2)});paths.push({points:pts,color:ring%2===0?'#534AB7':'#EF9F27',stitch:'running'});}for(let i=0;i<12;i++){const a=i/12*Math.PI*2;paths.push({points:[{x:cx+s*.07*Math.cos(a),y:cy+s*.07*Math.sin(a)},{x:cx+s*.42*Math.cos(a),y:cy+s*.42*Math.sin(a)}],color:'#EF9F27',stitch:'running'});}return paths;}},
+  {name:'Celtic Knot',cat:'geometric',stitch:'satin',gen:(cx,cy,s)=>{const paths=[];for(let i=0;i<4;i++){const a=i/4*Math.PI*2;const pts=[];for(let j=0;j<=60;j++){const t=j/60*Math.PI*4;const r=s*.3+s*.1*Math.sin(t*2);pts.push({x:cx+r*Math.cos(t/2+a),y:cy+r*Math.sin(t/2+a)*.8});}paths.push({points:pts,color:i%2===0?'#1D9E75':'#EF9F27',stitch:'satin'});}return paths;}},
+  {name:'Hexagon Tile',cat:'geometric',stitch:'fill',gen:(cx,cy,s)=>{const paths=[];const cols=['#1D9E75','#EF9F27','#534AB7','#E24B4A'];const r=s*.14;for(let row=-2;row<=2;row++){for(let col=-2;col<=2;col++){const ox=cx+col*r*1.75+(row%2)*r*.875,oy=cy+row*r*1.52;if(Math.sqrt((ox-cx)**2+(oy-cy)**2)>s*.45)continue;const hex=[];for(let i=0;i<=6;i++){const a=i/6*Math.PI*2+Math.PI/6;hex.push({x:ox+r*.9*Math.cos(a),y:oy+r*.9*Math.sin(a)});}paths.push({points:hex,color:cols[(Math.abs(row*3+col))%cols.length],stitch:'fill'});}}return paths;}},
+  {name:'Rose Garden',cat:'floral',stitch:'satin',gen:(cx,cy,s)=>{const paths=[];for(let rose=0;rose<5;rose++){const ox=rose===0?cx:cx+s*.3*Math.cos((rose-1)/4*Math.PI*2);const oy=rose===0?cy:cy+s*.3*Math.sin((rose-1)/4*Math.PI*2);const sz=rose===0?s*.18:s*.12;for(let p=0;p<5;p++){const a=p/5*Math.PI*2;const pts=[];for(let j=0;j<=16;j++){const t=j/16*Math.PI*2;pts.push({x:ox+sz*Math.cos(t+a)*(.7+.3*Math.cos(t))+sz*.5*Math.cos(a),y:oy+sz*Math.sin(t+a)*(.7+.3*Math.cos(t))+sz*.5*Math.sin(a)});}paths.push({points:pts,color:'#DC143C',stitch:'satin'});}}return paths;}},
+  {name:'Sunflower',cat:'floral',stitch:'satin',gen:(cx,cy,s)=>{const paths=[];for(let i=0;i<16;i++){const a=i/16*Math.PI*2;const pts=[];for(let j=0;j<=16;j++){const t=j/16*Math.PI*2;const r=s*.15*Math.abs(Math.sin(t/2));pts.push({x:cx+r*Math.cos(t+a)+s*.22*Math.cos(a),y:cy+r*Math.sin(t+a)+s*.22*Math.sin(a)});}paths.push({points:pts,color:'#FFD700',stitch:'satin'});}const center=[];for(let i=0;i<=24;i++)center.push({x:cx+s*.12*Math.cos(i/24*Math.PI*2),y:cy+s*.12*Math.sin(i/24*Math.PI*2)});paths.push({points:center,color:'#8B4513',stitch:'fill'});return paths;}},
+  {name:'Running Border',cat:'border',stitch:'running',gen:(cx,cy,s)=>{const paths=[];const makeRect=(w,h,col)=>{const p=[{x:cx-w,y:cy-h},{x:cx+w,y:cy-h},{x:cx+w,y:cy+h},{x:cx-w,y:cy+h},{x:cx-w,y:cy-h}];paths.push({points:p,color:col,stitch:'running'});};makeRect(s*.48,s*.38,'#534AB7');makeRect(s*.38,s*.28,'#EF9F27');makeRect(s*.28,s*.18,'#534AB7');return paths;}},
+  {name:'Wave Border',cat:'border',stitch:'stemstitch',gen:(cx,cy,s)=>{const paths=[];for(let row=-1;row<=1;row+=2){const pts=[];for(let i=0;i<=40;i++){const t=i/40;pts.push({x:cx-s*.5+t*s,y:cy+row*s*.25+s*.08*Math.sin(t*Math.PI*6)});}paths.push({points:pts,color:row<0?'#1D9E75':'#EF9F27',stitch:'stemstitch'});}return paths;}},
+  {name:'Team Badge',cat:'sports',stitch:'satin',gen:(cx,cy,s)=>{const paths=[];const shield=[{x:cx,y:cy+s*.45},{x:cx-s*.38,y:cy+s*.15},{x:cx-s*.38,y:cy-s*.38},{x:cx+s*.38,y:cy-s*.38},{x:cx+s*.38,y:cy+s*.15},{x:cx,y:cy+s*.45}];paths.push({points:shield,color:'#534AB7',stitch:'fill'});paths.push({points:[...shield],color:'#EF9F27',stitch:'satin'});const star=[];for(let i=0;i<10;i++){const a=i/10*Math.PI*2-Math.PI/2;const r=i%2===0?s*.18:s*.08;star.push({x:cx+r*Math.cos(a),y:cy+r*Math.sin(a)});}star.push(star[0]);paths.push({points:star,color:'#FFFFFF',stitch:'satin'});return paths;}},
+  {name:'Varsity Letter',cat:'sports',stitch:'satin',gen:(cx,cy,s)=>{const paths=[];[[{x:cx-s*.2,y:cy-s*.35},{x:cx-s*.2,y:cy+s*.35}],[{x:cx-s*.2,y:cy-s*.35},{x:cx+s*.2,y:cy-s*.35}],[{x:cx-s*.2,y:cy},{x:cx+s*.12,y:cy}],[{x:cx-s*.2,y:cy+s*.35},{x:cx+s*.2,y:cy+s*.35}]].forEach(seg=>paths.push({points:seg,color:'#534AB7',stitch:'satin'}));const border=[];for(let i=0;i<=36;i++)border.push({x:cx+s*.42*Math.cos(i/36*Math.PI*2),y:cy+s*.42*Math.sin(i/36*Math.PI*2)});paths.push({points:border,color:'#EF9F27',stitch:'running'});return paths;}},
+  {name:'Oval Monogram',cat:'monogram',stitch:'satin',gen:(cx,cy,s)=>{const paths=[];const outer=[];for(let i=0;i<=36;i++)outer.push({x:cx+s*.45*Math.cos(i/36*Math.PI*2),y:cy+s*.35*Math.sin(i/36*Math.PI*2)});const inner=[];for(let i=0;i<=36;i++)inner.push({x:cx+s*.38*Math.cos(i/36*Math.PI*2),y:cy+s*.28*Math.sin(i/36*Math.PI*2)});paths.push({points:outer,color:'#534AB7',stitch:'satin'});paths.push({points:inner,color:'#EF9F27',stitch:'running'});return paths;}},
+  {name:'Rangoli Mandala',cat:'geometric',stitch:'running',gen:(cx,cy,s)=>{const paths=[];for(let ring=1;ring<=4;ring++){const p=[];for(let i=0;i<=36;i++)p.push({x:cx+ring*s*.1*Math.cos(i/36*Math.PI*2),y:cy+ring*s*.1*Math.sin(i/36*Math.PI*2)});paths.push({points:p,color:ring%2===0?'#534AB7':'#EF9F27',stitch:'running'});}for(let i=0;i<12;i++){const a=i/12*Math.PI*2;paths.push({points:[{x:cx+s*.1*Math.cos(a),y:cy+s*.1*Math.sin(a)},{x:cx+s*.4*Math.cos(a),y:cy+s*.4*Math.sin(a)}],color:'#EF9F27',stitch:'running'});}return paths;}},
+];
+
+function showPatternLibrary(){
+  renderPatternGrid(PATTERNS);
+  const sizeEl=document.getElementById('plib-size');
+  if(sizeEl) sizeEl.oninput=function(){const v=document.getElementById('plib-size-val');if(v)v.textContent=this.value+'px';};
+  document.getElementById('plib-modal').classList.add('show');
+}
+function closePatternLibrary(){document.getElementById('plib-modal').classList.remove('show');}
+
+function renderPatternGrid(patterns){
+  const grid=document.getElementById('plib-grid');
+  const count=document.getElementById('plib-count');
+  if(!grid) return;
+  if(count) count.textContent=patterns.length+' patterns';
+  grid.innerHTML='';
+  patterns.forEach(pat=>{
+    const card=document.createElement('div');
+    card.className='plib-card';
+    const tc=document.createElement('canvas');
+    tc.width=140;tc.height=90;
+    const tctx=tc.getContext('2d');
+    tctx.fillStyle='#13121f';tctx.fillRect(0,0,140,90);
+    try{
+      const paths=pat.gen(70,45,70);
+      paths.forEach(p=>{
+        if(!p.points||p.points.length<2) return;
+        tctx.beginPath();p.points.forEach((pt,i)=>i?tctx.lineTo(pt.x,pt.y):tctx.moveTo(pt.x,pt.y));
+        tctx.strokeStyle=p.color;tctx.lineWidth=1.5;tctx.lineCap='round';tctx.stroke();
+      });
+    }catch(e){}
+    const thumb=document.createElement('div');thumb.className='plib-thumb';thumb.appendChild(tc);
+    const info=document.createElement('div');info.className='plib-info';
+    info.innerHTML='<div class="plib-name">'+pat.name+'</div><div class="plib-meta">'+pat.stitch+' · '+pat.cat+'</div>';
+    card.appendChild(thumb);card.appendChild(info);
+    card.onclick=()=>placePattern(pat);
+    grid.appendChild(card);
+  });
+}
+
+function filterPatterns(cat,el){
+  document.querySelectorAll('.plib-cat').forEach(c=>c.classList.remove('active'));
+  if(el) el.classList.add('active');
+  const filtered=cat==='all'?PATTERNS:PATTERNS.filter(p=>p.cat===cat);
+  renderPatternGrid(filtered);
+}
+
+function placePattern(pat){
+  const size=parseInt(document.getElementById('plib-size')?.value||120);
+  const cx=cvs.width/2/S.zoom-S.panX/S.zoom;
+  const cy=cvs.height/2/S.zoom-S.panY/S.zoom;
+  try{
+    const paths=pat.gen(cx,cy,size);
+    saveHist();
+    paths.forEach(p=>{
+      if(!p.points||p.points.length<2) return;
+      const pts=p.points.map(pt=>({x:pt.x,y:pt.y,cp1x:pt.x,cp1y:pt.y,cp2x:pt.x,cp2y:pt.y}));
+      S.paths.push({points:pts,color:p.color||S.color,stitch:p.stitch||S.stitch,layer:S.activeLayer,name:pat.name});
+    });
+    document.getElementById('wi').style.opacity='0';
+    if(pat.stitch) setStitch(pat.stitch);
+    updateStats();redraw();
+    closePatternLibrary();
+    toast('✓ '+pat.name+' placed on canvas');
+  }catch(e){toast('Could not place pattern: '+e.message);}
+}
+
+// ═══════════════════════════════════════════════════
+// SHAPE LIBRARY
+// ═══════════════════════════════════════════════════
+const SHAPES=[
+  {name:'Circle',cat:'basic',pts:(cx,cy,s)=>{const p=[];for(let i=0;i<=36;i++)p.push({x:cx+s*.5*Math.cos(i/36*Math.PI*2),y:cy+s*.5*Math.sin(i/36*Math.PI*2)});return[p];}},
+  {name:'Square',cat:'basic',pts:(cx,cy,s)=>{const h=s*.45;return[[{x:cx-h,y:cy-h},{x:cx+h,y:cy-h},{x:cx+h,y:cy+h},{x:cx-h,y:cy+h},{x:cx-h,y:cy-h}]];}},
+  {name:'Triangle',cat:'basic',pts:(cx,cy,s)=>{const h=s*.45;return[[{x:cx,y:cy-h},{x:cx+h,y:cy+h},{x:cx-h,y:cy+h},{x:cx,y:cy-h}]];}},
+  {name:'Diamond',cat:'basic',pts:(cx,cy,s)=>{const h=s*.45;return[[{x:cx,y:cy-h},{x:cx+h*.6,y:cy},{x:cx,y:cy+h},{x:cx-h*.6,y:cy},{x:cx,y:cy-h}]];}},
+  {name:'5-Point Star',cat:'star',pts:(cx,cy,s)=>{const p=[];for(let i=0;i<10;i++){const r=i%2===0?s*.48:s*.2;const a=i/10*Math.PI*2-Math.PI/2;p.push({x:cx+r*Math.cos(a),y:cy+r*Math.sin(a)});}p.push({...p[0]});return[p];}},
+  {name:'6-Point Star',cat:'star',pts:(cx,cy,s)=>{const p=[];for(let i=0;i<12;i++){const r=i%2===0?s*.48:s*.24;const a=i/12*Math.PI*2-Math.PI/2;p.push({x:cx+r*Math.cos(a),y:cy+r*Math.sin(a)});}p.push({...p[0]});return[p];}},
+  {name:'Shield',cat:'badge',pts:(cx,cy,s)=>{const h=s*.48,w=s*.4;return[[{x:cx,y:cy+h},{x:cx-w,y:cy-h*.1},{x:cx-w,y:cy-h},{x:cx+w,y:cy-h},{x:cx+w,y:cy-h*.1},{x:cx,y:cy+h}]];}},
+  {name:'Hexagon',cat:'badge',pts:(cx,cy,s)=>{const p=[];for(let i=0;i<6;i++){const a=i/6*Math.PI*2+Math.PI/6;p.push({x:cx+s*.48*Math.cos(a),y:cy+s*.48*Math.sin(a)});}p.push({...p[0]});return[p];}},
+  {name:'Arrow Right',cat:'arrow',pts:(cx,cy,s)=>{const h=s*.4,w=s*.5;return[[{x:cx-w,y:cy-h*.5},{x:cx,y:cy-h*.5},{x:cx,y:cy-h},{x:cx+w,y:cy},{x:cx,y:cy+h},{x:cx,y:cy+h*.5},{x:cx-w,y:cy+h*.5},{x:cx-w,y:cy-h*.5}]];}},
+  {name:'Rose',cat:'floral',pts:(cx,cy,s)=>{const p=[];for(let i=0;i<=72;i++){const a=i/72*Math.PI*4;const r=s*.4*Math.cos(a*.5);p.push({x:cx+r*Math.cos(a),y:cy+r*Math.sin(a)});}return[p];}},
+  {name:'Leaf',cat:'floral',pts:(cx,cy,s)=>{const p=[];for(let i=0;i<=20;i++){const t=i/20*Math.PI*2;p.push({x:cx+s*.3*Math.cos(t),y:cy+s*.48*Math.sin(t)*Math.cos(t)});}return[p];}},
+  {name:'Rect Frame',cat:'frame',pts:(cx,cy,s)=>{const h=s*.43,w=s*.48,t=s*.06;return[[{x:cx-w,y:cy-h},{x:cx+w,y:cy-h},{x:cx+w,y:cy+h},{x:cx-w,y:cy+h},{x:cx-w,y:cy-h}],[{x:cx-w+t,y:cy-h+t},{x:cx+w-t,y:cy-h+t},{x:cx+w-t,y:cy+h-t},{x:cx-w+t,y:cy+h-t},{x:cx-w+t,y:cy-h+t}]];}},
+  {name:'Circle Frame',cat:'frame',pts:(cx,cy,s)=>{const p1=[],p2=[];for(let i=0;i<=36;i++){p1.push({x:cx+s*.48*Math.cos(i/36*Math.PI*2),y:cy+s*.48*Math.sin(i/36*Math.PI*2)});p2.push({x:cx+s*.36*Math.cos(i/36*Math.PI*2),y:cy+s*.36*Math.sin(i/36*Math.PI*2)});}return[p1,p2];}},
+  {name:'Paisley',cat:'indian',pts:(cx,cy,s)=>{const p=[];for(let i=0;i<=36;i++){const t=i/36*Math.PI*2;const r=s*.3*(1+0.4*Math.cos(t));p.push({x:cx+r*Math.cos(t+0.3*Math.sin(t*2)),y:cy+r*Math.sin(t+0.3*Math.sin(t*2))*1.5-s*.1});}return[p];}},
+  {name:'Lotus',cat:'indian',pts:(cx,cy,s)=>{const paths=[];for(let i=0;i<8;i++){const a=i/8*Math.PI*2;const p=[];for(let j=0;j<=16;j++){const t=j/16*Math.PI*2;const r=s*.2*Math.abs(Math.sin(t/2));p.push({x:cx+r*Math.cos(t+a)+s*.15*Math.cos(a),y:cy+r*Math.sin(t+a)+s*.15*Math.sin(a)});}paths.push(p);}return paths;}},
+  {name:'Rangoli Star',cat:'indian',pts:(cx,cy,s)=>{const paths=[];for(let i=0;i<8;i++){const a=i/8*Math.PI*2;paths.push([{x:cx+s*.12*Math.cos(a+Math.PI/8),y:cy+s*.12*Math.sin(a+Math.PI/8)},{x:cx+s*.4*Math.cos(a),y:cy+s*.4*Math.sin(a)},{x:cx+s*.12*Math.cos(a-Math.PI/8),y:cy+s*.12*Math.sin(a-Math.PI/8)}]);}return paths;}},
+  {name:'Mango Motif',cat:'indian',pts:(cx,cy,s)=>{const p=[];for(let i=0;i<=36;i++){const t=i/36*Math.PI*2;p.push({x:cx+s*.28*(1+0.35*Math.sin(t))*Math.cos(t)*0.7,y:cy+s*.28*(1+0.35*Math.sin(t))*Math.sin(t)-s*.06});}return[p];}},
+  {name:'Jaali Diamond',cat:'indian',pts:(cx,cy,s)=>{const paths=[];for(let r=1;r<=4;r++){const p=[];for(let i=0;i<=4;i++){const a=i/4*Math.PI*2+Math.PI/4;p.push({x:cx+r*s*.1*Math.cos(a),y:cy+r*s*.1*Math.sin(a)});}paths.push(p);}return paths;}},
+];
+
+function showShapeLibrary(){
+  renderShapeGrid(SHAPES);
+  document.getElementById('shape-modal').classList.add('show');
+}
+function closeShapeLibrary(){document.getElementById('shape-modal').classList.remove('show');}
+
+function renderShapeGrid(shapes){
+  const grid=document.getElementById('shape-grid');
+  const count=document.getElementById('shape-count');
+  if(!grid) return;
+  if(count) count.textContent=shapes.length+' shapes';
+  grid.innerHTML='';
+  shapes.forEach(shape=>{
+    const item=document.createElement('div');item.className='shape-item';
+    const cx=20,cy=20,s=32;let pathD='';
+    try{
+      const allPts=shape.pts(cx,cy,s);
+      allPts.forEach(pts=>{if(!pts.length)return;pathD+='M'+pts[0].x+','+pts[0].y;pts.slice(1).forEach(p=>pathD+='L'+p.x+','+p.y);});
+    }catch(e){}
+    item.innerHTML='<svg width="40" height="40" viewBox="0 0 40 40"><path d="'+pathD+'" fill="rgba(83,74,183,0.15)" stroke="#534AB7" stroke-width="1.2" stroke-linejoin="round"/></svg><div class="shape-name">'+shape.name+'</div>';
+    item.onclick=()=>placeShape(shape);
+    grid.appendChild(item);
+  });
+}
+
+function filterShapes(query,catEl){
+  if(catEl){document.querySelectorAll('.shape-cat').forEach(c=>c.classList.remove('active'));catEl.classList.add('active');}
+  let filtered=SHAPES;
+  if(query&&query.length>0){
+    if(['basic','badge','floral','arrow','sport','frame','star','indian'].includes(query)){filtered=SHAPES.filter(s=>s.cat===query);}
+    else{filtered=SHAPES.filter(s=>s.name.toLowerCase().includes(query.toLowerCase()));}
+  }
+  renderShapeGrid(filtered);
+}
+
+function placeShape(shape){
+  const size=parseInt(document.getElementById('shape-size')?.value||80);
+  const stitch=document.getElementById('shape-stitch')?.value||'satin';
+  const cx=cvs.width/2/S.zoom-S.panX/S.zoom;
+  const cy=cvs.height/2/S.zoom-S.panY/S.zoom;
+  try{
+    const paths=shape.pts(cx,cy,size);
+    saveHist();
+    paths.forEach((pts,i)=>{
+      if(pts.length<2) return;
+      const bpts=pts.map(p=>({x:p.x,y:p.y,cp1x:p.x,cp1y:p.y,cp2x:p.x,cp2y:p.y}));
+      S.paths.push({points:bpts,color:S.color,stitch,layer:S.activeLayer,name:shape.name+(i>0?' '+(i+1):'')});
+    });
+    document.getElementById('wi').style.opacity='0';
+    updateStats();redraw();
+    closeShapeLibrary();
+    toast('✓ '+shape.name+' placed');
+  }catch(e){toast('Could not place shape: '+e.message);}
+}
+
+// ═══════════════════════════════════════════════════
+// GENERATE FROM PROMPT
+// ═══════════════════════════════════════════════════
+function showGeneratePrompt(){document.getElementById('gen-modal').classList.add('show');setTimeout(()=>document.getElementById('gen-prompt')?.focus(),100);}
+function closeGenModal(){document.getElementById('gen-modal').classList.remove('show');document.getElementById('gen-progress').style.display='none';const btn=document.getElementById('gen-btn');if(btn){btn.disabled=false;btn.textContent='✨ Generate';}}
+function setGenPrompt(text){const el=document.getElementById('gen-prompt');if(el)el.value=text;}
+function setGenProgress(text,pct){const p=document.getElementById('gen-progress');if(p)p.style.display='block';const pt=document.getElementById('gen-progress-text');if(pt)pt.textContent=text;const pf=document.getElementById('gen-progress-fill');if(pf)pf.style.width=pct+'%';}
+
+async function generateFromPrompt(){
+  const prompt=document.getElementById('gen-prompt')?.value?.trim();
+  if(!prompt){toast('Enter a design description first');return;}
+  const complexity=document.getElementById('gen-complexity')?.value||'medium';
+  const placement=document.getElementById('gen-placement')?.value||'center';
+  const btn=document.getElementById('gen-btn');
+  if(btn){btn.disabled=true;btn.textContent='Generating...';}
+  setGenProgress('Aari is analysing your prompt...',15);
+  try{
+    const systemPrompt='You are Aari, expert Indian and global embroidery designer. Generate embroidery designs as JSON. Return ONLY valid JSON, no markdown. Format: {"title":"name","stitchType":"zardozi/kantha/phulkari/running/satin/fill","primaryColor":"#hex","paths":[{"color":"#hex","stitch":"type","points":[{"x":0,"y":0}],"name":"element"}]}. Canvas 500x500, center (250,250). Generate 8-25 paths. Use authentic Indian colors for Indian styles.';
+    const userMsg='Create: '+prompt+'. Complexity: '+complexity+'. Placement: '+placement+'. Canvas: 500x500, center at (250,250).';
+    setGenProgress('Generating stitch coordinates...',35);
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:3000,system:systemPrompt,messages:[{role:'user',content:userMsg}]})});
+    setGenProgress('Processing paths...',65);
+    const data=await res.json();
+    const rawText=data.content?.[0]?.text||'{}';
+    const cleanText=rawText.replace(/```json|```/g,'').trim();
+    let design;
+    try{design=JSON.parse(cleanText);}catch(e){const m=rawText.match(/\{[\s\S]*\}/);if(m)design=JSON.parse(m[0]);else throw new Error('Could not parse response');}
+    if(!design.paths?.length)throw new Error('No paths in response');
+    setGenProgress('Placing design...',85);
+    saveHist();
+    const cx=cvs.width/2/S.zoom-S.panX/S.zoom,cy=cvs.height/2/S.zoom-S.panY/S.zoom;
+    const allPts=design.paths.flatMap(p=>p.points||[]);
+    const minX=Math.min(...allPts.map(p=>p.x)),maxX=Math.max(...allPts.map(p=>p.x));
+    const minY=Math.min(...allPts.map(p=>p.y)),maxY=Math.max(...allPts.map(p=>p.y));
+    const gCX=(minX+maxX)/2,gCY=(minY+maxY)/2;
+    const maxDim=Math.max(maxX-minX,maxY-minY)||1;
+    const targetSize=Math.min(cvs.width,cvs.height)*.55/S.zoom;
+    const sc=maxDim>targetSize?targetSize/maxDim:1;
+    let added=0;
+    design.paths.forEach(p=>{
+      if(!p.points||p.points.length<2)return;
+      const pts=p.points.map(pt=>({x:(pt.x-gCX)*sc+cx,y:(pt.y-gCY)*sc+cy,cp1x:(pt.x-gCX)*sc+cx,cp1y:(pt.y-gCY)*sc+cy,cp2x:(pt.x-gCX)*sc+cx,cp2y:(pt.y-gCY)*sc+cy}));
+      S.paths.push({points:pts,color:p.color||design.primaryColor||S.color,stitch:p.stitch||design.stitchType||S.stitch,layer:S.activeLayer,name:p.name||design.title||'Generated'});
+      added++;
+    });
+    if(design.stitchType)setStitch(design.stitchType);
+    document.getElementById('wi').style.opacity='0';
+    updateStats();redraw();
+    setGenProgress('Done! '+added+' paths placed.',100);
+    setTimeout(()=>{closeGenModal();toast('✨ Generated: '+design.title);},800);
+  }catch(err){
+    setGenProgress('⚠️ '+err.message,0);
+    if(btn){btn.disabled=false;btn.textContent='✨ Try again';}
+  }
+}
+
+// ═══════════════════════════════════════════════════
+// TEXT ON PATH
+// ═══════════════════════════════════════════════════
+function showTextOnPath(){document.getElementById('top-modal').classList.add('show');setTimeout(updateTOPPreview,50);}
+function closeTOP(){document.getElementById('top-modal').classList.remove('show');}
+
+function updateTOPPreview(){
+  const pc=document.getElementById('top-preview-cvs');if(!pc)return;
+  const pctx=pc.getContext('2d');pctx.clearRect(0,0,pc.width,pc.height);
+  const text=document.getElementById('top-text')?.value||'EMBROXIA';
+  const shape=document.getElementById('top-shape')?.value||'arc-top';
+  const size=parseInt(document.getElementById('top-size')?.value||18);
+  const radius=parseInt(document.getElementById('top-radius')?.value||100);
+  const spacing=parseInt(document.getElementById('top-spacing')?.value||2);
+  const startAngle=parseInt(document.getElementById('top-start')?.value||0);
+  const cx=pc.width/2,cy=pc.height/2;
+  pctx.font=size+'px DM Sans,sans-serif';pctx.fillStyle='#534AB7';pctx.textAlign='center';
+  const chars=text.split('');const charW=size*0.6+spacing;
+  chars.forEach((ch,i)=>{
+    let x,y,angle=0;const offset=(i-(chars.length-1)/2)*charW;
+    if(shape==='arc-top'){const a=startAngle*Math.PI/180+offset/radius;x=cx+radius*Math.cos(a-Math.PI/2);y=cy+radius*.6+radius*Math.sin(a-Math.PI/2);angle=a;}
+    else if(shape==='arc-bottom'){const a=startAngle*Math.PI/180-offset/radius;x=cx+radius*Math.cos(a+Math.PI/2);y=cy-radius*.6+radius*Math.sin(a+Math.PI/2);angle=a+Math.PI;}
+    else if(shape==='circle'){const a=startAngle*Math.PI/180+i/chars.length*Math.PI*2;x=cx+radius*.7*Math.cos(a);y=cy+radius*.7*Math.sin(a);angle=a+Math.PI/2;}
+    else if(shape==='wave'){x=cx-chars.length*charW/2+i*charW+charW/2;y=cy+Math.sin(i/chars.length*Math.PI*2)*25;angle=Math.cos(i/chars.length*Math.PI*2)*0.3;}
+    else{x=cx-chars.length*charW/2+i*charW+charW/2;y=cy;angle=startAngle*Math.PI/180;}
+    pctx.save();pctx.translate(x,y);pctx.rotate(angle);pctx.fillText(ch,0,0);pctx.restore();
+  });
+}
+
+function placeTOP(){
+  const text=document.getElementById('top-text')?.value||'TEXT';
+  const shape=document.getElementById('top-shape')?.value||'arc-top';
+  const size=parseInt(document.getElementById('top-size')?.value||18);
+  const radius=parseInt(document.getElementById('top-radius')?.value||100);
+  const spacing=parseInt(document.getElementById('top-spacing')?.value||2);
+  const startAngle=parseInt(document.getElementById('top-start')?.value||0);
+  const cx=cvs.width/2/S.zoom-S.panX/S.zoom,cy=cvs.height/2/S.zoom-S.panY/S.zoom;
+  const chars=text.split('');const charW=size*0.6+spacing;
+  saveHist();
+  chars.forEach((ch,i)=>{
+    let x,y;const offset=(i-(chars.length-1)/2)*charW;
+    if(shape==='arc-top'){const a=startAngle*Math.PI/180+offset/radius;x=cx+radius*Math.cos(a-Math.PI/2);y=cy+radius*.6+radius*Math.sin(a-Math.PI/2);}
+    else if(shape==='arc-bottom'){const a=startAngle*Math.PI/180-offset/radius;x=cx+radius*Math.cos(a+Math.PI/2);y=cy-radius*.6+radius*Math.sin(a+Math.PI/2);}
+    else if(shape==='circle'){const a=startAngle*Math.PI/180+i/chars.length*Math.PI*2;x=cx+radius*.7*Math.cos(a);y=cy+radius*.7*Math.sin(a);}
+    else if(shape==='wave'){x=cx-chars.length*charW/2+i*charW+charW/2;y=cy+Math.sin(i/chars.length*Math.PI*2)*25;}
+    else{x=cx-chars.length*charW/2+i*charW+charW/2;y=cy;}
+    const pts=textToPaths(ch,x,y,size);
+    if(pts&&pts.length>1)S.paths.push({points:pts,color:S.color,stitch:S.stitch,layer:S.activeLayer,name:'ToP:'+ch});
+  });
+  document.getElementById('wi').style.opacity='0';
+  updateStats();redraw();closeTOP();
+  toast('✓ Text on path placed: "'+text+'"');
+}
+
+// ═══════════════════════════════════════════════════
+// SVG IMPORT
+// ═══════════════════════════════════════════════════
+let svgData=null,svgDoc=null;
+function showSVGImport(){svgData=null;svgDoc=null;document.getElementById('svg-convert-btn').disabled=true;document.getElementById('svg-preview').style.display='none';document.getElementById('svg-status').style.display='none';document.getElementById('svg-modal').classList.add('show');}
+function closeSVGImport(){document.getElementById('svg-modal').classList.remove('show');}
+
+const svgDropEl=document.getElementById('svg-drop');
+if(svgDropEl){
+  svgDropEl.addEventListener('dragover',e=>{e.preventDefault();svgDropEl.style.borderColor='var(--purple)';});
+  svgDropEl.addEventListener('dragleave',()=>svgDropEl.style.borderColor='');
+  svgDropEl.addEventListener('drop',e=>{e.preventDefault();svgDropEl.style.borderColor='';const f=e.dataTransfer.files[0];if(f)processSVGFile(f);});
+}
+
+function handleSVGFile(e){const f=e.target.files[0];if(f)processSVGFile(f);e.target.value='';}
+
+function processSVGFile(file){
+  if(file.size>5*1024*1024){toast('File too large — max 5MB');return;}
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    svgData=ev.target.result;
+    try{
+      const parser=new DOMParser();svgDoc=parser.parseFromString(svgData,'image/svg+xml');
+      const err=svgDoc.querySelector('parsererror');if(err){toast('Invalid SVG file');return;}
+      const preview=document.getElementById('svg-preview');
+      preview.innerHTML=svgData;preview.style.display='flex';
+      const svgEl=preview.querySelector('svg');
+      if(svgEl){svgEl.style.maxWidth='100%';svgEl.style.maxHeight='130px';svgEl.removeAttribute('width');svgEl.removeAttribute('height');}
+      const paths=svgDoc.querySelectorAll('path,rect,circle,ellipse,polygon,polyline,line');
+      const status=document.getElementById('svg-status');
+      status.textContent='✓ '+file.name+' — '+paths.length+' paths detected';
+      status.style.display='block';status.style.color='var(--teal)';
+      document.getElementById('svg-convert-btn').disabled=false;
+      toast('SVG loaded — '+paths.length+' paths');
+    }catch(e){toast('Could not read SVG file');}
+  };
+  reader.readAsText(file);
+}
+
+function convertSVGToStitches(){
+  if(!svgDoc){toast('Upload an SVG first');return;}
+  const stitchType=document.getElementById('svg-stitch-type').value;
+  const scaleMode=document.getElementById('svg-scale').value;
+  const svgEl=svgDoc.querySelector('svg');
+  const vb=svgEl?.getAttribute('viewBox')?.split(/[\s,]+/).map(Number)||[0,0,100,100];
+  const svgW=vb[2]||parseFloat(svgEl?.getAttribute('width'))||100;
+  const svgH=vb[3]||parseFloat(svgEl?.getAttribute('height'))||100;
+  const cx=cvs.width/2/S.zoom-S.panX/S.zoom,cy=cvs.height/2/S.zoom-S.panY/S.zoom;
+  let scaleFactor=1;
+  if(scaleMode==='fit')scaleFactor=Math.min(200/svgW,200/svgH);
+  else if(scaleMode==='50')scaleFactor=Math.min(cvs.width*.5/S.zoom/svgW,cvs.height*.5/S.zoom/svgH);
+  const elements=svgDoc.querySelectorAll('path,rect,circle,ellipse,polygon,polyline,line');
+  const newPaths=[];
+  elements.forEach(el=>{
+    let pts=[];const tag=el.tagName.toLowerCase();
+    try{
+      if(tag==='rect'){const x=parseFloat(el.getAttribute('x')||0)*scaleFactor+cx-svgW*scaleFactor/2;const y=parseFloat(el.getAttribute('y')||0)*scaleFactor+cy-svgH*scaleFactor/2;const w=parseFloat(el.getAttribute('width')||10)*scaleFactor;const h=parseFloat(el.getAttribute('height')||10)*scaleFactor;pts=[{x,y},{x:x+w,y},{x:x+w,y:y+h},{x,y:y+h},{x,y}];}
+      else if(tag==='circle'){const cx2=parseFloat(el.getAttribute('cx')||0)*scaleFactor+cx-svgW*scaleFactor/2;const cy2=parseFloat(el.getAttribute('cy')||0)*scaleFactor+cy-svgH*scaleFactor/2;const r=parseFloat(el.getAttribute('r')||10)*scaleFactor;for(let i=0;i<=32;i++)pts.push({x:cx2+r*Math.cos(i/32*Math.PI*2),y:cy2+r*Math.sin(i/32*Math.PI*2)});}
+      else if(tag==='polygon'||tag==='polyline'){const rp=(el.getAttribute('points')||'').trim().split(/[\s,]+/);for(let i=0;i<rp.length-1;i+=2)pts.push({x:parseFloat(rp[i])*scaleFactor+cx-svgW*scaleFactor/2,y:parseFloat(rp[i+1])*scaleFactor+cy-svgH*scaleFactor/2});if(tag==='polygon'&&pts.length)pts.push({...pts[0]});}
+    }catch(e){return;}
+    if(pts.length<2)return;
+    const bpts=pts.map(p=>({...p,cp1x:p.x,cp1y:p.y,cp2x:p.x,cp2y:p.y}));
+    let sType=stitchType==='auto'?'running':stitchType;
+    newPaths.push({points:bpts,color:S.color,stitch:sType,layer:S.activeLayer,name:'SVG path'});
+  });
+  if(newPaths.length){saveHist();S.paths.push(...newPaths);document.getElementById('wi').style.opacity='0';updateStats();redraw();closeSVGImport();toast('✓ Imported '+newPaths.length+' paths');}
+  else toast('No convertible paths found');
+}
+
+// ═══════════════════════════════════════════════════
+// PRINT DESIGN SHEET
+// ═══════════════════════════════════════════════════
+function showPrintSheet(){if(!S.paths.length){toast('Draw a design first');return;}buildPrintSheet();document.getElementById('print-modal').classList.add('show');}
+function closePrintModal(){document.getElementById('print-modal').classList.remove('show');}
+
+function buildPrintSheet(){
+  const name=document.getElementById('doc-name')?.value||'Untitled design';
+  const count=calcStitches?calcStitches():S.paths.reduce((a,p)=>a+p.points.length*3,0);
+  const colors=[...new Set(S.paths.map(p=>p.color))];
+  const now=new Date().toLocaleDateString('en',{year:'numeric',month:'long',day:'numeric'});
+  const thumb=generateThumb?generateThumb():'';
+  const chips=colors.map(c=>'<span style="display:inline-flex;align-items:center;gap:5px;background:#f7f5f0;border-radius:20px;padding:4px 10px;font-size:11px;margin:2px"><span style="width:10px;height:10px;border-radius:50%;background:'+c+';flex-shrink:0"></span>'+c+'</span>').join('');
+  document.getElementById('print-preview-content').innerHTML='<div style="font-family:sans-serif"><div style="display:flex;justify-content:space-between;padding-bottom:12px;border-bottom:1px solid #eee;margin-bottom:12px"><div style="font-size:16px;font-weight:500">✦ Embroxia</div><div style="font-size:11px;color:#999">'+now+'</div></div><div style="font-size:20px;font-weight:500;margin-bottom:4px">'+name+'</div><div style="font-size:12px;color:#999;margin-bottom:16px">Embroidery Design Sheet</div>'+(thumb?'<img src="'+thumb+'" style="width:100%;height:160px;object-fit:contain;background:#f7f5f0;border-radius:8px;margin-bottom:16px">':'')+'<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px"><div style="background:#f7f5f0;border-radius:6px;padding:10px;text-align:center"><div style="font-size:20px;font-weight:500;color:#534AB7">'+count.toLocaleString()+'</div><div style="font-size:10px;color:#999;margin-top:2px">Total stitches</div></div><div style="background:#f7f5f0;border-radius:6px;padding:10px;text-align:center"><div style="font-size:20px;font-weight:500;color:#534AB7">'+colors.length+'</div><div style="font-size:10px;color:#999;margin-top:2px">Thread colors</div></div><div style="background:#f7f5f0;border-radius:6px;padding:10px;text-align:center"><div style="font-size:20px;font-weight:500;color:#534AB7">'+Math.max(1,Math.round(count/800))+' min</div><div style="font-size:10px;color:#999;margin-top:2px">Est. machine time</div></div></div><div style="font-size:10px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:#999;margin-bottom:8px">Thread colors</div><div style="margin-bottom:16px">'+chips+'</div><div style="font-size:10px;color:#999;padding-top:12px;border-top:1px solid #eee;display:flex;justify-content:space-between"><span>Designed with Embroxia Studio · embroxia.com</span><span>Always test before production</span></div></div>';
+}
+
+function printSheet(){
+  buildPrintSheet();
+  const content=document.getElementById('print-preview-content').innerHTML;
+  const win=window.open('','_blank');
+  win.document.write('<!DOCTYPE html><html><head><title>Design Sheet</title><style>body{font-family:sans-serif;padding:24px;max-width:680px;margin:0 auto}</style></head><body>'+content+'</body></html>');
+  win.document.close();setTimeout(()=>win.print(),500);
+}
+
+function downloadPrintSheet(){
+  buildPrintSheet();
+  const content=document.getElementById('print-preview-content').innerHTML;
+  const html='<!DOCTYPE html><html><head><title>Design Sheet</title><style>body{font-family:sans-serif;padding:24px;max-width:680px;margin:0 auto}</style></head><body>'+content+'</body></html>';
+  const blob=new Blob([html],{type:'text/html'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=(document.getElementById('doc-name')?.value||'design')+'-sheet.html';
+  a.click();URL.revokeObjectURL(a.href);
+  toast('✓ Design sheet downloaded');
+}
+
+// ═══════════════════════════════════════════════════
+// DESIGN LIBRARY
+// ═══════════════════════════════════════════════════
+function openLibrary(){renderLibrary();document.getElementById('library-modal').classList.add('show');}
+function closeLibrary(){document.getElementById('library-modal').classList.remove('show');}
+
+function renderLibrary(){
+  const grid=document.getElementById('library-grid');
+  const count=document.getElementById('library-count');
+  if(!grid) return;
+  const lib=getLibrary();
+  if(count) count.textContent=lib.length+' designs';
+  grid.innerHTML='';
+  if(!lib.length){grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--text3);font-size:13px">No saved designs yet.<br>Press Cmd+S to save your current design.</div>';return;}
+  lib.forEach((design,i)=>{
+    const card=document.createElement('div');card.className='library-card';
+    const thumb=document.createElement('div');thumb.className='library-thumb';
+    const tc=document.createElement('canvas');tc.width=140;tc.height=90;
+    const tctx=tc.getContext('2d');
+    tctx.fillStyle='#13121f';tctx.fillRect(0,0,140,90);
+    if(design.paths?.length){
+      const allPts=design.paths.flatMap(p=>p.points||[]);
+      if(allPts.length){
+        const minX=Math.min(...allPts.map(p=>p.x)),maxX=Math.max(...allPts.map(p=>p.x));
+        const minY=Math.min(...allPts.map(p=>p.y)),maxY=Math.max(...allPts.map(p=>p.y));
+        const w=maxX-minX||1,h=maxY-minY||1;
+        const sc=Math.min(120/w,80/h)*.85;
+        const ox=70-(minX+w/2)*sc,oy=45-(minY+h/2)*sc;
+        design.paths.forEach(p=>{
+          if(!p.points||p.points.length<2)return;
+          tctx.beginPath();p.points.forEach((pt,i)=>i?tctx.lineTo(pt.x*sc+ox,pt.y*sc+oy):tctx.moveTo(pt.x*sc+ox,pt.y*sc+oy));
+          tctx.strokeStyle=p.color;tctx.lineWidth=1.5;tctx.lineCap='round';tctx.stroke();
+        });
+      }
+    }
+    thumb.appendChild(tc);
+    const info=document.createElement('div');info.className='library-info';
+    info.innerHTML='<div class="library-name">'+(design.name||'Design '+(i+1))+'</div><div class="library-date">'+(design.savedAt?new Date(design.savedAt).toLocaleDateString():'')+'</div>';
+    const del=document.createElement('button');del.textContent='🗑';del.style.cssText='position:absolute;top:4px;right:4px;background:rgba(0,0,0,.5);color:white;border:none;border-radius:4px;padding:2px 6px;cursor:pointer;font-size:11px';
+    del.onclick=(e)=>{e.stopPropagation();if(confirm('Delete this design?')){deleteFromLibrary(i);renderLibrary();}};
+    thumb.style.position='relative';thumb.appendChild(del);
+    card.appendChild(thumb);card.appendChild(info);
+    card.onclick=()=>{loadFromLibrary(i);closeLibrary();};
+    grid.appendChild(card);
+  });
+}
+
+function filterLibrary(query){
+  const lib=getLibrary();
+  const grid=document.getElementById('library-grid');
+  if(!grid) return;
+  const filtered=query?lib.filter(d=>(d.name||'').toLowerCase().includes(query.toLowerCase())):lib;
+  const count=document.getElementById('library-count');
+  if(count) count.textContent=filtered.length+' designs';
+  grid.innerHTML='';
+  renderLibrary();
+}
+
+function saveToLibrary(){
+  if(!S.paths.length){toast('Nothing to save');return;}
+  const name=document.getElementById('doc-name')?.value||'Design '+(Date.now());
+  const lib=getLibrary();
+  lib.unshift({name,paths:JSON.parse(JSON.stringify(S.paths)),savedAt:new Date().toISOString(),stitch:S.stitch,color:S.color});
+  if(lib.length>50)lib.pop();
+  try{localStorage.setItem('embroxia_library',JSON.stringify(lib));}catch(e){}
+  toast('✓ Saved: '+name);
+  if(document.getElementById('library-modal').classList.contains('show'))renderLibrary();
+}
+
+function getLibrary(){try{return JSON.parse(localStorage.getItem('embroxia_library')||'[]');}catch(e){return[];}}
+function deleteFromLibrary(idx){const lib=getLibrary();lib.splice(idx,1);try{localStorage.setItem('embroxia_library',JSON.stringify(lib));}catch(e){}};
+function loadFromLibrary(idx){const lib=getLibrary();if(!lib[idx])return;saveHist();S.paths=JSON.parse(JSON.stringify(lib[idx].paths||[]));if(lib[idx].stitch)setStitch(lib[idx].stitch);if(lib[idx].color){S.color=lib[idx].color;const _cc=document.getElementById('g-color')||document.getElementById('cur-color');if(_cc)_cc.style.background=S.color;}document.getElementById('wi').style.opacity='0';updateStats();redraw();toast('✓ Loaded: '+lib[idx].name);}
+
+// ═══════════════════════════════════════════════════
+// ONBOARDING TOUR
+// ═══════════════════════════════════════════════════
+const TOUR_STEPS=[
+  {title:'Welcome to Embroxia Studio ✦',desc:'The first browser-based professional embroidery design platform. Let us take a quick tour — under 2 minutes.',target:null},
+  {title:'Drawing tools',desc:'The left toolbar has all your tools — pen, brush, shapes, text, eraser, zoom. Press P for pen, B for brush, R for rectangle, E for ellipse.',target:'.toolbar'},
+  {title:'25 stitch types',desc:'Choose from 15 standard stitches and 10 Indian traditional stitches — Zardozi, Kantha, Phulkari, Chikankari, Aari and more.',target:'#stgrid'},
+  {title:'The design canvas',desc:'Draw anywhere on the canvas. Scroll to zoom. Hold Space and drag to pan. Right-click for the context menu.',target:'#cw'},
+  {title:'240+ thread colors',desc:'Switch to the Color tab to pick from Madeira, Isacord, Robison-Anton, Sulky, and Indian Zari & Resham thread libraries.',target:'.ptabs'},
+  {title:'Aari ✦ — Indian embroidery AI',desc:'Click the Aari button to open your AI assistant. It knows every Indian embroidery tradition and can suggest designs, colors, and techniques.',target:'#ai-btn'},
+  {title:'Pattern & Shape library',desc:'Under the Tools menu you will find the Pattern Library (30+ ready-made Indian and global designs) and Shape Library (40+ shapes to place instantly).',target:null},
+  {title:'Export to your machine',desc:'Click Export to download DST, PES, JEF, or 8 other formats ready for your embroidery machine. Real binary files — not just images.',target:null},
+];
+
+let tourIdx=0;
+function startTour(){if(localStorage.getItem('embroxia_tour_done'))return;tourIdx=0;document.getElementById('tour-overlay').style.display='block';buildTourDots();showTourStep(0);}
+function buildTourDots(){const dots=document.getElementById('tour-dots');if(!dots)return;dots.innerHTML='';TOUR_STEPS.forEach((_,i)=>{const d=document.createElement('div');d.className='tour-dot'+(i===0?' active':'');d.id='tdot-'+i;dots.appendChild(d);});}
+function showTourStep(idx){
+  const step=TOUR_STEPS[idx];if(!step)return;
+  document.getElementById('tour-step-label').textContent='Step '+(idx+1)+' of '+TOUR_STEPS.length;
+  document.getElementById('tour-title').textContent=step.title;
+  document.getElementById('tour-desc').textContent=step.desc;
+  document.getElementById('tour-prev').style.opacity=idx===0?'0.3':'1';
+  document.getElementById('tour-next').textContent=idx===TOUR_STEPS.length-1?'Finish ✓':'Next →';
+  document.querySelectorAll('.tour-dot').forEach((d,i)=>d.classList.toggle('active',i===idx));
+  const hl=document.getElementById('tour-highlight');
+  const card=document.getElementById('tour-card');
+  if(!step.target){hl.style.cssText='display:none';card.style.cssText='top:50%;left:50%;transform:translate(-50%,-50%)';}
+  else{const el=document.querySelector(step.target);if(el){const r=el.getBoundingClientRect();const pad=8;hl.style.cssText='display:block;position:fixed;top:'+(r.top-pad)+'px;left:'+(r.left-pad)+'px;width:'+(r.width+pad*2)+'px;height:'+(r.height+pad*2)+'px;box-shadow:0 0 0 9999px rgba(0,0,0,.65);border-radius:var(--r);z-index:901;pointer-events:none';card.style.cssText='top:'+(Math.min(r.bottom+12,window.innerHeight-300))+'px;left:'+Math.min(r.left,window.innerWidth-310)+'px';}else{hl.style.cssText='display:none';card.style.cssText='top:50%;left:50%;transform:translate(-50%,-50%)';}}
+}
+function tourStep(dir){const next=tourIdx+dir;if(next<0)return;if(next>=TOUR_STEPS.length){endTour();return;}tourIdx=next;showTourStep(tourIdx);}
+function endTour(){document.getElementById('tour-overlay').style.display='none';localStorage.setItem('embroxia_tour_done','1');toast('✓ Tour complete — start designing!');}
+function restartTour(){localStorage.removeItem('embroxia_tour_done');tourIdx=0;document.getElementById('tour-overlay').style.display='block';buildTourDots();showTourStep(0);}
+
+// ═══════════════════════════════════════════════════
+// UTILITY — updateSelectedPathProp
+// ═══════════════════════════════════════════════════
+function updateSelectedPathProp(prop,val){S.selected.forEach(idx=>{if(S.paths[idx])S.paths[idx][prop]=val;});saveHist();redraw();}
+
 // ═══════════════════════════════════════
 // INIT
 // ═══════════════════════════════════════
@@ -2512,100 +3185,125 @@ updateStats();
 toast('✦ Embroxia Studio v2 ready');
 </script>
 
-<!-- ════ ALL MODALS ════ -->
+<style>
+.plib-modal,.shape-modal,.gen-modal,.top-modal,.svg-modal,.print-modal,.library-modal,.tour-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:800;display:none;align-items:center;justify-content:center;backdrop-filter:blur(6px)}
+.plib-modal.show,.shape-modal.show,.gen-modal.show,.top-modal.show,.svg-modal.show,.print-modal.show,.library-modal.show{display:flex}
+.plib-box,.shape-box,.gen-box,.svg-box,.print-box,.library-box{background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);padding:22px;width:560px;max-width:95vw;box-shadow:0 24px 64px rgba(0,0,0,.6)}
+.plib-box,.shape-box,.library-box{width:700px;max-height:85vh;display:flex;flex-direction:column}
+.plib-head,.library-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-shrink:0}
+.plib-title,.library-title{font-size:15px;font-weight:500;color:var(--text)}
+.plib-cats,.shape-cats{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;flex-shrink:0}
+.plib-cat,.shape-cat{font-size:11px;padding:4px 12px;border-radius:20px;background:var(--bg4);border:1px solid var(--border);color:var(--text2);cursor:pointer;transition:all .12s}
+.plib-cat.active,.shape-cat.active,.plib-cat:hover,.shape-cat:hover{background:var(--purple);color:white;border-color:transparent}
+.plib-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;overflow-y:auto;flex:1}
+.shape-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:8px;overflow-y:auto;flex:1}
+.plib-grid::-webkit-scrollbar,.shape-grid::-webkit-scrollbar{width:3px}
+.plib-grid::-webkit-scrollbar-thumb,.shape-grid::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+.plib-card{background:var(--bg4);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;cursor:pointer;transition:all .15s}
+.plib-card:hover{border-color:var(--purple);transform:translateY(-2px)}
+.plib-thumb{width:100%;height:90px;background:var(--canvas-bg);display:flex;align-items:center;justify-content:center}
+.plib-info{padding:8px 10px}
+.plib-name{font-size:11px;font-weight:500;color:var(--text);margin-bottom:1px}
+.plib-meta{font-size:10px;color:var(--text3)}
+.plib-footer,.shape-footer{display:flex;align-items:center;justify-content:space-between;margin-top:10px;flex-shrink:0;padding-top:8px;border-top:1px solid var(--border)}
+.plib-size{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text2)}
+.shape-item{background:var(--bg4);border:1px solid var(--border);border-radius:var(--rs);padding:10px 6px;cursor:pointer;text-align:center;transition:all .12s;display:flex;flex-direction:column;align-items:center;gap:4px}
+.shape-item:hover{border-color:var(--purple);background:var(--pg);transform:translateY(-1px)}
+.shape-item svg{width:36px;height:36px}
+.shape-name{font-size:9px;color:var(--text3)}
+.shape-search{width:100%;background:var(--bg4);border:1px solid var(--border);border-radius:var(--rs);padding:7px 12px;font-size:12px;font-family:var(--font);color:var(--text);outline:none;margin-bottom:10px;flex-shrink:0}
+.shape-search:focus{border-color:var(--purple)}
+.gen-title{font-size:15px;font-weight:500;color:var(--text);margin-bottom:4px}
+.gen-sub{font-size:12px;color:var(--text3);margin-bottom:12px;line-height:1.65}
+.gen-textarea{width:100%;background:var(--bg4);border:1px solid var(--border2);border-radius:var(--r);padding:12px;font-size:13px;font-family:var(--font);color:var(--text);resize:none;outline:none;height:80px;line-height:1.6;margin-bottom:10px;transition:border-color .15s}
+.gen-textarea:focus{border-color:var(--purple)}
+.gen-examples{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.gen-example{font-size:11px;padding:4px 10px;border-radius:20px;background:var(--bg4);border:1px solid var(--border2);color:var(--text2);cursor:pointer;transition:all .12s}
+.gen-example:hover{border-color:var(--purple);color:var(--pl)}
+.gen-options{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.gen-opt-label,.svg-opt-label{font-size:11px;color:var(--text2);margin-bottom:4px}
+.gen-progress{background:var(--bg4);border-radius:var(--r);padding:12px;margin-bottom:12px}
+.gen-progress-text{font-size:12px;color:var(--text2);margin-bottom:6px}
+.gen-progress-bar{height:3px;background:var(--border2);border-radius:2px;overflow:hidden}
+.gen-progress-fill{height:100%;background:linear-gradient(90deg,var(--purple),var(--teal));width:0%;transition:width .4s}
+.gen-btns,.svg-btns,.print-btns{display:flex;gap:8px}
+.gen-btn,.svg-btn,.print-btn{flex:1;padding:10px;border-radius:var(--rs);font-family:var(--font);font-size:13px;cursor:pointer;border:1px solid var(--border2);background:transparent;color:var(--text2);transition:all .12s}
+.gen-btn.primary,.svg-btn.primary,.print-btn.primary{background:var(--purple);color:white;border:none}
+.svg-title{font-size:15px;font-weight:500;color:var(--text);margin-bottom:4px}
+.svg-sub{font-size:12px;color:var(--text3);margin-bottom:12px;line-height:1.65}
+.svg-options{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.svg-drop{border:2px dashed var(--border2);border-radius:var(--r);padding:24px;text-align:center;cursor:pointer;position:relative;margin-bottom:12px}
+.svg-drop:hover{border-color:var(--purple)}
+.svg-drop input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.svg-drop-icon{font-size:28px;margin-bottom:6px;opacity:.5}
+.svg-drop-text{font-size:13px;color:var(--text2)}
+.svg-preview{width:100%;height:130px;background:var(--bg4);border-radius:var(--rs);margin-bottom:12px;display:none;align-items:center;justify-content:center;overflow:hidden;border:1px solid var(--border)}
+.top-preview{width:100%;height:120px;background:var(--canvas-bg);border-radius:var(--rs);margin-bottom:12px;display:flex;align-items:center;justify-content:center;overflow:hidden;border:1px solid var(--border)}
+.print-preview{background:white;border-radius:var(--rs);padding:16px;margin-bottom:12px;color:#1a1825;max-height:350px;overflow-y:auto}
+.library-search{background:var(--bg4);border:1px solid var(--border);border-radius:var(--rs);padding:6px 12px;font-size:12px;font-family:var(--font);color:var(--text);outline:none;width:180px}
+.library-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;overflow-y:auto;flex:1;margin:10px 0;min-height:200px}
+.library-card{background:var(--bg4);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;cursor:pointer;transition:all .15s}
+.library-card:hover{border-color:var(--purple);transform:translateY(-2px)}
+.library-thumb{width:100%;height:90px;background:var(--canvas-bg)}
+.library-info{padding:8px}
+.library-name{font-size:11px;font-weight:500;color:var(--text);margin-bottom:2px}
+.library-date{font-size:10px;color:var(--text3)}
+.library-footer{display:flex;align-items:center;justify-content:space-between;padding-top:8px;border-top:1px solid var(--border);flex-shrink:0}
+.library-count{font-size:11px;color:var(--text3)}
+.tour-overlay{background:rgba(0,0,0,.65);pointer-events:none}
+.tour-highlight{position:fixed;box-shadow:0 0 0 9999px rgba(0,0,0,.65);border-radius:var(--r);z-index:901;pointer-events:none;transition:all .35s}
+.tour-card{position:fixed;z-index:902;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);padding:20px;width:290px;box-shadow:0 16px 48px rgba(0,0,0,.5);pointer-events:all;transition:all .35s}
+.tour-step-badge{display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--pl);background:var(--pg);border-radius:20px;padding:3px 10px;margin-bottom:8px}
+.tour-title{font-size:14px;font-weight:500;color:var(--text);margin-bottom:5px}
+.tour-desc{font-size:12px;color:var(--text2);line-height:1.6;margin-bottom:14px}
+.tour-btns{display:flex;align-items:center;justify-content:space-between}
+.tour-skip{font-size:11px;color:var(--text3);cursor:pointer;background:none;border:none;font-family:var(--font);padding:0}
+.tour-nav{display:flex;gap:6px}
+.tour-prev,.tour-next{padding:5px 12px;border-radius:var(--rs);font-size:12px;cursor:pointer;font-family:var(--font)}
+.tour-prev{border:1px solid var(--border2);background:transparent;color:var(--text2)}
+.tour-next{border:none;background:var(--purple);color:white}
+.tour-dots{display:flex;gap:4px;align-items:center}
+.tour-dot{width:5px;height:5px;border-radius:50%;background:var(--border2);transition:all .2s}
+.tour-dot.active{background:var(--purple);width:14px;border-radius:3px}
+</style>
 
-<!-- PATTERN LIBRARY -->
+<!-- ALL MODALS -->
 <div class="plib-modal" id="plib-modal">
   <div class="plib-box">
-    <div class="plib-head">
-      <div class="plib-title">🧵 Pattern Library</div>
-      <button onclick="closePatternLibrary()" style="padding:4px 12px;border:1px solid var(--border2);background:transparent;color:var(--text2);border-radius:var(--rs);cursor:pointer;font-family:var(--font);font-size:12px">✕</button>
-    </div>
-    <div class="plib-cats">
-      <div class="plib-cat active" onclick="filterPatterns('all',this)">All</div>
-      <div class="plib-cat" onclick="filterPatterns('indian',this)">🇮🇳 Indian</div>
-      <div class="plib-cat" onclick="filterPatterns('bridal',this)">💍 Bridal</div>
-      <div class="plib-cat" onclick="filterPatterns('geometric',this)">◈ Geometric</div>
-      <div class="plib-cat" onclick="filterPatterns('floral',this)">🌸 Floral</div>
-      <div class="plib-cat" onclick="filterPatterns('border',this)">▬ Borders</div>
-      <div class="plib-cat" onclick="filterPatterns('sports',this)">🏆 Sports</div>
-      <div class="plib-cat" onclick="filterPatterns('monogram',this)">✒ Monogram</div>
-    </div>
+    <div class="plib-head"><div class="plib-title">🧵 Pattern Library</div><button onclick="closePatternLibrary()" style="padding:4px 12px;border:1px solid var(--border2);background:transparent;color:var(--text2);border-radius:var(--rs);cursor:pointer;font-family:var(--font);font-size:12px">✕</button></div>
+    <div class="plib-cats"><div class="plib-cat active" onclick="filterPatterns('all',this)">All</div><div class="plib-cat" onclick="filterPatterns('indian',this)">🇮🇳 Indian</div><div class="plib-cat" onclick="filterPatterns('bridal',this)">💍 Bridal</div><div class="plib-cat" onclick="filterPatterns('geometric',this)">◈ Geometric</div><div class="plib-cat" onclick="filterPatterns('floral',this)">🌸 Floral</div><div class="plib-cat" onclick="filterPatterns('border',this)">▬ Borders</div><div class="plib-cat" onclick="filterPatterns('sports',this)">🏆 Sports</div><div class="plib-cat" onclick="filterPatterns('monogram',this)">✒ Monogram</div></div>
     <div class="plib-grid" id="plib-grid"></div>
-    <div class="plib-footer">
-      <div class="plib-size"><span>Size:</span><input type="range" min="50" max="300" value="120" id="plib-size" style="width:80px;accent-color:var(--purple)"><span id="plib-size-val">120px</span></div>
-      <div style="font-size:11px;color:var(--text3)" id="plib-count">30 patterns</div>
-    </div>
+    <div class="plib-footer"><div class="plib-size"><span>Size:</span><input type="range" min="50" max="300" value="120" id="plib-size" style="width:80px;accent-color:var(--purple)"><span id="plib-size-val">120px</span></div><div style="font-size:11px;color:var(--text3)" id="plib-count">30 patterns</div></div>
   </div>
 </div>
 
-<!-- SHAPE LIBRARY -->
 <div class="shape-modal" id="shape-modal">
   <div class="shape-box">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-shrink:0">
-      <div style="font-size:15px;font-weight:500;color:var(--text)">⬡ Shape Library</div>
-      <button onclick="closeShapeLibrary()" style="padding:4px 12px;border:1px solid var(--border2);background:transparent;color:var(--text2);border-radius:var(--rs);cursor:pointer;font-family:var(--font);font-size:12px">✕</button>
-    </div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-shrink:0"><div style="font-size:15px;font-weight:500;color:var(--text)">⬡ Shape Library</div><button onclick="closeShapeLibrary()" style="padding:4px 12px;border:1px solid var(--border2);background:transparent;color:var(--text2);border-radius:var(--rs);cursor:pointer;font-family:var(--font);font-size:12px">✕</button></div>
     <input class="shape-search" id="shape-search" placeholder="Search shapes..." oninput="filterShapes(this.value)">
-    <div class="shape-cats">
-      <div class="shape-cat active" onclick="filterShapes('',this)">All</div>
-      <div class="shape-cat" onclick="filterShapes('basic',this)">Basic</div>
-      <div class="shape-cat" onclick="filterShapes('badge',this)">Badges</div>
-      <div class="shape-cat" onclick="filterShapes('floral',this)">Florals</div>
-      <div class="shape-cat" onclick="filterShapes('arrow',this)">Arrows</div>
-      <div class="shape-cat" onclick="filterShapes('sport',this)">Sports</div>
-      <div class="shape-cat" onclick="filterShapes('frame',this)">Frames</div>
-      <div class="shape-cat" onclick="filterShapes('star',this)">Stars</div>
-      <div class="shape-cat" onclick="filterShapes('indian',this)">🇮🇳 Indian</div>
-    </div>
+    <div class="shape-cats"><div class="shape-cat active" onclick="filterShapes('',this)">All</div><div class="shape-cat" onclick="filterShapes('basic',this)">Basic</div><div class="shape-cat" onclick="filterShapes('badge',this)">Badges</div><div class="shape-cat" onclick="filterShapes('floral',this)">Florals</div><div class="shape-cat" onclick="filterShapes('arrow',this)">Arrows</div><div class="shape-cat" onclick="filterShapes('sport',this)">Sports</div><div class="shape-cat" onclick="filterShapes('frame',this)">Frames</div><div class="shape-cat" onclick="filterShapes('star',this)">Stars</div><div class="shape-cat" onclick="filterShapes('indian',this)">🇮🇳 Indian</div></div>
     <div class="shape-grid" id="shape-grid"></div>
-    <div class="shape-footer">
-      <div style="font-size:11px;color:var(--text3)" id="shape-count">40 shapes</div>
-      <div style="display:flex;gap:8px;align-items:center">
-        <span style="font-size:11px;color:var(--text3)">Stitch:</span>
-        <select class="pinput" id="shape-stitch" style="width:auto;font-size:11px"><option value="running">Running</option><option value="satin" selected>Satin</option><option value="fill">Fill</option></select>
-        <span style="font-size:11px;color:var(--text3)">Size:</span>
-        <input class="pinput" type="number" id="shape-size" value="80" min="20" max="400" style="width:60px;font-size:11px">
-      </div>
-    </div>
+    <div class="shape-footer"><div style="font-size:11px;color:var(--text3)" id="shape-count">40 shapes</div><div style="display:flex;gap:8px;align-items:center"><span style="font-size:11px;color:var(--text3)">Stitch:</span><select class="pinput" id="shape-stitch" style="width:auto;font-size:11px"><option value="running">Running</option><option value="satin" selected>Satin</option><option value="fill">Fill</option></select><span style="font-size:11px;color:var(--text3)">Size:</span><input class="pinput" type="number" id="shape-size" value="80" min="20" max="400" style="width:60px;font-size:11px"></div></div>
   </div>
 </div>
 
-<!-- GENERATE FROM PROMPT -->
 <div class="gen-modal" id="gen-modal">
   <div class="gen-box">
     <div class="gen-title">✨ Generate design from prompt</div>
     <div class="gen-sub">Describe any embroidery design. Aari AI generates stitch paths on your canvas.</div>
-    <textarea class="gen-textarea" id="gen-prompt" placeholder="e.g. Zardozi lotus border in gold for a bridal lehenga&#10;e.g. Phulkari geometric diamonds in red and yellow for a dupatta"></textarea>
-    <div class="gen-examples">
-      <div class="gen-example" onclick="setGenPrompt('Zardozi lotus border in gold and maroon for a bridal lehenga')">Zardozi bridal</div>
-      <div class="gen-example" onclick="setGenPrompt('Phulkari geometric diamond pattern in red and yellow')">Phulkari</div>
-      <div class="gen-example" onclick="setGenPrompt('Kantha lotus motif in indigo and white for a saree')">Kantha lotus</div>
-      <div class="gen-example" onclick="setGenPrompt('Kashmiri paisley in teal and gold for a shawl')">Kashmiri</div>
-      <div class="gen-example" onclick="setGenPrompt('Rangoli mandala in purple and gold')">Rangoli</div>
-      <div class="gen-example" onclick="setGenPrompt('Peacock feather with Aari stitch in blue and green')">Peacock</div>
-    </div>
-    <div class="gen-options">
-      <div><div class="gen-opt-label">Complexity</div><select class="pinput" id="gen-complexity"><option value="simple">Simple</option><option value="medium" selected>Medium</option><option value="complex">Complex</option></select></div>
-      <div><div class="gen-opt-label">Placement</div><select class="pinput" id="gen-placement"><option value="center">Center</option><option value="border">Border</option><option value="corner">Corner</option></select></div>
-    </div>
-    <div class="gen-progress" id="gen-progress" style="display:none">
-      <div class="gen-progress-text" id="gen-progress-text">Generating...</div>
-      <div class="gen-progress-bar"><div class="gen-progress-fill" id="gen-progress-fill"></div></div>
-    </div>
-    <div class="gen-btns">
-      <button class="gen-btn" onclick="closeGenModal()">Cancel</button>
-      <button class="gen-btn primary" id="gen-btn" onclick="generateFromPrompt()">✨ Generate</button>
-    </div>
+    <textarea class="gen-textarea" id="gen-prompt" placeholder="e.g. Zardozi lotus border in gold for a bridal lehenga&#10;e.g. Phulkari geometric diamonds in red and yellow"></textarea>
+    <div class="gen-examples"><div class="gen-example" onclick="setGenPrompt('Zardozi lotus border in gold and maroon for a bridal lehenga')">Zardozi bridal</div><div class="gen-example" onclick="setGenPrompt('Phulkari geometric diamonds in red and yellow')">Phulkari</div><div class="gen-example" onclick="setGenPrompt('Kantha lotus in indigo and white for a saree')">Kantha lotus</div><div class="gen-example" onclick="setGenPrompt('Kashmiri paisley in teal and gold')">Kashmiri</div><div class="gen-example" onclick="setGenPrompt('Rangoli mandala in purple and gold')">Rangoli</div><div class="gen-example" onclick="setGenPrompt('Peacock feather with Aari stitch in blue and green')">Peacock</div></div>
+    <div class="gen-options"><div><div class="gen-opt-label">Complexity</div><select class="pinput" id="gen-complexity"><option value="simple">Simple</option><option value="medium" selected>Medium</option><option value="complex">Complex</option></select></div><div><div class="gen-opt-label">Placement</div><select class="pinput" id="gen-placement"><option value="center">Center</option><option value="border">Border</option><option value="corner">Corner</option></select></div></div>
+    <div class="gen-progress" id="gen-progress" style="display:none"><div class="gen-progress-text" id="gen-progress-text">Generating...</div><div class="gen-progress-bar"><div class="gen-progress-fill" id="gen-progress-fill"></div></div></div>
+    <div class="gen-btns"><button class="gen-btn" onclick="closeGenModal()">Cancel</button><button class="gen-btn primary" id="gen-btn" onclick="generateFromPrompt()">✨ Generate</button></div>
   </div>
 </div>
 
-<!-- TEXT ON PATH -->
 <div class="top-modal" id="top-modal">
-  <div class="top-box" style="width:520px">
+  <div style="background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);padding:22px;width:520px;max-width:95vw;box-shadow:0 24px 64px rgba(0,0,0,.6)">
     <div style="font-size:15px;font-weight:500;color:var(--text);margin-bottom:4px">Text on Path</div>
     <div style="font-size:12px;color:var(--text3);margin-bottom:12px">Place text along a curve, circle, or arc.</div>
-    <div class="top-preview"><canvas id="top-preview-cvs" width="460" height="120"></canvas></div>
+    <div class="top-preview"><canvas id="top-preview-cvs" width="460" height="110"></canvas></div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
       <div><div class="svg-opt-label">Text</div><input class="pinput" type="text" id="top-text" value="EMBROXIA" oninput="updateTOPPreview()"></div>
       <div><div class="svg-opt-label">Shape</div><select class="pinput" id="top-shape" onchange="updateTOPPreview()"><option value="arc-top">Arc top</option><option value="arc-bottom">Arc bottom</option><option value="circle">Circle</option><option value="wave">Wave</option><option value="straight">Straight</option></select></div>
@@ -2614,87 +3312,50 @@ toast('✦ Embroxia Studio v2 ready');
       <div><div class="svg-opt-label">Spacing</div><input class="pinput" type="range" id="top-spacing" min="-5" max="20" value="2" oninput="updateTOPPreview()"></div>
       <div><div class="svg-opt-label">Start angle</div><input class="pinput" type="range" id="top-start" min="-180" max="180" value="0" oninput="updateTOPPreview()"></div>
     </div>
-    <div style="display:flex;gap:8px">
-      <button class="svg-btn" onclick="closeTOP()">Cancel</button>
-      <button class="svg-btn primary" onclick="placeTOP()">Place on canvas</button>
-    </div>
+    <div style="display:flex;gap:8px"><button class="gen-btn" onclick="closeTOP()">Cancel</button><button class="gen-btn primary" onclick="placeTOP()">Place on canvas</button></div>
   </div>
 </div>
 
-<!-- SVG IMPORT -->
 <div class="svg-modal" id="svg-modal">
   <div class="svg-box">
     <div class="svg-title">Import SVG / Vector</div>
-    <div class="svg-sub">Upload an SVG and convert vector paths to embroidery stitches.</div>
-    <div class="svg-drop" id="svg-drop">
-      <input type="file" id="svg-file-input" accept=".svg,.ai" onchange="handleSVGFile(event)">
-      <div class="svg-drop-icon">📐</div>
-      <div class="svg-drop-text">Click to upload or drag & drop SVG</div>
-    </div>
+    <div class="svg-sub">Upload an SVG and convert vector paths to embroidery stitches automatically.</div>
+    <div class="svg-drop" id="svg-drop"><input type="file" id="svg-file-input" accept=".svg,.ai" onchange="handleSVGFile(event)"><div class="svg-drop-icon">📐</div><div class="svg-drop-text">Click to upload or drag & drop SVG</div></div>
     <div class="svg-preview" id="svg-preview"></div>
     <div class="svg-options">
       <div><div class="svg-opt-label">Stitch type</div><select class="pinput" id="svg-stitch-type"><option value="auto">Auto detect</option><option value="running">Running</option><option value="satin">Satin</option><option value="fill">Fill</option></select></div>
-      <div><div class="svg-opt-label">Scale</div><select class="pinput" id="svg-scale"><option value="fit">Fit to hoop</option><option value="original">Original</option><option value="50">50%</option></select></div>
-      <div><div class="svg-opt-label">Color</div><select class="pinput" id="svg-color"><option value="keep">Keep original</option><option value="current">Use current</option></select></div>
-      <div><div class="svg-opt-label">Simplify</div><select class="pinput" id="svg-simplify"><option value="medium">Medium</option><option value="low">Low detail</option><option value="high">High</option></select></div>
+      <div><div class="svg-opt-label">Scale</div><select class="pinput" id="svg-scale"><option value="fit">Fit to hoop</option><option value="original">Original size</option><option value="50">50%</option></select></div>
+      <div><div class="svg-opt-label">Color</div><select class="pinput" id="svg-color"><option value="keep">Keep original</option><option value="current">Use current color</option></select></div>
+      <div><div class="svg-opt-label">Simplify</div><select class="pinput" id="svg-simplify"><option value="medium">Medium</option><option value="low">Low</option><option value="high">High</option></select></div>
     </div>
     <div id="svg-status" style="font-size:12px;color:var(--text3);margin-bottom:10px;display:none"></div>
-    <div class="svg-btns">
-      <button class="svg-btn" onclick="closeSVGImport()">Cancel</button>
-      <button class="svg-btn primary" id="svg-convert-btn" onclick="convertSVGToStitches()" disabled>Convert to embroidery</button>
-    </div>
+    <div class="svg-btns"><button class="svg-btn" onclick="closeSVGImport()">Cancel</button><button class="svg-btn primary" id="svg-convert-btn" onclick="convertSVGToStitches()" disabled>Convert to embroidery</button></div>
   </div>
 </div>
 
-<!-- PRINT DESIGN SHEET -->
 <div class="print-modal" id="print-modal">
-  <div class="print-box" style="width:560px">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-      <div style="font-size:15px;font-weight:500;color:var(--text)">📄 Print Design Sheet</div>
-      <button onclick="closePrintModal()" style="padding:4px 12px;border:1px solid var(--border2);background:transparent;color:var(--text2);border-radius:var(--rs);cursor:pointer;font-family:var(--font);font-size:12px">✕</button>
-    </div>
-    <div class="print-preview" id="print-preview-content" style="max-height:400px;overflow-y:auto"></div>
-    <div style="display:flex;gap:8px;margin-top:10px">
-      <button class="svg-btn" onclick="closePrintModal()">Cancel</button>
-      <button class="svg-btn" onclick="downloadPrintSheet()">↓ Download</button>
-      <button class="svg-btn primary" onclick="printSheet()">🖨 Print</button>
-    </div>
+  <div style="background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);padding:22px;width:560px;max-width:95vw;box-shadow:0 24px 64px rgba(0,0,0,.6)">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px"><div style="font-size:15px;font-weight:500;color:var(--text)">📄 Print Design Sheet</div><button onclick="closePrintModal()" style="padding:4px 12px;border:1px solid var(--border2);background:transparent;color:var(--text2);border-radius:var(--rs);cursor:pointer;font-family:var(--font);font-size:12px">✕</button></div>
+    <div class="print-preview" id="print-preview-content"></div>
+    <div style="display:flex;gap:8px"><button class="gen-btn" onclick="closePrintModal()">Cancel</button><button class="gen-btn" onclick="downloadPrintSheet()">↓ Download</button><button class="gen-btn primary" onclick="printSheet()">🖨 Print</button></div>
   </div>
 </div>
 
-<!-- DESIGN LIBRARY -->
 <div class="library-modal" id="library-modal">
   <div class="library-box">
-    <div class="library-head">
-      <div class="library-title">📁 Design Library</div>
-      <div style="display:flex;gap:8px;align-items:center">
-        <input class="library-search" id="library-search" placeholder="Search..." oninput="filterLibrary(this.value)">
-        <button class="tbtn primary" onclick="saveToLibrary()">+ Save</button>
-        <button class="tbtn" onclick="closeLibrary()" style="padding:5px 10px">✕</button>
-      </div>
-    </div>
+    <div class="library-head"><div class="library-title">📁 Design Library</div><div style="display:flex;gap:8px;align-items:center"><input class="library-search" id="library-search" placeholder="Search..." oninput="filterLibrary(this.value)"><button class="tbtn primary" onclick="saveToLibrary()">+ Save</button><button class="tbtn" onclick="closeLibrary()" style="padding:5px 10px">✕</button></div></div>
     <div class="library-grid" id="library-grid"></div>
-    <div class="library-footer">
-      <div class="library-count" id="library-count">0 designs</div>
-    </div>
+    <div class="library-footer"><div class="library-count" id="library-count">0 designs</div></div>
   </div>
 </div>
 
-<!-- ONBOARDING TOUR -->
 <div id="tour-overlay" class="tour-overlay" style="display:none">
   <div class="tour-highlight" id="tour-highlight"></div>
   <div class="tour-card" id="tour-card">
     <div class="tour-step-badge"><span>✦</span><span id="tour-step-label">Step 1 of 8</span></div>
     <div class="tour-title" id="tour-title">Welcome to Embroxia Studio</div>
     <div class="tour-desc" id="tour-desc">Let us take a quick tour so you can start designing in under 2 minutes.</div>
-    <div class="tour-btns">
-      <button class="tour-skip" onclick="endTour()">Skip tour</button>
-      <div class="tour-dots" id="tour-dots"></div>
-      <div class="tour-nav">
-        <button class="tour-prev" id="tour-prev" onclick="tourStep(-1)">←</button>
-        <button class="tour-next" id="tour-next" onclick="tourStep(1)">Next →</button>
-      </div>
-    </div>
+    <div class="tour-btns"><button class="tour-skip" onclick="endTour()">Skip tour</button><div class="tour-dots" id="tour-dots"></div><div class="tour-nav"><button class="tour-prev" id="tour-prev" onclick="tourStep(-1)">←</button><button class="tour-next" id="tour-next" onclick="tourStep(1)">Next →</button></div></div>
   </div>
 </div>
 
