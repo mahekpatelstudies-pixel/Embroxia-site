@@ -1109,25 +1109,24 @@ function drawPath(p){
   switch(p.stitch){
 
     case 'running':
-      ctx.beginPath();p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
-      ctx.strokeStyle='rgba(0,0,0,0.15)';ctx.lineWidth=2/S.zoom;ctx.setLineDash([7/S.zoom,4/S.zoom]);ctx.stroke();
-      ctx.beginPath();p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
+      ctx.beginPath();strokeSmoothPath(ctx,p.points);
+      ctx.strokeStyle='rgba(0,0,0,0.15)';ctx.lineWidth=2/S.zoom;ctx.setLineDash([7/S.zoom,4/S.zoom]);ctx.lineCap='round';ctx.stroke();
+      ctx.beginPath();strokeSmoothPath(ctx,p.points);
       ctx.strokeStyle=p.color;ctx.lineWidth=1.6/S.zoom;ctx.setLineDash([7/S.zoom,4/S.zoom]);ctx.stroke();
       ctx.setLineDash([]);
       break;
 
     case 'triple':
       for(let off=-1.5;off<=1.5;off+=1.5){
-        ctx.beginPath();
-        p.points.forEach((pt,i,arr)=>{
-          if(i===0){ctx.moveTo(pt.x,pt.y);return;}
-          const prev=arr[i-1];
-          const dx=pt.x-prev.x,dy=pt.y-prev.y;
+        // Offset points perpendicular to path
+        const offPts=p.points.map((pt,i,arr)=>{
+          const prev=arr[Math.max(0,i-1)],next=arr[Math.min(arr.length-1,i+1)];
+          const dx=next.x-prev.x,dy=next.y-prev.y;
           const len=Math.sqrt(dx*dx+dy*dy)||1;
-          const nx=-dy/len*off/S.zoom,ny=dx/len*off/S.zoom;
-          ctx.lineTo(pt.x+nx,pt.y+ny);
+          return {x:pt.x+(-dy/len)*off/S.zoom,y:pt.y+(dx/len)*off/S.zoom};
         });
-        ctx.strokeStyle=p.color;ctx.lineWidth=1.2/S.zoom;ctx.setLineDash([5/S.zoom,2/S.zoom]);ctx.stroke();
+        ctx.beginPath();strokeSmoothPath(ctx,offPts);
+        ctx.strokeStyle=p.color;ctx.lineWidth=1.2/S.zoom;ctx.setLineDash([5/S.zoom,2/S.zoom]);ctx.lineCap='round';ctx.stroke();
       }
       ctx.setLineDash([]);
       break;
@@ -1142,8 +1141,8 @@ function drawPath(p){
         const sCX=(bbSat.minX+bbSat.maxX)/2,sCY=(bbSat.minY+bbSat.maxY)/2;
         ctx.save();
         ctx.beginPath();
-        p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
-        ctx.closePath();ctx.fillStyle=p.color+'12';ctx.fill();ctx.clip();
+        strokeSmoothPath(ctx,p.points);ctx.closePath();
+        ctx.fillStyle=p.color+'12';ctx.fill();ctx.clip();
         const spCos=Math.cos(satAngle+Math.PI/2),spSin=Math.sin(satAngle+Math.PI/2);
         const slCos=Math.cos(satAngle),slSin=Math.sin(satAngle);
         let sRow=0;
@@ -1160,8 +1159,8 @@ function drawPath(p){
           }
         }
         ctx.restore();
-        ctx.beginPath();p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
-        ctx.closePath();ctx.strokeStyle=p.color+'66';ctx.lineWidth=0.4/S.zoom;ctx.stroke();
+        ctx.beginPath();strokeSmoothPath(ctx,p.points);ctx.closePath();
+        ctx.strokeStyle=p.color+'66';ctx.lineWidth=0.4/S.zoom;ctx.stroke();
       } break;
 
     case 'fill':
@@ -1173,8 +1172,8 @@ function drawPath(p){
         const fCX=(bbFill.minX+bbFill.maxX)/2,fCY=(bbFill.minY+bbFill.maxY)/2;
         const fDiag=Math.sqrt(Math.pow(bbFill.maxX-bbFill.minX,2)+Math.pow(bbFill.maxY-bbFill.minY,2))+20/S.zoom;
         ctx.save();
-        ctx.beginPath();p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
-        ctx.closePath();ctx.fillStyle=p.color+'12';ctx.fill();ctx.clip();
+        ctx.beginPath();strokeSmoothPath(ctx,p.points);ctx.closePath();
+        ctx.fillStyle=p.color+'12';ctx.fill();ctx.clip();
         const fpCos=Math.cos(fAngle+Math.PI/2),fpSin=Math.sin(fAngle+Math.PI/2);
         const flCos=Math.cos(fAngle),flSin=Math.sin(fAngle);
         let fRow=0;
@@ -1190,8 +1189,8 @@ function drawPath(p){
           ctx.globalAlpha=p.opacity||1;
         }
         ctx.restore();
-        ctx.beginPath();p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
-        ctx.closePath();ctx.strokeStyle=p.color+'55';ctx.lineWidth=0.4/S.zoom;ctx.stroke();
+        ctx.beginPath();strokeSmoothPath(ctx,p.points);ctx.closePath();
+        ctx.strokeStyle=p.color+'55';ctx.lineWidth=0.4/S.zoom;ctx.stroke();
       } break;
 
     case 'cross':
@@ -1206,29 +1205,26 @@ function drawPath(p){
       }); break;
 
     case 'backstitch':
-      for(let i=1;i<p.points.length;i++){
-        ctx.beginPath();ctx.moveTo(p.points[i-1].x,p.points[i-1].y);ctx.lineTo(p.points[i].x,p.points[i].y);
-        ctx.strokeStyle='rgba(0,0,0,0.18)';ctx.lineWidth=2.2/S.zoom;ctx.lineCap='round';ctx.stroke();
-        ctx.beginPath();ctx.moveTo(p.points[i-1].x,p.points[i-1].y);ctx.lineTo(p.points[i].x,p.points[i].y);
-        ctx.strokeStyle=p.color;ctx.lineWidth=1.8/S.zoom;ctx.stroke();
-        if(i%2===0){
-          const mx=(p.points[i-1].x+p.points[i].x)/2,my=(p.points[i-1].y+p.points[i].y)/2;
-          ctx.beginPath();ctx.arc(mx,my,1.2/S.zoom,0,Math.PI*2);ctx.fillStyle=p.color;ctx.fill();
-        }
-      } break;
+      ctx.beginPath();strokeSmoothPath(ctx,p.points);
+      ctx.strokeStyle='rgba(0,0,0,0.18)';ctx.lineWidth=2.2/S.zoom;ctx.lineCap='round';ctx.stroke();
+      ctx.beginPath();strokeSmoothPath(ctx,p.points);
+      ctx.strokeStyle=p.color;ctx.lineWidth=1.8/S.zoom;ctx.stroke();
+      // Backstitch tick marks at intervals
+      p.points.filter((_,i)=>i%4===0&&i>0).forEach(pt=>{
+        ctx.beginPath();ctx.arc(pt.x,pt.y,1.5/S.zoom,0,Math.PI*2);ctx.fillStyle=p.color;ctx.fill();
+      }); break;
 
     case 'stemstitch':
-      for(let i=2;i<p.points.length;i+=2){
-        ctx.beginPath();ctx.moveTo(p.points[i-2].x,p.points[i-2].y);ctx.lineTo(p.points[i].x,p.points[i].y);
-        ctx.strokeStyle='rgba(0,0,0,0.18)';ctx.lineWidth=2/S.zoom;ctx.lineCap='round';ctx.stroke();
-        ctx.beginPath();ctx.moveTo(p.points[i-2].x,p.points[i-2].y);ctx.lineTo(p.points[i].x,p.points[i].y);
-        ctx.strokeStyle=p.color;ctx.lineWidth=1.6/S.zoom;ctx.stroke();
-      } break;
+      ctx.beginPath();strokeSmoothPath(ctx,p.points);
+      ctx.strokeStyle='rgba(0,0,0,0.18)';ctx.lineWidth=2/S.zoom;ctx.lineCap='round';ctx.stroke();
+      ctx.beginPath();strokeSmoothPath(ctx,p.points);
+      ctx.strokeStyle=p.color;ctx.lineWidth=1.6/S.zoom;ctx.stroke();
+      break;
 
     case 'applique':
       if(p.points.length>2){
-        ctx.beginPath();p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
-        ctx.closePath();ctx.fillStyle=p.color+'30';ctx.fill();
+        ctx.beginPath();strokeSmoothPath(ctx,p.points);ctx.closePath();
+        ctx.fillStyle=p.color+'30';ctx.fill();
         // Tack-down stitches
         ctx.setLineDash([3/S.zoom,3/S.zoom]);
         ctx.strokeStyle=p.color;ctx.lineWidth=1.5/S.zoom;ctx.stroke();
@@ -1252,9 +1248,9 @@ function drawPath(p){
       } break;
 
     case 'redwork':
-      ctx.beginPath();p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
-      ctx.strokeStyle='rgba(0,0,0,0.2)';ctx.lineWidth=2.5/S.zoom;ctx.stroke();
-      ctx.beginPath();p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
+      ctx.beginPath();strokeSmoothPath(ctx,p.points);
+      ctx.strokeStyle='rgba(0,0,0,0.2)';ctx.lineWidth=2.5/S.zoom;ctx.lineCap='round';ctx.stroke();
+      ctx.beginPath();strokeSmoothPath(ctx,p.points);
       ctx.strokeStyle=p.color||'#DC143C';ctx.lineWidth=2/S.zoom;ctx.stroke();
       break;
 
@@ -1306,25 +1302,22 @@ function drawPath(p){
 
     case 'wave':
       if(p.points.length>1){
+        // Generate wave offset from smooth path
+        const wvBase=p.points;
         const wvPts=[];
-        for(let i=0;i<p.points.length-1;i++){
-          const a=p.points[i],b=p.points[i+1];
-          const segs=8;
-          for(let j=0;j<segs;j++){
-            const t=j/segs,t2=(j+1)/segs;
-            const amp=5/S.zoom;
-            wvPts.push({x:a.x+(b.x-a.x)*t,y:a.y+(b.y-a.y)*t+Math.sin(t*Math.PI*2)*amp});
-          }
+        for(let i=0;i<wvBase.length;i++){
+          const t=i/(wvBase.length-1);
+          const amp=6/S.zoom;
+          wvPts.push({x:wvBase[i].x,y:wvBase[i].y+Math.sin(t*Math.PI*8)*amp});
         }
-        wvPts.push(p.points[p.points.length-1]);
-        ctx.beginPath();wvPts.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
-        ctx.strokeStyle=p.color;ctx.lineWidth=lw;ctx.stroke();
+        ctx.beginPath();strokeSmoothPath(ctx,wvPts);
+        ctx.strokeStyle=p.color;ctx.lineWidth=lw;ctx.lineCap='round';ctx.stroke();
       } break;
 
     case 'zardozi':
-      ctx.beginPath();p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
-      ctx.strokeStyle='rgba(0,0,0,0.25)';ctx.lineWidth=5/S.zoom;ctx.stroke();
-      ctx.beginPath();p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
+      ctx.beginPath();strokeSmoothPath(ctx,p.points);
+      ctx.strokeStyle='rgba(0,0,0,0.25)';ctx.lineWidth=5/S.zoom;ctx.lineCap='round';ctx.stroke();
+      ctx.beginPath();strokeSmoothPath(ctx,p.points);
       ctx.strokeStyle=p.color;ctx.lineWidth=4/S.zoom;ctx.stroke();
       ctx.fillStyle='rgba(255,255,255,0.7)';
       p.points.filter((_,i)=>i%3===0).forEach(pt=>{ctx.beginPath();ctx.arc(pt.x,pt.y,1.5/S.zoom,0,Math.PI*2);ctx.fill();});
@@ -1332,10 +1325,11 @@ function drawPath(p){
       break;
 
     case 'kantha':
-      ctx.setLineDash([5/S.zoom,3/S.zoom]);threadStroke(p.points,p.color,1.5);ctx.setLineDash([]);
-      ctx.beginPath();ctx.setLineDash([4/S.zoom,4/S.zoom]);
-      p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y+3/S.zoom):ctx.moveTo(pt.x,pt.y+3/S.zoom));
-      ctx.strokeStyle=p.color+'99';ctx.lineWidth=1/S.zoom;ctx.stroke();ctx.setLineDash([]);
+      ctx.beginPath();strokeSmoothPath(ctx,p.points);
+      ctx.strokeStyle=p.color;ctx.lineWidth=1.5/S.zoom;ctx.setLineDash([5/S.zoom,3/S.zoom]);ctx.lineCap='round';ctx.stroke();
+      ctx.beginPath();strokeSmoothPath(ctx,p.points.map(pt=>({...pt,y:pt.y+3/S.zoom})));
+      ctx.strokeStyle=p.color+'99';ctx.lineWidth=1/S.zoom;ctx.setLineDash([4/S.zoom,4/S.zoom]);ctx.stroke();
+      ctx.setLineDash([]);
       break;
 
     case 'phulkari':
@@ -1361,8 +1355,8 @@ function drawPath(p){
       break;
 
     case 'aari':
-      ctx.beginPath();p.points.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
-      ctx.strokeStyle=p.color;ctx.lineWidth=2/S.zoom;ctx.stroke();
+      ctx.beginPath();strokeSmoothPath(ctx,p.points);
+      ctx.strokeStyle=p.color;ctx.lineWidth=2/S.zoom;ctx.lineCap='round';ctx.stroke();
       p.points.filter((_,i)=>i%2===0&&i>0).forEach((pt,idx,arr)=>{
         const prev=arr[idx-1]||p.points[0];
         ctx.beginPath();ctx.ellipse((pt.x+prev.x)/2,(pt.y+prev.y)/2,2/S.zoom,1.5/S.zoom,Math.atan2(pt.y-prev.y,pt.x-prev.x),0,Math.PI*2);
@@ -1442,7 +1436,8 @@ function drawPath(p){
       break;
 
     default:
-      threadStroke(p.points,p.color,1.8);
+      ctx.beginPath();strokeSmoothPath(ctx,p.points);
+      ctx.strokeStyle=p.color;ctx.lineWidth=1.8/S.zoom;ctx.lineCap='round';ctx.lineJoin='round';ctx.stroke();
   }
 
   ctx.restore();
@@ -1516,73 +1511,356 @@ function drawRulers(){
 // ═══════════════════════════════════════
 let panning=false, panStart={x:0,y:0};
 
-cvs.addEventListener('mousedown',e=>{
-  if(e.button===1||S.tool==='hand'||(e.button===0&&e.altKey)){
-    panning=true; panStart={x:e.clientX-S.panX,y:e.clientY-S.panY};
+
+// ═══════════════════════════════════════════════════
+// SMOOTH DRAWING ENGINE
+// Catmull-Rom splines + bezier rendering
+// ═══════════════════════════════════════════════════
+
+// Convert raw points to smooth Catmull-Rom spline
+function catmullRomPoints(pts, tension) {
+  if(pts.length < 2) return pts;
+  tension = tension || 0.5;
+  const result = [];
+  for(let i = 0; i < pts.length - 1; i++) {
+    const p0 = pts[Math.max(0, i-1)];
+    const p1 = pts[i];
+    const p2 = pts[i+1];
+    const p3 = pts[Math.min(pts.length-1, i+2)];
+    const steps = Math.max(4, Math.ceil(
+      Math.sqrt(Math.pow(p2.x-p1.x,2)+Math.pow(p2.y-p1.y,2)) / 3
+    ));
+    for(let t = 0; t < steps; t++) {
+      const tN = t / steps;
+      const t2 = tN * tN;
+      const t3 = t2 * tN;
+      const x = 0.5 * (
+        (2*p1.x) +
+        (-p0.x + p2.x) * tN +
+        (2*p0.x - 5*p1.x + 4*p2.x - p3.x) * t2 +
+        (-p0.x + 3*p1.x - 3*p2.x + p3.x) * t3
+      );
+      const y = 0.5 * (
+        (2*p1.y) +
+        (-p0.y + p2.y) * tN +
+        (2*p0.y - 5*p1.y + 4*p2.y - p3.y) * t2 +
+        (-p0.y + 3*p1.y - 3*p2.y + p3.y) * t3
+      );
+      result.push({x, y});
+    }
+  }
+  result.push(pts[pts.length-1]);
+  return result;
+}
+
+// Douglas-Peucker point decimation for cleaner paths
+function simplifyPath(pts, tolerance) {
+  if(pts.length <= 2) return pts;
+  tolerance = tolerance || 1.5;
+  function perpendicularDist(pt, lineStart, lineEnd) {
+    const dx = lineEnd.x - lineStart.x;
+    const dy = lineEnd.y - lineStart.y;
+    if(dx === 0 && dy === 0) return Math.sqrt(Math.pow(pt.x-lineStart.x,2)+Math.pow(pt.y-lineStart.y,2));
+    const t = ((pt.x-lineStart.x)*dx + (pt.y-lineStart.y)*dy) / (dx*dx+dy*dy);
+    const tC = Math.max(0, Math.min(1, t));
+    return Math.sqrt(Math.pow(pt.x-(lineStart.x+tC*dx),2)+Math.pow(pt.y-(lineStart.y+tC*dy),2));
+  }
+  function dp(points, start, end, tol, result) {
+    let maxDist = 0, maxIdx = 0;
+    for(let i = start+1; i < end; i++) {
+      const d = perpendicularDist(points[i], points[start], points[end]);
+      if(d > maxDist) { maxDist = d; maxIdx = i; }
+    }
+    if(maxDist > tol) {
+      dp(points, start, maxIdx, tol, result);
+      result.push(points[maxIdx]);
+      dp(points, maxIdx, end, tol, result);
+    }
+  }
+  const result = [pts[0]];
+  dp(pts, 0, pts.length-1, tolerance, result);
+  result.push(pts[pts.length-1]);
+  return result;
+}
+
+// Smooth canvas path using bezier curves through points
+function strokeSmoothPath(ctx2, pts) {
+  if(!pts || pts.length < 2) return;
+  ctx2.moveTo(pts[0].x, pts[0].y);
+  if(pts.length === 2) {
+    ctx2.lineTo(pts[1].x, pts[1].y);
+    return;
+  }
+  for(let i = 1; i < pts.length - 1; i++) {
+    const xc = (pts[i].x + pts[i+1].x) / 2;
+    const yc = (pts[i].y + pts[i+1].y) / 2;
+    ctx2.quadraticCurveTo(pts[i].x, pts[i].y, xc, yc);
+  }
+  ctx2.lineTo(pts[pts.length-1].x, pts[pts.length-1].y);
+}
+
+// Pen tool state
+let penPoints = [];
+let penActive = false;
+let penPreviewPos = {x:0, y:0};
+let isDragging = false;
+let dragStart = {x:0, y:0};
+let moveInfo = {active:false, pathIdx:-1, startX:0, startY:0, origPoints:[]};
+panning = false, panStart = {x:0, y:0};
+
+cvs.addEventListener('mousedown', e => {
+  if(e.button===1 || S.tool==='hand' || (e.button===0&&e.altKey)) {
+    panning=true; panStart={x:e.clientX-S.panX, y:e.clientY-S.panY};
     cvs.style.cursor='grabbing'; return;
   }
   if(e.button!==0) return;
-  const pos=mPos(e);
-  if(S.tool==='zoom'){changeZoom(e.shiftKey?-.2:.2,pos);return;}
-  if(S.tool==='select'){handleSelect(pos);return;}
+  const pos = mPos(e);
+
+  if(S.tool==='zoom') { changeZoom(e.shiftKey?-.25:.25,pos); return; }
+
+  if(S.tool==='select') {
+    handleSelect(pos);
+    if(S.selected.length>0) {
+      const pi = S.selected[0];
+      moveInfo = {active:true, pathIdx:pi, startX:pos.x, startY:pos.y,
+        origPoints: S.paths[pi] ? JSON.parse(JSON.stringify(S.paths[pi].points)) : []};
+    }
+    return;
+  }
+
+  if(S.tool==='pen') {
+    if(!penActive) { penActive=true; document.getElementById('wi').style.opacity='0'; }
+    if(penPoints.length > 2) {
+      const first = penPoints[0];
+      const d = Math.sqrt((first.x-pos.x)**2+(first.y-pos.y)**2);
+      if(d < 14/S.zoom) { commitPen(true); return; }
+    }
+    penPoints.push({x:pos.x, y:pos.y});
+    redraw(); drawPenOverlay();
+    return;
+  }
+
+  if(S.tool==='eraser') {
+    S.drawing=true; return;
+  }
+
+  // Freehand brush + shapes
   S.drawing=true;
-  S.currentPath=[snap(pos)];
+  S.currentPath=[pos];
+  S.shapeStart=pos;
   document.getElementById('wi').style.opacity='0';
 });
 
-cvs.addEventListener('mousemove',e=>{
-  const pos=mPos(e);
+cvs.addEventListener('mousemove', e => {
+  const raw = mPos(e);
+  const pos = raw;
+  penPreviewPos = pos;
+
   document.getElementById('st-x').textContent=Math.round(pos.x);
   document.getElementById('st-y').textContent=Math.round(pos.y);
-  // crosshairs
   const rect=cvs.getBoundingClientRect();
   document.getElementById('ch').style.cssText=`left:${e.clientX-rect.left}px;top:0;bottom:0;display:block`;
   document.getElementById('cv2').style.cssText=`top:${e.clientY-rect.top}px;left:0;right:0;display:block`;
-  if(panning){
+
+  if(panning) {
     S.panX=e.clientX-panStart.x; S.panY=e.clientY-panStart.y;
     drawRulers(); redraw(); return;
   }
-  if(S.tool==='eraser'&&S.drawing){
-    const eraserR=12/S.zoom;
+
+  // Move selected object
+  if(S.tool==='select' && moveInfo.active && e.buttons===1 && S.selected.length>0) {
+    const dx=pos.x-moveInfo.startX, dy=pos.y-moveInfo.startY;
+    const pi=moveInfo.pathIdx;
+    if(S.paths[pi]) {
+      S.paths[pi].points = moveInfo.origPoints.map(p=>({...p,x:p.x+dx,y:p.y+dy}));
+    }
+    redraw(); return;
+  }
+
+  // Pen preview
+  if(S.tool==='pen') {
+    redraw(); drawPenOverlay();
+    return;
+  }
+
+  // Eraser
+  if(S.tool==='eraser' && S.drawing) {
+    const eraserR=14/S.zoom;
     const newPaths=[];
     let changed=false;
     S.paths.forEach(p=>{
-      let segment=[];
+      let seg=[];
       p.points.forEach(pt=>{
         const dx=pt.x-pos.x,dy=pt.y-pos.y;
-        if(Math.sqrt(dx*dx+dy*dy)<eraserR){
-          changed=true;
-          if(segment.length>1) newPaths.push(Object.assign({},p,{points:[...segment]}));
-          segment=[];
-        } else { segment.push(pt); }
+        if(Math.sqrt(dx*dx+dy*dy)<eraserR){changed=true;if(seg.length>1)newPaths.push({...p,points:[...seg]});seg=[];}
+        else seg.push(pt);
       });
-      if(segment.length>1) newPaths.push(Object.assign({},p,{points:segment}));
-      else if(segment.length===1&&p.points.length===1) newPaths.push(p);
+      if(seg.length>1) newPaths.push({...p,points:seg});
     });
-    if(changed){ S.paths=newPaths; updateStats(); }
+    if(changed){S.paths=newPaths;updateStats();}
     redraw();
     ctx.save();ctx.translate(S.panX,S.panY);ctx.scale(S.zoom,S.zoom);
     ctx.beginPath();ctx.arc(pos.x,pos.y,eraserR,0,Math.PI*2);
-    ctx.strokeStyle='rgba(255,255,255,0.5)';ctx.lineWidth=1/S.zoom;
-    ctx.setLineDash([2/S.zoom,2/S.zoom]);ctx.stroke();ctx.setLineDash([]);
+    ctx.strokeStyle='rgba(255,80,80,0.6)';ctx.lineWidth=1.5/S.zoom;
+    ctx.setLineDash([3/S.zoom,3/S.zoom]);ctx.stroke();ctx.setLineDash([]);
     ctx.restore();
     return;
   }
+
+  if(!S.drawing || e.buttons===0) return;
+
+  if(S.tool==='brush') {
+    // Only add point if moved enough (reduces noise)
+    const last = S.currentPath[S.currentPath.length-1];
+    const d = Math.sqrt((pos.x-last.x)**2+(pos.y-last.y)**2);
+    if(d > 2/S.zoom) S.currentPath.push(pos);
+    redraw();
+    // Draw smooth preview
+    if(S.currentPath.length > 2) {
+      ctx.save();ctx.translate(S.panX,S.panY);ctx.scale(S.zoom,S.zoom);
+      ctx.beginPath();
+      strokeSmoothPath(ctx, S.currentPath);
+      ctx.strokeStyle=S.color;ctx.lineWidth=2/S.zoom;ctx.lineCap='round';ctx.lineJoin='round';ctx.stroke();
+      ctx.restore();
+    }
+    return;
+  }
+
+  // Shape tools — live preview
+  if(['rect','ellipse','line','poly'].includes(S.tool)) {
+    const s=S.shapeStart||pos;
+    let pts=[];
+    if(S.tool==='rect'){
+      pts=[{x:s.x,y:s.y},{x:pos.x,y:s.y},{x:pos.x,y:pos.y},{x:s.x,y:pos.y},{x:s.x,y:s.y}];
+    } else if(S.tool==='ellipse'){
+      const rx=Math.abs(pos.x-s.x)/2,ry=Math.abs(pos.y-s.y)/2;
+      const cx=(s.x+pos.x)/2,cy=(s.y+pos.y)/2;
+      pts=[];for(let i=0;i<=48;i++){const a=i/48*Math.PI*2;pts.push({x:cx+rx*Math.cos(a),y:cy+ry*Math.sin(a)});}
+    } else if(S.tool==='line'){
+      pts=[s,pos];
+    } else if(S.tool==='poly'){
+      const r=Math.max(Math.abs(pos.x-s.x),Math.abs(pos.y-s.y));const sides=6;
+      for(let i=0;i<=sides;i++){const a=i/sides*Math.PI*2-Math.PI/6;pts.push({x:s.x+r*Math.cos(a),y:s.y+r*Math.sin(a)});}
+    }
+    S.currentPath=pts;
+    redraw();
+    return;
+  }
+});
+
+window.addEventListener('mouseup', e => {
+  if(panning){panning=false;updateCursor();return;}
+  if(e.button!==0) return;
+  const pos=mPos(e);
+
+  if(S.tool==='select'){moveInfo.active=false;saveHist();return;}
+
   if(!S.drawing) return;
-  S.currentPath.push(snap(pos));
+  S.drawing=false;
+
+  if(S.tool==='brush' && S.currentPath.length>3) {
+    // Simplify then smooth
+    const simplified = simplifyPath(S.currentPath, 1.5/S.zoom);
+    const smoothed = catmullRomPoints(simplified, 0.5);
+    S.paths.push({points:smoothed,color:S.color,stitch:S.stitch,layer:S.activeLayer,name:'Object '+(S.paths.length+1)});
+    updateStats();saveHist();
+  } else if(['rect','ellipse','line','poly'].includes(S.tool) && S.currentPath.length>1){
+    S.paths.push({points:[...S.currentPath],color:S.color,stitch:S.stitch,layer:S.activeLayer,name:'Object '+(S.paths.length+1)});
+    updateStats();saveHist();
+  }
+  S.currentPath=[];
+  S.shapeStart=null;
   redraw();
 });
 
-window.addEventListener('mouseup',e=>{
-  panning=false; updateCursor();
-  if(!S.drawing) return;
-  S.drawing=false;
-  if(S.currentPath.length>1){
-    S.paths.push({points:[...S.currentPath],color:S.color,stitch:S.stitch,layer:S.activeLayer,name:'Object '+(S.paths.length+1)});
-    updateStats(); saveHist();
+// Pen tool commit and overlay
+function commitPen(closed) {
+  if(penPoints.length < 2){penPoints=[];penActive=false;return;}
+  if(closed) penPoints.push({...penPoints[0]});
+  const smoothed = catmullRomPoints(penPoints, 0.4);
+  S.paths.push({points:smoothed,color:S.color,stitch:S.stitch,layer:S.activeLayer,name:'Object '+(S.paths.length+1)});
+  penPoints=[];penActive=false;
+  updateStats();saveHist();redraw();
+  toast('Path completed — '+smoothed.length+' points');
+}
+
+function drawPenOverlay() {
+  ctx.save();ctx.translate(S.panX,S.panY);ctx.scale(S.zoom,S.zoom);
+
+  // Draw placed points connected smoothly
+  if(penPoints.length > 1) {
+    const preview = catmullRomPoints(penPoints, 0.4);
+    ctx.beginPath();
+    strokeSmoothPath(ctx, preview);
+    ctx.strokeStyle='rgba(83,74,183,0.6)';ctx.lineWidth=1.5/S.zoom;
+    ctx.setLineDash([4/S.zoom,3/S.zoom]);ctx.lineCap='round';ctx.stroke();
+    ctx.setLineDash([]);
   }
-  S.currentPath=[]; redraw();
+
+  // Preview line to cursor
+  if(penPoints.length > 0) {
+    const last=penPoints[penPoints.length-1];
+    ctx.beginPath();ctx.moveTo(last.x,last.y);ctx.lineTo(penPreviewPos.x,penPreviewPos.y);
+    ctx.strokeStyle='rgba(83,74,183,0.35)';ctx.lineWidth=1/S.zoom;
+    ctx.setLineDash([3/S.zoom,3/S.zoom]);ctx.stroke();ctx.setLineDash([]);
+  }
+
+  // Draw anchor points — small, clean, non-intrusive
+  penPoints.forEach((pt, i) => {
+    const isFirst = i===0;
+    const nearFirst = penPoints.length>2 && isFirst &&
+      Math.sqrt((penPreviewPos.x-pt.x)**2+(penPreviewPos.y-pt.y)**2) < 12/S.zoom;
+
+    // Close path hint
+    if(nearFirst) {
+      ctx.beginPath();ctx.arc(pt.x,pt.y,7/S.zoom,0,Math.PI*2);
+      ctx.fillStyle='rgba(29,158,117,0.2)';ctx.fill();
+      ctx.strokeStyle='#1D9E75';ctx.lineWidth=1.5/S.zoom;ctx.stroke();
+    }
+
+    // Small circle anchor — not a box
+    ctx.beginPath();ctx.arc(pt.x,pt.y,2.5/S.zoom,0,Math.PI*2);
+    ctx.fillStyle=isFirst?'#1D9E75':'white';ctx.fill();
+    ctx.strokeStyle=isFirst?'#1D9E75':''+'#534AB7';ctx.lineWidth=1/S.zoom;ctx.stroke();
+  });
+
+  // Cursor dot
+  ctx.beginPath();ctx.arc(penPreviewPos.x,penPreviewPos.y,3/S.zoom,0,Math.PI*2);
+  ctx.fillStyle='rgba(83,74,183,0.8)';ctx.fill();
+
+  ctx.restore();
+}
+
+// Keyboard shortcuts for pen
+document.addEventListener('keydown', e => {
+  if(e.key==='Enter' && penActive) { commitPen(false); return; }
+  if(e.key==='Escape') {
+    if(penActive){penPoints=[];penActive=false;redraw();toast('Pen cancelled');}
+    S.selected=[];S.drawing=false;S.currentPath=[];redraw();
+  }
+  if((e.metaKey||e.ctrlKey)&&e.key==='z'){e.preventDefault();undo();}
+  if((e.metaKey||e.ctrlKey)&&e.key==='y'){e.preventDefault();redo();}
+  if((e.metaKey||e.ctrlKey)&&e.key==='s'){e.preventDefault();saveDesign();}
+  if((e.metaKey||e.ctrlKey)&&e.key==='a'){e.preventDefault();S.selected=S.paths.map((_,i)=>i);redraw();}
 });
+
+cvs.addEventListener('contextmenu',e=>{
+  e.preventDefault();
+  if(penActive){commitPen(false);return;}
+  const m=document.getElementById('ctx');
+  m.style.cssText=`left:${e.clientX}px;top:${e.clientY}px`;
+  m.classList.add('show');
+});
+
+document.addEventListener('click',()=>{
+  document.querySelectorAll('.mi.open').forEach(m=>m.classList.remove('open'));
+  document.getElementById('ctx').classList.remove('show');
+});
+
+cvs.addEventListener('wheel',e=>{
+  e.preventDefault();
+  changeZoom(e.deltaY>0?-.1:.1,mPos(e));
+},{passive:false});
 
 cvs.addEventListener('contextmenu',e=>{
   e.preventDefault();
