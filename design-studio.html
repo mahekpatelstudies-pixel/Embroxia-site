@@ -327,7 +327,7 @@ select.pinput{cursor:pointer;-webkit-appearance:none}
         <div class="ddi" onclick="toggleHoop()">Toggle hoop guide</div>
         <div class="ddi" onclick="toggleSnap()">Toggle snap</div>
         <div class="dd-sep"></div>
-        <div class="ddi" onclick="simulateStitches()">Stitch simulation<span class="kbd">⌘P</span></div>
+        <div class="ddi" onclick="runStitchSimulation()">▶ Stitch simulation<span class="kbd">⌘P</span></div>
         <div class="ddi" onclick="showGarmentPreview()">3D garment preview<span class="kbd">⌘⇧P</span></div>
         <div class="ddi" onclick="showPhotoStitch()">PhotoStitch — photo to embroidery</div>
       </div>
@@ -354,6 +354,7 @@ select.pinput{cursor:pointer;-webkit-appearance:none}
     </div>
     <div class="mi" id="m-tools" onclick="toggleMenu('m-tools',event)">Tools
       <div class="dd">
+        <div class="ddi" onclick="showAlignPanel()">⊞ Align & distribute</div>
         <div class="ddi" onclick="showPatternLibrary()">🧵 Pattern library</div>
         <div class="ddi" onclick="showShapeLibrary()">⬡ Shape library</div>
         <div class="dd-sep"></div>
@@ -1712,6 +1713,9 @@ cvs.addEventListener('mousedown', e => {
       const pi = S.selected[0];
       moveInfo = {active:true, pathIdx:pi, startX:pos.x, startY:pos.y,
         origPoints: S.paths[pi] ? JSON.parse(JSON.stringify(S.paths[pi].points)) : []};
+    } else {
+      // Start drag select
+      dragSelect={active:true,startX:pos.x,startY:pos.y,endX:pos.x,endY:pos.y};
     }
     return;
   }
@@ -1776,6 +1780,9 @@ cvs.addEventListener('mousemove', e => {
     S.panX=e.clientX-panStart.x; S.panY=e.clientY-panStart.y;
     drawRulers(); redraw(); return;
   }
+
+  // Drag select
+  if(S.tool==='select' && dragSelect.active) { updateDragSelect(pos); return; }
 
   // Move selected object
   if(S.tool==='select' && moveInfo.active && e.buttons===1 && S.selected.length>0) {
@@ -1876,7 +1883,10 @@ window.addEventListener('mouseup', e => {
   if(e.button!==0) return;
   const pos=mPos(e);
 
-  if(S.tool==='select'){moveInfo.active=false;saveHist();return;}
+  if(S.tool==='select'){
+    if(dragSelect.active){finishDragSelect();}
+    moveInfo.active=false;saveHist();return;
+  }
   if(S.tool==='node'){S.draggingNode=false;saveHist();return;}
 
   if(!S.drawing) return;
@@ -3668,6 +3678,467 @@ function restartTour(){localStorage.removeItem('embroxia_tour_done');tourIdx=0;d
 // UTILITY — updateSelectedPathProp
 // ═══════════════════════════════════════════════════
 function updateSelectedPathProp(prop,val){S.selected.forEach(idx=>{if(S.paths[idx])S.paths[idx][prop]=val;});saveHist();redraw();}
+
+
+// ═══════════════════════════════════════════════════
+// COPY / PASTE / DUPLICATE / DELETE
+// ═══════════════════════════════════════════════════
+let clipboard = [];
+
+function copySelected(){
+  if(!S.selected.length){toast('Select something first');return;}
+  clipboard = S.selected.map(i=>JSON.parse(JSON.stringify(S.paths[i])));
+  toast('✓ Copied '+clipboard.length+' object'+(clipboard.length>1?'s':''));
+}
+
+function pasteSelected(){
+  if(!clipboard.length){toast('Nothing to paste');return;}
+  saveHist();
+  const offset=10/S.zoom;
+  const newPaths=clipboard.map(p=>({
+    ...JSON.parse(JSON.stringify(p)),
+    points:p.points.map(pt=>({...pt,x:pt.x+offset,y:pt.y+offset})),
+    name:(p.name||'Object')+' copy'
+  }));
+  const startIdx=S.paths.length;
+  S.paths.push(...newPaths);
+  S.selected=newPaths.map((_,i)=>startIdx+i);
+  // Update clipboard to paste at new offset next time
+  clipboard=newPaths.map(p=>JSON.parse(JSON.stringify(p)));
+  updateStats();redraw();
+  toast('✓ Pasted '+newPaths.length+' object'+(newPaths.length>1?'s':''));
+}
+
+function duplicateSelected(){
+  if(!S.selected.length){toast('Select something first');return;}
+  copySelected();
+  pasteSelected();
+}
+
+function deleteSelected(){
+  if(!S.selected.length){toast('Select something first');return;}
+  saveHist();
+  const toDelete=new Set(S.selected);
+  S.paths=S.paths.filter((_,i)=>!toDelete.has(i));
+  S.selected=[];
+  updateStats();redraw();
+  toast('✓ Deleted');
+}
+
+function selectAll(){
+  S.selected=S.paths.map((_,i)=>i);
+  redraw();
+  toast(S.paths.length+' objects selected');
+}
+
+function deselectAll(){
+  S.selected=[];
+  redraw();
+}
+
+// ═══════════════════════════════════════════════════
+// OBJECT ORDERING
+// ═══════════════════════════════════════════════════
+function bringToFront(){
+  if(!S.selected.length) return;
+  saveHist();
+  const sel=S.selected.map(i=>S.paths[i]);
+  S.paths=S.paths.filter((_,i)=>!S.selected.includes(i));
+  S.paths.push(...sel);
+  S.selected=sel.map((_,i)=>S.paths.length-sel.length+i);
+  redraw();toast('Brought to front');
+}
+
+function sendToBack(){
+  if(!S.selected.length) return;
+  saveHist();
+  const sel=S.selected.map(i=>S.paths[i]);
+  S.paths=S.paths.filter((_,i)=>!S.selected.includes(i));
+  S.paths.unshift(...sel);
+  S.selected=sel.map((_,i)=>i);
+  redraw();toast('Sent to back');
+}
+
+function bringForward(){
+  if(!S.selected.length) return;
+  saveHist();
+  const idx=S.selected[0];
+  if(idx>=S.paths.length-1) return;
+  [S.paths[idx],S.paths[idx+1]]=[S.paths[idx+1],S.paths[idx]];
+  S.selected=[idx+1];
+  redraw();toast('Brought forward');
+}
+
+function sendBackward(){
+  if(!S.selected.length) return;
+  saveHist();
+  const idx=S.selected[0];
+  if(idx<=0) return;
+  [S.paths[idx],S.paths[idx-1]]=[S.paths[idx-1],S.paths[idx]];
+  S.selected=[idx-1];
+  redraw();toast('Sent backward');
+}
+
+// ═══════════════════════════════════════════════════
+// SCALE SELECTED OBJECT
+// ═══════════════════════════════════════════════════
+function scaleSelected(factor){
+  if(!S.selected.length){toast('Select something first');return;}
+  saveHist();
+  S.selected.forEach(idx=>{
+    if(!S.paths[idx]) return;
+    const bb=bbox(S.paths[idx].points);
+    const cx=(bb.minX+bb.maxX)/2,cy=(bb.minY+bb.maxY)/2;
+    S.paths[idx].points=S.paths[idx].points.map(pt=>({
+      ...pt,
+      x:cx+(pt.x-cx)*factor,
+      y:cy+(pt.y-cy)*factor
+    }));
+  });
+  updateStats();redraw();
+  toast('Scaled '+(factor>1?'up':'down')+' to '+Math.round(factor*100)+'%');
+}
+
+// ═══════════════════════════════════════════════════
+// DRAG-SELECT MULTIPLE OBJECTS
+// ═══════════════════════════════════════════════════
+let dragSelect={active:false,startX:0,startY:0,endX:0,endY:0};
+
+// Override select mousedown to support drag-select
+// Inject into existing mousemove handler
+function updateDragSelect(pos){
+  if(!dragSelect.active) return;
+  dragSelect.endX=pos.x;dragSelect.endY=pos.y;
+  // Draw selection rect
+  redraw();
+  ctx.save();ctx.translate(S.panX,S.panY);ctx.scale(S.zoom,S.zoom);
+  const x=Math.min(dragSelect.startX,dragSelect.endX);
+  const y=Math.min(dragSelect.startY,dragSelect.endY);
+  const w=Math.abs(dragSelect.endX-dragSelect.startX);
+  const h=Math.abs(dragSelect.endY-dragSelect.startY);
+  ctx.strokeStyle='rgba(83,74,183,0.8)';ctx.lineWidth=1/S.zoom;
+  ctx.setLineDash([3/S.zoom,2/S.zoom]);ctx.strokeRect(x,y,w,h);
+  ctx.fillStyle='rgba(83,74,183,0.06)';ctx.fillRect(x,y,w,h);
+  ctx.setLineDash([]);ctx.restore();
+}
+
+function finishDragSelect(){
+  if(!dragSelect.active) return;
+  dragSelect.active=false;
+  const x1=Math.min(dragSelect.startX,dragSelect.endX);
+  const x2=Math.max(dragSelect.startX,dragSelect.endX);
+  const y1=Math.min(dragSelect.startY,dragSelect.endY);
+  const y2=Math.max(dragSelect.startY,dragSelect.endY);
+  if(x2-x1<5&&y2-y1<5) return; // too small — was a click not a drag
+  // Select all objects whose bbox overlaps the drag rect
+  S.selected=[];
+  S.paths.forEach((p,i)=>{
+    const bb=bbox(p.points);
+    if(bb.maxX>=x1&&bb.minX<=x2&&bb.maxY>=y1&&bb.minY<=y2){
+      S.selected.push(i);
+    }
+  });
+  redraw();
+  if(S.selected.length) toast(S.selected.length+' objects selected');
+}
+
+// ═══════════════════════════════════════════════════
+// ALIGN & DISTRIBUTE
+// ═══════════════════════════════════════════════════
+function showAlignPanel(){
+  const existing=document.getElementById('align-panel');
+  if(existing){existing.remove();return;}
+
+  const panel=document.createElement('div');
+  panel.id='align-panel';
+  panel.style.cssText='position:fixed;top:80px;left:50%;transform:translateX(-50%);background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);padding:14px;z-index:300;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:8px;min-width:260px';
+
+  panel.innerHTML=`
+    <div style="font-size:12px;font-weight:500;color:var(--text);margin-bottom:4px;display:flex;justify-content:space-between;align-items:center">
+      ⊞ Align & Distribute
+      <button onclick="document.getElementById('align-panel').remove()" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:14px">✕</button>
+    </div>
+    <div style="font-size:10px;color:var(--text3);margin-bottom:4px;text-transform:uppercase;letter-spacing:.06em">Align</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px">
+      <button class="tbtn" onclick="alignObjects('left')" title="Align left">⇤ Left</button>
+      <button class="tbtn" onclick="alignObjects('centerH')" title="Center horizontal">↔ Center</button>
+      <button class="tbtn" onclick="alignObjects('right')" title="Align right">⇥ Right</button>
+      <button class="tbtn" onclick="alignObjects('top')" title="Align top">⇡ Top</button>
+      <button class="tbtn" onclick="alignObjects('centerV')" title="Center vertical">↕ Middle</button>
+      <button class="tbtn" onclick="alignObjects('bottom')" title="Align bottom">⇣ Bottom</button>
+    </div>
+    <div style="font-size:10px;color:var(--text3);margin-top:4px;margin-bottom:4px;text-transform:uppercase;letter-spacing:.06em">Distribute</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+      <button class="tbtn" onclick="distributeObjects('h')">↔ Horizontal</button>
+      <button class="tbtn" onclick="distributeObjects('v')">↕ Vertical</button>
+    </div>
+    <div style="font-size:10px;color:var(--text3);margin-top:4px;margin-bottom:4px;text-transform:uppercase;letter-spacing:.06em">Scale selected</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px">
+      <button class="tbtn" onclick="scaleSelected(0.5)">50%</button>
+      <button class="tbtn" onclick="scaleSelected(0.75)">75%</button>
+      <button class="tbtn" onclick="scaleSelected(1.5)">150%</button>
+      <button class="tbtn" onclick="scaleSelected(2)">200%</button>
+    </div>
+  `;
+  document.body.appendChild(panel);
+}
+
+function alignObjects(direction){
+  if(S.selected.length<2){toast('Select 2+ objects to align');return;}
+  saveHist();
+  const bbs=S.selected.map(i=>({i,bb:bbox(S.paths[i].points)}));
+  let target;
+  if(direction==='left') target=Math.min(...bbs.map(b=>b.bb.minX));
+  else if(direction==='right') target=Math.max(...bbs.map(b=>b.bb.maxX));
+  else if(direction==='top') target=Math.min(...bbs.map(b=>b.bb.minY));
+  else if(direction==='bottom') target=Math.max(...bbs.map(b=>b.bb.maxY));
+  else if(direction==='centerH') target=(Math.min(...bbs.map(b=>b.bb.minX))+Math.max(...bbs.map(b=>b.bb.maxX)))/2;
+  else if(direction==='centerV') target=(Math.min(...bbs.map(b=>b.bb.minY))+Math.max(...bbs.map(b=>b.bb.maxY)))/2;
+
+  bbs.forEach(({i,bb})=>{
+    let dx=0,dy=0;
+    if(direction==='left') dx=target-bb.minX;
+    else if(direction==='right') dx=target-bb.maxX;
+    else if(direction==='top') dy=target-bb.minY;
+    else if(direction==='bottom') dy=target-bb.maxY;
+    else if(direction==='centerH') dx=target-(bb.minX+bb.maxX)/2;
+    else if(direction==='centerV') dy=target-(bb.minY+bb.maxY)/2;
+    S.paths[i].points=S.paths[i].points.map(p=>({...p,x:p.x+dx,y:p.y+dy}));
+  });
+  redraw();toast('Aligned: '+direction);
+}
+
+function distributeObjects(axis){
+  if(S.selected.length<3){toast('Select 3+ objects to distribute');return;}
+  saveHist();
+  const bbs=S.selected.map(i=>({i,bb:bbox(S.paths[i].points)}));
+  if(axis==='h'){
+    bbs.sort((a,b)=>(a.bb.minX+a.bb.maxX)/2-(b.bb.minX+b.bb.maxX)/2);
+    const first=(bbs[0].bb.minX+bbs[0].bb.maxX)/2;
+    const last=(bbs[bbs.length-1].bb.minX+bbs[bbs.length-1].bb.maxX)/2;
+    const step=(last-first)/(bbs.length-1);
+    bbs.forEach(({i,bb},idx)=>{
+      const cx=(bb.minX+bb.maxX)/2;
+      const target=first+idx*step;
+      const dx=target-cx;
+      S.paths[i].points=S.paths[i].points.map(p=>({...p,x:p.x+dx}));
+    });
+  } else {
+    bbs.sort((a,b)=>(a.bb.minY+a.bb.maxY)/2-(b.bb.minY+b.bb.maxY)/2);
+    const first=(bbs[0].bb.minY+bbs[0].bb.maxY)/2;
+    const last=(bbs[bbs.length-1].bb.minY+bbs[bbs.length-1].bb.maxY)/2;
+    const step=(last-first)/(bbs.length-1);
+    bbs.forEach(({i,bb},idx)=>{
+      const cy=(bb.minY+bb.maxY)/2;
+      const target=first+idx*step;
+      const dy=target-cy;
+      S.paths[i].points=S.paths[i].points.map(p=>({...p,y:p.y+dy}));
+    });
+  }
+  redraw();toast('Distributed: '+(axis==='h'?'horizontal':'vertical'));
+}
+
+// ═══════════════════════════════════════════════════
+// STITCH SIMULATION
+// ═══════════════════════════════════════════════════
+let simActive=false,simFrame=0,simTotal=0,simRAF=null;
+
+function runStitchSimulation(){
+  if(!S.paths.length){toast('Draw something first');return;}
+  if(simActive){stopSimulation();return;}
+
+  simActive=true;simFrame=0;
+  const allPts=S.paths.flatMap((p,pi)=>
+    p.points.map((pt,i)=>({...pt,color:p.color,stitch:p.stitch,pathIdx:pi,isFirst:i===0}))
+  );
+  simTotal=allPts.length;
+
+  // Show simulation controls
+  let simBar=document.getElementById('sim-bar');
+  if(!simBar){
+    simBar=document.createElement('div');
+    simBar.id='sim-bar';
+    simBar.style.cssText='position:fixed;bottom:40px;left:50%;transform:translateX(-50%);background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);padding:10px 16px;z-index:300;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow)';
+    simBar.innerHTML=`
+      <span style="font-size:12px;color:var(--text2)">▶ Simulation</span>
+      <input type="range" id="sim-speed" min="1" max="50" value="10" style="width:80px;accent-color:var(--purple)">
+      <span style="font-size:11px;color:var(--text3)" id="sim-progress">0%</span>
+      <button class="tbtn" onclick="stopSimulation()">■ Stop</button>
+    `;
+    document.body.appendChild(simBar);
+  }
+
+  function animate(){
+    if(!simActive) return;
+    const speed=parseInt(document.getElementById('sim-speed')?.value||10);
+    simFrame=Math.min(simFrame+speed,simTotal);
+
+    // Redraw with only simFrame points
+    ctx.clearRect(0,0,cvs.width,cvs.height);
+    ctx.save();ctx.translate(S.panX,S.panY);ctx.scale(S.zoom,S.zoom);
+
+    // Draw hoop/grid background
+    if(S.showGrid) drawGrid();
+    if(S.showHoop) drawHoop();
+
+    // Draw stitches up to current frame
+    let count=0;
+    for(let pi=0;pi<S.paths.length&&count<simFrame;pi++){
+      const p=S.paths[pi];
+      const ptsToShow=Math.min(p.points.length,simFrame-count);
+      if(ptsToShow<2){count+=ptsToShow;continue;}
+      const visiblePts=p.points.slice(0,ptsToShow);
+
+      ctx.beginPath();strokeSmoothPath(ctx,visiblePts);
+      ctx.strokeStyle=p.color;
+      ctx.lineWidth=1.8/S.zoom;ctx.lineCap='round';ctx.lineJoin='round';ctx.stroke();
+
+      // Draw needle position
+      const needle=visiblePts[visiblePts.length-1];
+      ctx.beginPath();ctx.arc(needle.x,needle.y,3/S.zoom,0,Math.PI*2);
+      ctx.fillStyle='rgba(255,255,255,0.9)';ctx.fill();
+      ctx.strokeStyle='rgba(0,0,0,0.5)';ctx.lineWidth=0.8/S.zoom;ctx.stroke();
+
+      count+=ptsToShow;
+    }
+    ctx.restore();
+
+    const pct=Math.round(simFrame/simTotal*100);
+    const prog=document.getElementById('sim-progress');
+    if(prog) prog.textContent=pct+'%';
+
+    if(simFrame<simTotal) simRAF=requestAnimationFrame(animate);
+    else { simActive=false; toast('✓ Simulation complete');redraw(); }
+  }
+  simRAF=requestAnimationFrame(animate);
+  toast('▶ Simulation started — click ■ Stop to end');
+}
+
+function stopSimulation(){
+  simActive=false;
+  if(simRAF) cancelAnimationFrame(simRAF);
+  const bar=document.getElementById('sim-bar');
+  if(bar) bar.remove();
+  redraw();
+  toast('■ Simulation stopped');
+}
+
+function simulateStitches(){ runStitchSimulation(); }
+
+// ═══════════════════════════════════════════════════
+// AUTO UNDERLAY
+// ═══════════════════════════════════════════════════
+function autoUnderlay(){
+  if(!S.selected.length){
+    if(!S.paths.length){toast('Draw something first');return;}
+    // Apply to all paths if nothing selected
+    S.selected=S.paths.map((_,i)=>i);
+  }
+  saveHist();
+  const underlayPaths=[];
+  S.selected.forEach(idx=>{
+    const p=S.paths[idx];
+    if(!p||p.points.length<3) return;
+    const stitch=p.stitch||'running';
+    // Only add underlay to fill-type stitches
+    if(!['satin','fill','phulkari','zardozi','chikankari','kutch','toda'].includes(stitch)) return;
+
+    const bb=bbox(p.points);
+    const underlayType=stitch==='satin'?'edge':'zigzag';
+
+    if(underlayType==='edge'){
+      // Edge walk underlay — run stitch just inside the edge
+      const insetPts=p.points.map(pt=>{
+        // Simple inset — move toward centroid by 2mm
+        const cx=(bb.minX+bb.maxX)/2,cy=(bb.minY+bb.maxY)/2;
+        const dx=cx-pt.x,dy=cy-pt.y;
+        const len=Math.sqrt(dx*dx+dy*dy)||1;
+        return {...pt,x:pt.x+dx/len*2,y:pt.y+dy/len*2};
+      });
+      underlayPaths.push({
+        points:insetPts,color:p.color,stitch:'running',
+        layer:p.layer,name:(p.name||'Object')+' underlay',
+        opacity:0.6
+      });
+    } else {
+      // Zigzag underlay — center zigzag
+      const zigPts=[];
+      const steps=Math.max(4,Math.floor((bb.maxX-bb.minX)/10));
+      for(let i=0;i<=steps;i++){
+        const t=i/steps;
+        const x=bb.minX+(bb.maxX-bb.minX)*t;
+        zigPts.push({x,y:i%2===0?bb.minY+5:bb.maxY-5});
+      }
+      underlayPaths.push({
+        points:zigPts,color:p.color,stitch:'running',
+        layer:p.layer,name:(p.name||'Object')+' underlay',
+        opacity:0.6
+      });
+    }
+  });
+
+  if(underlayPaths.length){
+    // Insert underlay BEFORE the selected objects
+    const minIdx=Math.min(...S.selected);
+    S.paths.splice(minIdx,0,...underlayPaths);
+    S.selected=S.selected.map(i=>i+underlayPaths.length);
+    updateStats();redraw();
+    toast('✓ Added '+underlayPaths.length+' underlay path'+(underlayPaths.length>1?'s':''));
+  } else {
+    toast('Underlay added to satin/fill stitches only');
+  }
+}
+
+// ═══════════════════════════════════════════════════
+// KEYBOARD SHORTCUTS — extend existing handler
+// ═══════════════════════════════════════════════════
+document.addEventListener('keydown', e => {
+  const meta=e.metaKey||e.ctrlKey;
+  // Edit shortcuts
+  if(meta&&e.key==='c'){e.preventDefault();copySelected();return;}
+  if(meta&&e.key==='v'){e.preventDefault();pasteSelected();return;}
+  if(meta&&e.key==='d'){e.preventDefault();duplicateSelected();return;}
+  if(meta&&e.key==='a'){e.preventDefault();selectAll();return;}
+  if(e.key==='Delete'||e.key==='Backspace'){
+    if(S.selected.length&&document.activeElement===document.body){
+      e.preventDefault();deleteSelected();return;
+    }
+  }
+  // Tool shortcuts
+  if(!meta){
+    if(e.key==='v'||e.key==='V'){setTool('select');return;}
+    if(e.key==='p'||e.key==='P'){setTool('pen');return;}
+    if(e.key==='b'||e.key==='B'){setTool('brush');return;}
+    if(e.key==='n'||e.key==='N'){setTool('node');return;}
+    if(e.key==='r'||e.key==='R'){setTool('rect');return;}
+    if(e.key==='e'||e.key==='E'){setTool('ellipse');return;}
+    if(e.key==='t'||e.key==='T'){setTool('text');return;}
+    if(e.key==='x'||e.key==='X'){setTool('eraser');return;}
+    if(e.key==='z'||e.key==='Z'){setTool('zoom');return;}
+    if(e.key===']'){bringForward();return;}
+    if(e.key==='['){sendBackward();return;}
+  }
+  if(meta&&e.key==='z'){e.preventDefault();undo();return;}
+  if(meta&&e.key==='y'){e.preventDefault();redo();return;}
+  if(meta&&(e.key==='='||e.key==='+')){e.preventDefault();changeZoom(.2,{x:cvs.width/2,y:cvs.height/2});return;}
+  if(meta&&e.key==='-'){e.preventDefault();changeZoom(-.2,{x:cvs.width/2,y:cvs.height/2});return;}
+  // Pen/escape
+  if(e.key==='Enter'&&penActive){commitPen(false);return;}
+  if(e.key==='Escape'){
+    if(penActive){penPoints=[];penActive=false;redraw();toast('Pen cancelled');}
+    S.selected=[];S.drawing=false;S.currentPath=[];redraw();
+  }
+  // Nudge selected with arrow keys
+  if(S.selected.length&&['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key)){
+    e.preventDefault();
+    const step=e.shiftKey?10:1;
+    const dx=e.key==='ArrowLeft'?-step:e.key==='ArrowRight'?step:0;
+    const dy=e.key==='ArrowUp'?-step:e.key==='ArrowDown'?step:0;
+    saveHist();
+    S.selected.forEach(i=>{if(S.paths[i])S.paths[i].points=S.paths[i].points.map(p=>({...p,x:p.x+dx,y:p.y+dy}));});
+    redraw();
+  }
+});
 
 // ═══════════════════════════════════════
 // INIT
