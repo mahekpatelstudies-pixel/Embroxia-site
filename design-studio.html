@@ -1133,34 +1133,87 @@ function drawPath(p){
 
     case 'satin':
       if(p.points.length>1){
-        const bbSat=bbox(p.points);
-        const satAngle=((p.angle)||45)*Math.PI/180;
+        // Satin that follows path direction — perpendicular to path at each point
         const satDensity=Math.max(1.5,(p.density||4));
         const satStep=satDensity/S.zoom;
-        const satW=Math.sqrt(Math.pow(bbSat.maxX-bbSat.minX,2)+Math.pow(bbSat.maxY-bbSat.minY,2))*0.8+12/S.zoom;
-        const sCX=(bbSat.minX+bbSat.maxX)/2,sCY=(bbSat.minY+bbSat.maxY)/2;
+        const pts=p.points;
+        const bbSat=bbox(pts);
+        const satW=Math.sqrt(Math.pow(bbSat.maxX-bbSat.minX,2)+Math.pow(bbSat.maxY-bbSat.minY,2))+12/S.zoom;
+        const useAngle=p.angle!==undefined && p.angle!==null;
+
+        // Clip to path shape
         ctx.save();
-        ctx.beginPath();
-        strokeSmoothPath(ctx,p.points);ctx.closePath();
-        ctx.fillStyle=p.color+'12';ctx.fill();ctx.clip();
-        const spCos=Math.cos(satAngle+Math.PI/2),spSin=Math.sin(satAngle+Math.PI/2);
-        const slCos=Math.cos(satAngle),slSin=Math.sin(satAngle);
-        let sRow=0;
-        for(let d=-satW;d<=satW;d+=satStep){
-          sRow++;
-          const bx=sCX+d*spCos,by=sCY+d*spSin;
-          ctx.beginPath();ctx.moveTo(bx-slCos*satW,by-slSin*satW);ctx.lineTo(bx+slCos*satW,by+slSin*satW);
-          ctx.strokeStyle='rgba(0,0,0,0.1)';ctx.lineWidth=1.1/S.zoom;ctx.stroke();
-          ctx.beginPath();ctx.moveTo(bx-slCos*satW,by-slSin*satW);ctx.lineTo(bx+slCos*satW,by+slSin*satW);
-          ctx.strokeStyle=p.color;ctx.lineWidth=0.85/S.zoom;ctx.stroke();
-          if(sRow%4===0){
+        ctx.beginPath();strokeSmoothPath(ctx,pts);ctx.closePath();
+        ctx.fillStyle=p.color+'15';ctx.fill();ctx.clip();
+
+        if(useAngle){
+          // Fixed angle mode
+          const satAngle=(p.angle||45)*Math.PI/180;
+          const sCX=(bbSat.minX+bbSat.maxX)/2,sCY=(bbSat.minY+bbSat.maxY)/2;
+          const spCos=Math.cos(satAngle+Math.PI/2),spSin=Math.sin(satAngle+Math.PI/2);
+          const slCos=Math.cos(satAngle),slSin=Math.sin(satAngle);
+          let sRow=0;
+          for(let d=-satW;d<=satW;d+=satStep){
+            sRow++;
+            const bx=sCX+d*spCos,by=sCY+d*spSin;
             ctx.beginPath();ctx.moveTo(bx-slCos*satW,by-slSin*satW);ctx.lineTo(bx+slCos*satW,by+slSin*satW);
-            ctx.strokeStyle='rgba(255,255,255,0.18)';ctx.lineWidth=0.3/S.zoom;ctx.stroke();
+            ctx.strokeStyle='rgba(0,0,0,0.1)';ctx.lineWidth=1.1/S.zoom;ctx.stroke();
+            ctx.beginPath();ctx.moveTo(bx-slCos*satW,by-slSin*satW);ctx.lineTo(bx+slCos*satW,by+slSin*satW);
+            ctx.strokeStyle=p.color;ctx.lineWidth=0.85/S.zoom;ctx.stroke();
+            if(sRow%4===0){
+              ctx.beginPath();ctx.moveTo(bx-slCos*satW,by-slSin*satW);ctx.lineTo(bx+slCos*satW,by+slSin*satW);
+              ctx.strokeStyle='rgba(255,255,255,0.18)';ctx.lineWidth=0.3/S.zoom;ctx.stroke();
+            }
+          }
+        } else {
+          // Path-following mode — stitches perpendicular to path direction
+          // Sample evenly along path
+          const totalLen=pts.reduce((a,pt,i)=>i?a+Math.sqrt((pt.x-pts[i-1].x)**2+(pt.y-pts[i-1].y)**2):0,0);
+          const steps=Math.max(8,Math.floor(totalLen/satStep));
+
+          for(let s=0;s<=steps;s++){
+            const t=s/steps;
+            // Find point at parameter t along path
+            const targetLen=t*totalLen;
+            let cumLen=0,ptIdx=0,pt={x:pts[0].x,y:pts[0].y};
+            for(let i=1;i<pts.length;i++){
+              const segLen=Math.sqrt((pts[i].x-pts[i-1].x)**2+(pts[i].y-pts[i-1].y)**2);
+              if(cumLen+segLen>=targetLen){
+                const r=(targetLen-cumLen)/segLen;
+                pt={x:pts[i-1].x+(pts[i].x-pts[i-1].x)*r, y:pts[i-1].y+(pts[i].y-pts[i-1].y)*r};
+                ptIdx=i-1; break;
+              }
+              cumLen+=segLen;
+              pt=pts[i];ptIdx=i;
+            }
+            // Get tangent direction at this point
+            const prev=pts[Math.max(0,ptIdx-1)],next=pts[Math.min(pts.length-1,ptIdx+1)];
+            const tx=next.x-prev.x,ty=next.y-prev.y;
+            const tLen=Math.sqrt(tx*tx+ty*ty)||1;
+            // Perpendicular to tangent
+            const px=-ty/tLen,py=tx/tLen;
+            const halfW=satW*0.5;
+            ctx.beginPath();
+            ctx.moveTo(pt.x+px*halfW,pt.y+py*halfW);
+            ctx.lineTo(pt.x-px*halfW,pt.y-py*halfW);
+            ctx.strokeStyle='rgba(0,0,0,0.1)';ctx.lineWidth=1.1/S.zoom;ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(pt.x+px*halfW,pt.y+py*halfW);
+            ctx.lineTo(pt.x-px*halfW,pt.y-py*halfW);
+            ctx.strokeStyle=p.color;ctx.lineWidth=0.85/S.zoom;ctx.stroke();
+            if(s%4===0){
+              ctx.beginPath();
+              ctx.moveTo(pt.x+px*halfW,pt.y+py*halfW);
+              ctx.lineTo(pt.x-px*halfW,pt.y-py*halfW);
+              ctx.strokeStyle='rgba(255,255,255,0.18)';ctx.lineWidth=0.3/S.zoom;ctx.stroke();
+            }
           }
         }
+
         ctx.restore();
-        ctx.beginPath();strokeSmoothPath(ctx,p.points);ctx.closePath();
-        ctx.strokeStyle=p.color+'66';ctx.lineWidth=0.4/S.zoom;ctx.stroke();
+        // Outline
+        ctx.beginPath();strokeSmoothPath(ctx,pts);ctx.closePath();
+        ctx.strokeStyle=p.color+'66';ctx.lineWidth=0.5/S.zoom;ctx.stroke();
       } break;
 
     case 'fill':
@@ -1454,23 +1507,58 @@ function drawSelectionHandles(){
   if(!S.selected.length) return;
   S.selected.forEach(idx=>{
     if(!S.paths[idx]) return;
-    const bb=bbox(S.paths[idx].points);
-    const pad=8/S.zoom;
-    ctx.strokeStyle='rgba(83,74,183,0.8)';
-    ctx.lineWidth=1/S.zoom; ctx.setLineDash([3/S.zoom,2/S.zoom]);
+    const p=S.paths[idx];
+    const bb=bbox(p.points);
+    const pad=10/S.zoom;
+
+    if(S.tool==='node'){
+      // NODE MODE — show individual point handles
+      // Draw path outline first
+      ctx.save();ctx.translate(S.panX,S.panY);ctx.scale(S.zoom,S.zoom);
+      ctx.beginPath();strokeSmoothPath(ctx,p.points);
+      ctx.strokeStyle='rgba(83,74,183,0.4)';ctx.lineWidth=1.5/S.zoom;ctx.setLineDash([3/S.zoom,2/S.zoom]);ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Draw each node
+      p.points.forEach((pt,i)=>{
+        const isActive=i===S.nodeEditIdx && idx===S.nodeEditPath;
+        // Node circle
+        ctx.beginPath();ctx.arc(pt.x,pt.y,isActive?5/S.zoom:3.5/S.zoom,0,Math.PI*2);
+        ctx.fillStyle=isActive?'#534AB7':'white';ctx.fill();
+        ctx.strokeStyle='#534AB7';ctx.lineWidth=1.5/S.zoom;ctx.stroke();
+      });
+      ctx.restore();
+      return;
+    }
+
+    // SELECT MODE — show bounding box with resize handles
+    ctx.save();ctx.translate(S.panX,S.panY);ctx.scale(S.zoom,S.zoom);
+    ctx.strokeStyle='rgba(83,74,183,0.7)';
+    ctx.lineWidth=1/S.zoom;ctx.setLineDash([4/S.zoom,3/S.zoom]);
     ctx.strokeRect(bb.minX-pad,bb.minY-pad,(bb.maxX-bb.minX)+pad*2,(bb.maxY-bb.minY)+pad*2);
     ctx.setLineDash([]);
+
+    // Resize handles — 8 points
+    const hSize=5/S.zoom;
     const handles=[
-      {x:bb.minX-pad,y:bb.minY-pad},{x:bb.maxX+pad,y:bb.minY-pad},
-      {x:bb.minX-pad,y:bb.maxY+pad},{x:bb.maxX+pad,y:bb.maxY+pad},
-      {x:(bb.minX+bb.maxX)/2,y:bb.minY-pad},{x:(bb.minX+bb.maxX)/2,y:bb.maxY+pad}
+      {x:bb.minX-pad,y:bb.minY-pad},{x:(bb.minX+bb.maxX)/2,y:bb.minY-pad},{x:bb.maxX+pad,y:bb.minY-pad},
+      {x:bb.maxX+pad,y:(bb.minY+bb.maxY)/2},
+      {x:bb.maxX+pad,y:bb.maxY+pad},{x:(bb.minX+bb.maxX)/2,y:bb.maxY+pad},{x:bb.minX-pad,y:bb.maxY+pad},
+      {x:bb.minX-pad,y:(bb.minY+bb.maxY)/2}
     ];
     handles.forEach(h=>{
-      ctx.fillStyle=white; ctx.strokeStyle='#534AB7';
-      ctx.lineWidth=1/S.zoom; ctx.beginPath();
-      ctx.rect(h.x-3/S.zoom,h.y-3/S.zoom,6/S.zoom,6/S.zoom);
-      ctx.fill(); ctx.stroke();
+      ctx.fillStyle='white';ctx.strokeStyle='#534AB7';
+      ctx.lineWidth=1.5/S.zoom;ctx.beginPath();
+      ctx.rect(h.x-hSize,h.y-hSize,hSize*2,hSize*2);
+      ctx.fill();ctx.stroke();
     });
+
+    // Selected path info
+    ctx.fillStyle='rgba(83,74,183,0.8)';
+    ctx.font=(10/S.zoom)+'px DM Sans,sans-serif';ctx.textAlign='left';
+    const w=Math.round((bb.maxX-bb.minX)/10),h=Math.round((bb.maxY-bb.minY)/10);
+    ctx.fillText(w+'×'+h+'mm',bb.minX-pad,bb.minY-pad-3/S.zoom);
+    ctx.restore();
   });
 }
 const white='white';
@@ -1628,6 +1716,28 @@ cvs.addEventListener('mousedown', e => {
     return;
   }
 
+  if(S.tool==='node') {
+    // Find nearest point within threshold
+    const threshold = 12/S.zoom;
+    let bestDist = threshold, bestPath = -1, bestIdx = -1;
+    S.paths.forEach((p,pi)=>{
+      p.points.forEach((pt,idx)=>{
+        const d=Math.sqrt((pt.x-pos.x)**2+(pt.y-pos.y)**2);
+        if(d<bestDist){bestDist=d;bestPath=pi;bestIdx=idx;}
+      });
+    });
+    if(bestPath>=0){
+      S.selected=[bestPath];
+      S.nodeEditPath=bestPath;S.nodeEditIdx=bestIdx;S.draggingNode=true;
+    } else {
+      // Click empty space — select path by proximity
+      handleSelect(pos);
+      S.nodeEditPath=S.selected[0]??-1;
+      S.nodeEditIdx=-1;S.draggingNode=false;
+    }
+    redraw();return;
+  }
+
   if(S.tool==='pen') {
     if(!penActive) { penActive=true; document.getElementById('wi').style.opacity='0'; }
     if(penPoints.length > 2) {
@@ -1672,7 +1782,7 @@ cvs.addEventListener('mousemove', e => {
     const dx=pos.x-moveInfo.startX, dy=pos.y-moveInfo.startY;
     const pi=moveInfo.pathIdx;
     if(S.paths[pi]) {
-      S.paths[pi].points = moveInfo.origPoints.map(p=>({...p,x:p.x+dx,y:p.y+dy}));
+      S.paths[pi].points = moveInfo.origPoints.map(pt=>({...pt,x:pt.x+dx,y:pt.y+dy}));
     }
     redraw(); return;
   }
@@ -1680,6 +1790,19 @@ cvs.addEventListener('mousemove', e => {
   // Pen preview
   if(S.tool==='pen') {
     redraw(); drawPenOverlay();
+    return;
+  }
+
+  // Node editing — drag individual points
+  if(S.tool==='node' && S.draggingNode && S.nodeEditPath>=0 && S.nodeEditIdx>=0 && e.buttons===1){
+    if(S.paths[S.nodeEditPath]){
+      S.paths[S.nodeEditPath].points[S.nodeEditIdx]={
+        x:pos.x, y:pos.y,
+        cp1x:pos.x, cp1y:pos.y,
+        cp2x:pos.x, cp2y:pos.y
+      };
+      updateStats(); redraw();
+    }
     return;
   }
 
@@ -1754,6 +1877,7 @@ window.addEventListener('mouseup', e => {
   const pos=mPos(e);
 
   if(S.tool==='select'){moveInfo.active=false;saveHist();return;}
+  if(S.tool==='node'){S.draggingNode=false;saveHist();return;}
 
   if(!S.drawing) return;
   S.drawing=false;
@@ -1892,11 +2016,44 @@ function snap(pos){
 
 function handleSelect(pos){
   S.selected=[];
+  const threshold=10/S.zoom;
+  // First try precise point-on-path hit test
   for(let i=S.paths.length-1;i>=0;i--){
-    const bb=bbox(S.paths[i].points);
-    const pad=10/S.zoom;
-    if(pos.x>=bb.minX-pad&&pos.x<=bb.maxX+pad&&pos.y>=bb.minY-pad&&pos.y<=bb.maxY+pad){
-      S.selected=[i]; break;
+    const pts=S.paths[i].points;
+    if(!pts||pts.length<2) continue;
+    // Check each segment
+    let hit=false;
+    for(let j=1;j<pts.length;j++){
+      const ax=pts[j-1].x,ay=pts[j-1].y,bx=pts[j].x,by=pts[j].y;
+      const dx=bx-ax,dy=by-ay;
+      const len=Math.sqrt(dx*dx+dy*dy)||1;
+      const t=Math.max(0,Math.min(1,((pos.x-ax)*dx+(pos.y-ay)*dy)/(len*len)));
+      const nearX=ax+t*dx,nearY=ay+t*dy;
+      const dist=Math.sqrt((pos.x-nearX)**2+(pos.y-nearY)**2);
+      if(dist<threshold){hit=true;break;}
+    }
+    if(hit){S.selected=[i];break;}
+  }
+  // Fallback to bbox if no path hit
+  if(!S.selected.length){
+    for(let i=S.paths.length-1;i>=0;i--){
+      const bb=bbox(S.paths[i].points);
+      const pad=threshold;
+      if(pos.x>=bb.minX-pad&&pos.x<=bb.maxX+pad&&pos.y>=bb.minY-pad&&pos.y<=bb.maxY+pad){
+        S.selected=[i];break;
+      }
+    }
+  }
+  // Update props panel with selected path info
+  if(S.selected.length>0){
+    const p=S.paths[S.selected[0]];
+    if(p){
+      const densEl=document.getElementById('p-density');
+      const angleEl=document.getElementById('p-angle');
+      if(densEl&&p.density){densEl.value=p.density;const dv=document.getElementById('p-density-val');if(dv)dv.textContent=p.density;}
+      if(angleEl&&p.angle!==undefined){angleEl.value=p.angle;const av=document.getElementById('p-angle-val');if(av)av.textContent=p.angle+'°';}
+      // Update color display
+      const cc=document.getElementById('g-color');if(cc)cc.value=p.color;
     }
   }
   redraw();
@@ -1961,13 +2118,28 @@ function saveHist(){
 }
 function undo(){
   if(S.histIdx<=0){toast('Nothing to undo');return;}
-  S.histIdx--;S.paths=JSON.parse(S.history[S.histIdx]);
-  updateStats();redraw();toast('Undo');
+  S.histIdx--;
+  try{S.paths=JSON.parse(S.history[S.histIdx]);}catch(e){S.paths=[];}
+  S.selected=[];
+  updateStats();redraw();
+  toast('↩ Undo ('+S.histIdx+'/'+Math.max(0,S.history.length-1)+')');
 }
 function redo(){
   if(S.histIdx>=S.history.length-1){toast('Nothing to redo');return;}
-  S.histIdx++;S.paths=JSON.parse(S.history[S.histIdx]);
-  updateStats();redraw();toast('Redo');
+  S.histIdx++;
+  try{S.paths=JSON.parse(S.history[S.histIdx]);}catch(e){S.paths=[];}
+  S.selected=[];
+  updateStats();redraw();
+  toast('↪ Redo');
+}
+function saveHist(){
+  // Truncate future history
+  S.history=S.history.slice(0,S.histIdx+1);
+  // Save current state
+  try{S.history.push(JSON.stringify(S.paths));}catch(e){}
+  // Limit history to 50 steps
+  if(S.history.length>50){S.history.shift();}
+  S.histIdx=S.history.length-1;
 }
 
 // ═══════════════════════════════════════
@@ -2081,7 +2253,53 @@ function placeMonogram(){
 // STATS
 // ═══════════════════════════════════════
 function calcStitches(){
-  return S.paths.reduce((a,p)=>a+Math.max(0,p.points.length-1)*4,0);
+  // More accurate stitch count based on stitch type and path length
+  return S.paths.reduce((total,p)=>{
+    if(!p.points||p.points.length<2) return total;
+    // Calculate actual path length in pixels
+    let pathLen=0;
+    for(let i=1;i<p.points.length;i++){
+      pathLen+=Math.sqrt((p.points[i].x-p.points[i-1].x)**2+(p.points[i].y-p.points[i-1].y)**2);
+    }
+    // Convert pixels to mm (assuming 10px = 1mm at default zoom)
+    const lenMm=pathLen/10;
+    const density=p.density||4;
+    // Stitch count varies by type
+    const multipliers={
+      running:1, triple:3, backstitch:2, stemstitch:1.5,
+      satin:density*2, fill:density*1.5, cross:2,
+      applique:1.5, puff:density*2, redwork:1, accordion:2,
+      contour:1.5, spiral:1, radial:1, wave:1.5,
+      zardozi:density*3, kantha:2, phulkari:density*3,
+      chikankari:1.5, aari:3, kashmiri:2.5,
+      kutch:density*2, suf:density*2, toda:density*2, shisha:4
+    };
+    const mult=multipliers[p.stitch]||1;
+    return total+Math.round(lenMm*mult);
+  },0);
+}
+
+function updateStats(){
+  const count=calcStitches();
+  const colors=new Set(S.paths.map(p=>p.color)).size;
+  const trims=Math.max(0,S.paths.length-1);
+  const timeMins=Math.max(0,Math.round(count/800));
+  // Update all stat elements safely
+  const set=(id,val)=>{const el=document.getElementById(id);if(el)el.textContent=val;};
+  set('s-count',count.toLocaleString());
+  set('s-time',timeMins<1?'<1 min':timeMins+' min');
+  set('s-colors',colors);
+  set('s-objs',S.paths.length);
+  set('s-trims',trims);
+  set('st-stitches',count.toLocaleString());
+  set('st-colcount',colors);
+  // Live progress indicator color based on stitch count
+  const statusEl=document.getElementById('s-count');
+  if(statusEl){
+    if(count>50000) statusEl.style.color='var(--red,#E24B4A)';
+    else if(count>20000) statusEl.style.color='var(--gold,#EF9F27)';
+    else statusEl.style.color='var(--teal,#1D9E75)';
+  }
 }
 function updateStats(){
   const count=calcStitches();
