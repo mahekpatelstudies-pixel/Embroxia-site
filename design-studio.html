@@ -293,6 +293,9 @@ select.pinput{cursor:pointer;-webkit-appearance:none}
     <div class="mi" id="m-file" onclick="toggleMenu('m-file',event)">File
       <div class="dd">
         <div class="ddi" onclick="newDoc()">New design<span class="kbd">⌘N</span></div>
+        <div class="ddi" onclick="openLibrary()">Open from library...<span class="kbd">⌘L</span></div>
+        <div class="ddi" onclick="saveToLibrary()">Save to library<span class="kbd">⌘S</span></div>
+        <div class="dd-sep"></div>
         <div class="ddi" onclick="openFile()">Open file...<span class="kbd">⌘O</span></div>
         <div class="dd-sep"></div>
         <div class="ddi" onclick="saveDesign()">Save<span class="kbd">⌘S</span></div>
@@ -406,6 +409,7 @@ select.pinput{cursor:pointer;-webkit-appearance:none}
     </div>
     <button class="tbtn" onclick="simulateStitches()">▶ Simulate</button>
     <button class="tbtn" onclick="showGarmentPreview()" style="background:var(--bg3);color:var(--text);">👕 Preview</button>
+    <button class="tbtn" onclick="openLibrary()" title="Project Library" style="background:var(--bg4)">📁 Library</button>
     <button class="tbtn" onclick="toggleAI()" id="ai-btn" style="background:linear-gradient(135deg,#534AB7,#1D9E75);color:white;border:none;">✦ AI</button>
     <button class="tbtn primary" onclick="showExportModal()">Export ↗</button>
   </div>
@@ -3614,46 +3618,133 @@ function downloadPrintSheet(){
 function openLibrary(){renderLibrary();document.getElementById('library-modal').classList.add('show');}
 function closeLibrary(){document.getElementById('library-modal').classList.remove('show');}
 
+let _libFilter='all';
+function setLibFilter(filter,el){
+  _libFilter=filter;
+  document.querySelectorAll('[id^=lib-filter-]').forEach(b=>b.classList.remove('active'));
+  if(el) el.classList.add('active');
+  renderLibrary();
+}
+
 function renderLibrary(){
   const grid=document.getElementById('library-grid');
   const count=document.getElementById('library-count');
   if(!grid) return;
-  const lib=getLibrary();
-  if(count) count.textContent=lib.length+' designs';
+  let lib=getLibrary();
+  const search=document.getElementById('library-search')?.value?.toLowerCase()||'';
+
+  // Filter
+  if(_libFilter==='progress') lib=lib.filter(d=>d.status!=='complete');
+  if(_libFilter==='complete') lib=lib.filter(d=>d.status==='complete');
+  if(search) lib=lib.filter(d=>(d.name||'').toLowerCase().includes(search));
+
+  if(count) count.textContent=lib.length+' project'+(lib.length!==1?'s':'');
   grid.innerHTML='';
-  if(!lib.length){grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--text3);font-size:13px">No saved designs yet.<br>Press Cmd+S to save your current design.</div>';return;}
-  lib.forEach((design,i)=>{
-    const card=document.createElement('div');card.className='library-card';
-    const thumb=document.createElement('div');thumb.className='library-thumb';
-    const tc=document.createElement('canvas');tc.width=140;tc.height=90;
+
+  if(!lib.length){
+    const empty=document.createElement('div');
+    empty.style.cssText='grid-column:1/-1;text-align:center;padding:3rem;color:var(--text3)';
+    empty.innerHTML='<div style="font-size:32px;margin-bottom:12px">📁</div><div style="font-size:14px;margin-bottom:6px">No projects yet</div><div style="font-size:12px">Click "+ Save current" to save your design</div>';
+    grid.appendChild(empty);
+    return;
+  }
+
+  // Get actual lib indices for deletion
+  const fullLib=getLibrary();
+
+  lib.forEach((design)=>{
+    const fullIdx=fullLib.findIndex(d=>d.name===design.name&&d.savedAt===design.savedAt);
+    const card=document.createElement('div');
+    card.className='library-card';
+    card.style.cssText='background:var(--bg4);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;cursor:pointer;transition:all .15s;position:relative';
+    card.onmouseenter=()=>{card.style.borderColor='var(--purple)';card.style.transform='translateY(-2px)';};
+    card.onmouseleave=()=>{card.style.borderColor='';card.style.transform='';};
+
+    // Status badge
+    const isComplete=design.status==='complete';
+    const statusBadge=document.createElement('div');
+    statusBadge.style.cssText='position:absolute;top:6px;left:6px;font-size:9px;padding:2px 7px;border-radius:20px;font-weight:500;z-index:1;'+(isComplete?'background:var(--teal-light,#E1F5EE);color:var(--teal,#1D9E75)':'background:var(--gold-light,#FAEEDA);color:#854F0B');
+    statusBadge.textContent=isComplete?'✅ Complete':'🔄 In Progress';
+
+    // Thumbnail canvas
+    const tc=document.createElement('canvas');tc.width=180;tc.height=110;
     const tctx=tc.getContext('2d');
-    tctx.fillStyle='#13121f';tctx.fillRect(0,0,140,90);
-    if(design.paths?.length){
+    tctx.fillStyle='#13121f';tctx.fillRect(0,0,180,110);
+    if(design.thumbnail){
+      const img=new Image();img.onload=()=>{tctx.drawImage(img,0,0,180,110);};img.src=design.thumbnail;
+    } else if(design.paths?.length){
       const allPts=design.paths.flatMap(p=>p.points||[]);
       if(allPts.length){
         const minX=Math.min(...allPts.map(p=>p.x)),maxX=Math.max(...allPts.map(p=>p.x));
         const minY=Math.min(...allPts.map(p=>p.y)),maxY=Math.max(...allPts.map(p=>p.y));
         const w=maxX-minX||1,h=maxY-minY||1;
-        const sc=Math.min(120/w,80/h)*.85;
-        const ox=70-(minX+w/2)*sc,oy=45-(minY+h/2)*sc;
+        const sc=Math.min(160/w,100/h)*.85;
+        const ox=90-(minX+w/2)*sc,oy=55-(minY+h/2)*sc;
         design.paths.forEach(p=>{
           if(!p.points||p.points.length<2)return;
-          tctx.beginPath();p.points.forEach((pt,i)=>i?tctx.lineTo(pt.x*sc+ox,pt.y*sc+oy):tctx.moveTo(pt.x*sc+ox,pt.y*sc+oy));
+          tctx.beginPath();
+          p.points.forEach((pt,i)=>i?tctx.lineTo(pt.x*sc+ox,pt.y*sc+oy):tctx.moveTo(pt.x*sc+ox,pt.y*sc+oy));
           tctx.strokeStyle=p.color;tctx.lineWidth=1.5;tctx.lineCap='round';tctx.stroke();
         });
       }
     }
-    thumb.appendChild(tc);
-    const info=document.createElement('div');info.className='library-info';
-    info.innerHTML='<div class="library-name">'+(design.name||'Design '+(i+1))+'</div><div class="library-date">'+(design.savedAt?new Date(design.savedAt).toLocaleDateString():'')+'</div>';
-    const del=document.createElement('button');del.textContent='🗑';del.style.cssText='position:absolute;top:4px;right:4px;background:rgba(0,0,0,.5);color:white;border:none;border-radius:4px;padding:2px 6px;cursor:pointer;font-size:11px';
-    del.onclick=(e)=>{e.stopPropagation();if(confirm('Delete this design?')){deleteFromLibrary(i);renderLibrary();}};
-    thumb.style.position='relative';thumb.appendChild(del);
-    card.appendChild(thumb);card.appendChild(info);
-    card.onclick=()=>{loadFromLibrary(i);closeLibrary();};
+    tc.style.width='100%';tc.style.display='block';
+
+    // Info section
+    const info=document.createElement('div');
+    info.style.cssText='padding:10px';
+
+    const nameRow=document.createElement('div');
+    nameRow.style.cssText='display:flex;align-items:center;justify-content:space-between;margin-bottom:4px';
+    const nameEl=document.createElement('div');
+    nameEl.style.cssText='font-size:12px;font-weight:500;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1';
+    nameEl.textContent=design.name||'Untitled';
+    nameRow.appendChild(nameEl);
+
+    const meta=document.createElement('div');
+    meta.style.cssText='display:flex;gap:8px;font-size:10px;color:var(--text3);margin-bottom:6px';
+    const dateStr=design.updatedAt?new Date(design.updatedAt).toLocaleDateString('en',{month:'short',day:'numeric'}):
+                  design.savedAt?new Date(design.savedAt).toLocaleDateString('en',{month:'short',day:'numeric'}):'';
+    meta.innerHTML='<span>'+dateStr+'</span>'+(design.stitchCount?'<span>'+design.stitchCount.toLocaleString()+' st</span>':'')+(design.colors?'<span>'+design.colors+' colors</span>':'');
+
+    // Action buttons
+    const actions=document.createElement('div');
+    actions.style.cssText='display:flex;gap:4px';
+
+    const openBtn=document.createElement('button');
+    openBtn.className='tbtn primary';openBtn.style.cssText='flex:1;font-size:11px;padding:5px';
+    openBtn.textContent='Open';
+    openBtn.onclick=(e)=>{e.stopPropagation();loadFromLibrary(fullIdx);closeLibrary();};
+
+    const statusBtn=document.createElement('button');
+    statusBtn.className='tbtn';statusBtn.style.cssText='font-size:10px;padding:5px 8px';
+    statusBtn.textContent=isComplete?'↩ Reopen':'✅ Mark done';
+    statusBtn.onclick=(e)=>{
+      e.stopPropagation();
+      const lib2=getLibrary();
+      if(lib2[fullIdx]) lib2[fullIdx].status=isComplete?'progress':'complete';
+      try{localStorage.setItem('embroxia_library',JSON.stringify(lib2));}catch(err){}
+      renderLibrary();
+    };
+
+    const delBtn=document.createElement('button');
+    delBtn.className='tbtn';delBtn.style.cssText='font-size:10px;padding:5px 8px;color:var(--text3)';
+    delBtn.textContent='🗑';
+    delBtn.onclick=(e)=>{
+      e.stopPropagation();
+      if(confirm('Delete "'+design.name+'"?')){deleteFromLibrary(fullIdx);renderLibrary();}
+    };
+
+    actions.appendChild(openBtn);actions.appendChild(statusBtn);actions.appendChild(delBtn);
+    info.appendChild(nameRow);info.appendChild(meta);info.appendChild(actions);
+
+    card.appendChild(statusBadge);card.appendChild(tc);card.appendChild(info);
+    card.ondblclick=()=>{loadFromLibrary(fullIdx);closeLibrary();};
     grid.appendChild(card);
   });
 }
+
+function filterLibrary(query){renderLibrary();}
 
 function filterLibrary(query){
   const lib=getLibrary();
@@ -3666,14 +3757,46 @@ function filterLibrary(query){
   renderLibrary();
 }
 
-function saveToLibrary(){
-  if(!S.paths.length){toast('Nothing to save');return;}
-  const name=document.getElementById('doc-name')?.value||'Design '+(Date.now());
+function saveToLibrary(promptName){
+  if(!S.paths.length){toast('Nothing to save — draw a design first');return;}
+  const docName=document.getElementById('doc-name')?.value;
+  let name=docName&&docName!=='Untitled'?docName:'';
+  if(promptName||!name){
+    name=prompt('Project name:',name||'My Design')?.trim();
+    if(!name) return;
+    // Update doc name field
+    const dn=document.getElementById('doc-name');if(dn)dn.value=name;
+  }
   const lib=getLibrary();
-  lib.unshift({name,paths:JSON.parse(JSON.stringify(S.paths)),savedAt:new Date().toISOString(),stitch:S.stitch,color:S.color});
-  if(lib.length>50)lib.pop();
-  try{localStorage.setItem('embroxia_library',JSON.stringify(lib));}catch(e){}
-  toast('✓ Saved: '+name);
+  // Check if updating existing
+  const existingIdx=lib.findIndex(d=>d.name===name);
+  const entry={
+    name,
+    paths:JSON.parse(JSON.stringify(S.paths)),
+    savedAt:new Date().toISOString(),
+    updatedAt:new Date().toISOString(),
+    stitch:S.stitch,
+    color:S.color,
+    status:'progress', // default to in-progress
+    stitchCount:calcStitches(),
+    colors:[...new Set(S.paths.map(p=>p.color))].length,
+    thumbnail:generateThumb?generateThumb():null,
+  };
+  if(existingIdx>=0){
+    entry.status=lib[existingIdx].status||'progress';
+    entry.createdAt=lib[existingIdx].createdAt||lib[existingIdx].savedAt;
+    lib[existingIdx]=entry;
+    toast('✓ Updated: '+name);
+  } else {
+    entry.createdAt=new Date().toISOString();
+    lib.unshift(entry);
+    if(lib.length>100)lib.pop();
+    toast('✓ Saved: '+name);
+  }
+  try{localStorage.setItem('embroxia_library',JSON.stringify(lib));}catch(e){
+    toast('⚠️ Storage full — delete old projects');
+  }
+  markSaved&&markSaved();
   if(document.getElementById('library-modal').classList.contains('show'))renderLibrary();
 }
 
@@ -4140,6 +4263,8 @@ document.addEventListener('keydown', e => {
   if(meta&&e.key==='v'){e.preventDefault();pasteSelected();return;}
   if(meta&&e.key==='d'){e.preventDefault();duplicateSelected();return;}
   if(meta&&e.key==='a'){e.preventDefault();selectAll();return;}
+  if(meta&&e.key==='l'){e.preventDefault();openLibrary();return;}
+  if(meta&&e.key==='s'){e.preventDefault();saveToLibrary();return;}
   if(meta&&e.key==='g'&&!e.shiftKey){e.preventDefault();groupSelected();return;}
   if(meta&&e.key==='g'&&e.shiftKey){e.preventDefault();ungroupSelected();return;}
   if(e.key==='Delete'||e.key==='Backspace'){
@@ -4607,7 +4732,7 @@ toast('✦ Embroxia Studio v2 ready');
 .top-preview{width:100%;height:120px;background:var(--canvas-bg);border-radius:var(--rs);margin-bottom:12px;display:flex;align-items:center;justify-content:center;overflow:hidden;border:1px solid var(--border)}
 .print-preview{background:white;border-radius:var(--rs);padding:16px;margin-bottom:12px;color:#1a1825;max-height:350px;overflow-y:auto}
 .library-search{background:var(--bg4);border:1px solid var(--border);border-radius:var(--rs);padding:6px 12px;font-size:12px;font-family:var(--font);color:var(--text);outline:none;width:180px}
-.library-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;overflow-y:auto;flex:1;margin:10px 0;min-height:200px}
+.library-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;overflow-y:auto;flex:1;margin:10px 0;min-height:200px}
 .library-card{background:var(--bg4);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;cursor:pointer;transition:all .15s}
 .library-card:hover{border-color:var(--purple);transform:translateY(-2px)}
 .library-thumb{width:100%;height:90px;background:var(--canvas-bg)}
@@ -4708,10 +4833,27 @@ toast('✦ Embroxia Studio v2 ready');
 </div>
 
 <div class="library-modal" id="library-modal">
-  <div class="library-box">
-    <div class="library-head"><div class="library-title">📁 Design Library</div><div style="display:flex;gap:8px;align-items:center"><input class="library-search" id="library-search" placeholder="Search..." oninput="filterLibrary(this.value)"><button class="tbtn primary" onclick="saveToLibrary()">+ Save</button><button class="tbtn" onclick="closeLibrary()" style="padding:5px 10px">✕</button></div></div>
-    <div class="library-grid" id="library-grid"></div>
-    <div class="library-footer"><div class="library-count" id="library-count">0 designs</div></div>
+  <div class="library-box" style="width:860px;max-height:88vh">
+    <div class="library-head">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div class="library-title">📁 Project Library</div>
+        <div style="display:flex;gap:4px">
+          <button class="tbtn active" id="lib-filter-all" onclick="setLibFilter('all',this)" style="font-size:10px;padding:3px 10px">All</button>
+          <button class="tbtn" id="lib-filter-progress" onclick="setLibFilter('progress',this)" style="font-size:10px;padding:3px 10px">🔄 In Progress</button>
+          <button class="tbtn" id="lib-filter-complete" onclick="setLibFilter('complete',this)" style="font-size:10px;padding:3px 10px">✅ Complete</button>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <input class="library-search" id="library-search" placeholder="Search projects..." oninput="filterLibrary(this.value)">
+        <button class="tbtn primary" onclick="saveToLibrary(true)">+ Save current</button>
+        <button class="tbtn" onclick="closeLibrary()" style="padding:5px 10px">✕</button>
+      </div>
+    </div>
+    <div id="library-grid" class="library-grid"></div>
+    <div class="library-footer">
+      <div class="library-count" id="library-count">0 projects</div>
+      <div style="font-size:11px;color:var(--text3)">Saved locally · Auto-saves every 2 min</div>
+    </div>
   </div>
 </div>
 
