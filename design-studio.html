@@ -307,6 +307,9 @@ select.pinput{cursor:pointer;-webkit-appearance:none}
         <div class="ddi" onclick="undo()">Undo<span class="kbd">⌘Z</span></div>
         <div class="ddi" onclick="redo()">Redo<span class="kbd">⌘⇧Z</span></div>
         <div class="dd-sep"></div>
+        <div class="ddi" onclick="groupSelected()">Group<span class="kbd">⌘G</span></div>
+        <div class="ddi" onclick="ungroupSelected()">Ungroup<span class="kbd">⌘⇧G</span></div>
+        <div class="dd-sep"></div>
         <div class="ddi" onclick="selectAll()">Select all<span class="kbd">⌘A</span></div>
         <div class="ddi" onclick="deselectAll()">Deselect<span class="kbd">Esc</span></div>
         <div class="dd-sep"></div>
@@ -362,6 +365,7 @@ select.pinput{cursor:pointer;-webkit-appearance:none}
         <div class="ddi" onclick="pullCompensation()">Pull compensation</div>
         <div class="ddi" onclick="optimizeStitches()">Optimize stitch path</div>
         <div class="ddi" onclick="reduceColors()">Color reduction</div>
+        <div class="ddi" onclick="showColorSequence()">🎨 Color sequence</div>
         <div class="dd-sep"></div>
         <div class="ddi" onclick="mirrorH()">Mirror horizontal</div>
         <div class="ddi" onclick="mirrorV()">Mirror vertical</div>
@@ -1708,13 +1712,15 @@ cvs.addEventListener('mousedown', e => {
   if(S.tool==='zoom') { changeZoom(e.shiftKey?-.25:.25,pos); return; }
 
   if(S.tool==='select') {
+    // Check resize handle first
+    const hIdx=findHandleHit(pos);
+    if(hIdx>=0){startScaleHandle(pos,hIdx);return;}
     handleSelect(pos);
     if(S.selected.length>0) {
       const pi = S.selected[0];
       moveInfo = {active:true, pathIdx:pi, startX:pos.x, startY:pos.y,
         origPoints: S.paths[pi] ? JSON.parse(JSON.stringify(S.paths[pi].points)) : []};
     } else {
-      // Start drag select
       dragSelect={active:true,startX:pos.x,startY:pos.y,endX:pos.x,endY:pos.y};
     }
     return;
@@ -1781,6 +1787,8 @@ cvs.addEventListener('mousemove', e => {
     drawRulers(); redraw(); return;
   }
 
+  // Scale handle drag
+  if(S.tool==='select' && scaleHandle.active) { updateScaleHandle(pos); return; }
   // Drag select
   if(S.tool==='select' && dragSelect.active) { updateDragSelect(pos); return; }
 
@@ -1884,6 +1892,7 @@ window.addEventListener('mouseup', e => {
   const pos=mPos(e);
 
   if(S.tool==='select'){
+    if(scaleHandle.active){finishScaleHandle();return;}
     if(dragSelect.active){finishDragSelect();}
     moveInfo.active=false;saveHist();return;
   }
@@ -2427,14 +2436,46 @@ function exportFmt(fmt){
   if(!S.paths.length){toast('Draw a design first');return;}
   const name=document.getElementById('doc-name').value||'embroxia-design';
 
-  // Collect all stitch points scaled to 0.1mm units (standard embroidery unit)
+  // Collect all stitch points with tie-in/tie-off and pull compensation
   const stitchPts=[];
-  S.paths.forEach(path=>{
-    path.points.forEach((pt,i)=>{
-      stitchPts.push({x:Math.round(pt.x*10),y:Math.round(pt.y*10),
-        jump:i===0,color:path.color,stitch:path.stitch});
+  const pullComp=S.pull||0; // pull compensation in 0.1mm units
+  S.paths.forEach((path,pathIdx)=>{
+    const pts=path.points;
+    if(!pts||pts.length<2) return;
+
+    // TIE-IN: 3 small locking stitches at start
+    const p0=pts[0],p1=pts[1]||pts[0];
+    const dx=(p1.x-p0.x)*0.1,dy=(p1.y-p0.y)*0.1;
+    stitchPts.push({x:Math.round(p0.x*10),y:Math.round(p0.y*10),jump:true,color:path.color,stitch:path.stitch});
+    stitchPts.push({x:Math.round((p0.x+dx)*10),y:Math.round((p0.y+dy)*10),color:path.color});
+    stitchPts.push({x:Math.round(p0.x*10),y:Math.round(p0.y*10),color:path.color});
+    stitchPts.push({x:Math.round((p0.x+dx)*10),y:Math.round((p0.y+dy)*10),color:path.color});
+
+    // Main stitches with pull compensation
+    pts.forEach((pt,i)=>{
+      if(i===0) return;
+      const prev=pts[i-1];
+      // Pull compensation: expand each stitch slightly along perpendicular
+      let x=pt.x,y=pt.y;
+      if(pullComp>0){
+        const sdx=pt.x-prev.x,sdy=pt.y-prev.y;
+        const slen=Math.sqrt(sdx*sdx+sdy*sdy)||1;
+        const compMm=pullComp/10;
+        x+=(-sdy/slen)*compMm;
+        y+=(sdx/slen)*compMm;
+      }
+      stitchPts.push({x:Math.round(x*10),y:Math.round(y*10),color:path.color,stitch:path.stitch});
     });
-    stitchPts.push({trim:true}); // color change / trim between objects
+
+    // TIE-OFF: 3 small locking stitches at end
+    const pLast=pts[pts.length-1],pPrev=pts[pts.length-2]||pts[pts.length-1];
+    const edx=(pLast.x-pPrev.x)*0.1,edy=(pLast.y-pPrev.y)*0.1;
+    stitchPts.push({x:Math.round((pLast.x-edx)*10),y:Math.round((pLast.y-edy)*10),color:path.color});
+    stitchPts.push({x:Math.round(pLast.x*10),y:Math.round(pLast.y*10),color:path.color});
+    stitchPts.push({x:Math.round((pLast.x-edx)*10),y:Math.round((pLast.y-edy)*10),color:path.color});
+
+    // Color change / trim between objects
+    if(pathIdx<S.paths.length-1) stitchPts.push({trim:true});
   });
 
   let blob, mimeType='application/octet-stream';
@@ -4099,6 +4140,8 @@ document.addEventListener('keydown', e => {
   if(meta&&e.key==='v'){e.preventDefault();pasteSelected();return;}
   if(meta&&e.key==='d'){e.preventDefault();duplicateSelected();return;}
   if(meta&&e.key==='a'){e.preventDefault();selectAll();return;}
+  if(meta&&e.key==='g'&&!e.shiftKey){e.preventDefault();groupSelected();return;}
+  if(meta&&e.key==='g'&&e.shiftKey){e.preventDefault();ungroupSelected();return;}
   if(e.key==='Delete'||e.key==='Backspace'){
     if(S.selected.length&&document.activeElement===document.body){
       e.preventDefault();deleteSelected();return;
@@ -4139,6 +4182,362 @@ document.addEventListener('keydown', e => {
     redraw();
   }
 });
+
+
+// ═══════════════════════════════════════════════════
+// MIRROR / FLIP / ROTATE
+// ═══════════════════════════════════════════════════
+function mirrorH(){
+  const targets=S.selected.length?S.selected:S.paths.map((_,i)=>i);
+  if(!targets.length){toast('Nothing to mirror');return;}
+  saveHist();
+  targets.forEach(idx=>{
+    if(!S.paths[idx]) return;
+    const bb=bbox(S.paths[idx].points);
+    const cx=(bb.minX+bb.maxX)/2;
+    S.paths[idx].points=S.paths[idx].points.map(p=>({...p,x:cx*2-p.x}));
+  });
+  redraw();toast('↔ Mirrored horizontal');
+}
+
+function mirrorV(){
+  const targets=S.selected.length?S.selected:S.paths.map((_,i)=>i);
+  if(!targets.length){toast('Nothing to mirror');return;}
+  saveHist();
+  targets.forEach(idx=>{
+    if(!S.paths[idx]) return;
+    const bb=bbox(S.paths[idx].points);
+    const cy=(bb.minY+bb.maxY)/2;
+    S.paths[idx].points=S.paths[idx].points.map(p=>({...p,y:cy*2-p.y}));
+  });
+  redraw();toast('↕ Mirrored vertical');
+}
+
+function rotateSelected(deg){
+  const targets=S.selected.length?S.selected:S.paths.map((_,i)=>i);
+  if(!targets.length){toast('Nothing to rotate');return;}
+  saveHist();
+  const rad=deg*Math.PI/180;
+  // Get combined bbox center
+  const allPts=targets.flatMap(i=>S.paths[i]?.points||[]);
+  const bb=bbox(allPts);
+  const cx=(bb.minX+bb.maxX)/2,cy=(bb.minY+bb.maxY)/2;
+  targets.forEach(idx=>{
+    if(!S.paths[idx]) return;
+    S.paths[idx].points=S.paths[idx].points.map(p=>{
+      const dx=p.x-cx,dy=p.y-cy;
+      return {...p,
+        x:cx+dx*Math.cos(rad)-dy*Math.sin(rad),
+        y:cy+dx*Math.sin(rad)+dy*Math.cos(rad)
+      };
+    });
+  });
+  redraw();toast('↻ Rotated '+deg+'°');
+}
+
+function rotate90(){ rotateSelected(90); }
+function rotate180(){ rotateSelected(180); }
+function rotateMinus90(){ rotateSelected(-90); }
+
+// Free rotate — opens input
+function rotateCustom(){
+  const deg=parseFloat(prompt('Rotate by degrees (e.g. 45):','45'));
+  if(!isNaN(deg)) rotateSelected(deg);
+}
+
+
+// ═══════════════════════════════════════════════════
+// DRAG-TO-SCALE HANDLES ON CANVAS
+// ═══════════════════════════════════════════════════
+let scaleHandle={active:false,handleIdx:-1,startPos:{x:0,y:0},origBB:null,origPoints:[]};
+
+function getResizeHandles(bb,pad){
+  return [
+    {x:bb.minX-pad,y:bb.minY-pad,cursor:'nw-resize',type:'nw'},
+    {x:(bb.minX+bb.maxX)/2,y:bb.minY-pad,cursor:'n-resize',type:'n'},
+    {x:bb.maxX+pad,y:bb.minY-pad,cursor:'ne-resize',type:'ne'},
+    {x:bb.maxX+pad,y:(bb.minY+bb.maxY)/2,cursor:'e-resize',type:'e'},
+    {x:bb.maxX+pad,y:bb.maxY+pad,cursor:'se-resize',type:'se'},
+    {x:(bb.minX+bb.maxX)/2,y:bb.maxY+pad,cursor:'s-resize',type:'s'},
+    {x:bb.minX-pad,y:bb.maxY+pad,cursor:'sw-resize',type:'sw'},
+    {x:bb.minX-pad,y:(bb.minY+bb.maxY)/2,cursor:'w-resize',type:'w'},
+  ];
+}
+
+function findHandleHit(pos){
+  if(!S.selected.length||S.tool!=='select') return -1;
+  const idx=S.selected[0];
+  if(!S.paths[idx]) return -1;
+  const bb=bbox(S.paths[idx].points);
+  const pad=10/S.zoom;
+  const handles=getResizeHandles(bb,pad);
+  const hitR=8/S.zoom;
+  for(let i=0;i<handles.length;i++){
+    const d=Math.sqrt((handles[i].x-pos.x)**2+(handles[i].y-pos.y)**2);
+    if(d<hitR) return i;
+  }
+  return -1;
+}
+
+function startScaleHandle(pos,handleIdx){
+  const idx=S.selected[0];
+  if(!S.paths[idx]) return;
+  scaleHandle={
+    active:true,handleIdx,
+    startPos:{x:pos.x,y:pos.y},
+    origBB:bbox(S.paths[idx].points),
+    origPoints:JSON.parse(JSON.stringify(S.paths[idx].points)),
+    pathIdx:idx
+  };
+}
+
+function updateScaleHandle(pos){
+  if(!scaleHandle.active) return;
+  const {origBB,origPoints,pathIdx,handleIdx}=scaleHandle;
+  const handles=getResizeHandles(origBB,10/S.zoom);
+  const h=handles[handleIdx];
+  // Opposite anchor point
+  const anchors={
+    nw:{x:origBB.maxX,y:origBB.maxY},n:{x:(origBB.minX+origBB.maxX)/2,y:origBB.maxY},
+    ne:{x:origBB.minX,y:origBB.maxY},e:{x:origBB.minX,y:(origBB.minY+origBB.maxY)/2},
+    se:{x:origBB.minX,y:origBB.minY},s:{x:(origBB.minX+origBB.maxX)/2,y:origBB.minY},
+    sw:{x:origBB.maxX,y:origBB.minY},w:{x:origBB.maxX,y:(origBB.minY+origBB.maxY)/2},
+  };
+  const anchor=anchors[h.type];
+  const origW=origBB.maxX-origBB.minX||1;
+  const origH=origBB.maxY-origBB.minY||1;
+  // Scale factor based on handle type
+  let scaleX=1,scaleY=1;
+  const dx=pos.x-anchor.x, dy=pos.y-anchor.y;
+  const odx=h.x-anchor.x, ody=h.y-anchor.y;
+  if(Math.abs(odx)>1) scaleX=dx/odx;
+  if(Math.abs(ody)>1) scaleY=dy/ody;
+  // Constrain minimums
+  scaleX=Math.max(0.05,scaleX);
+  scaleY=Math.max(0.05,scaleY);
+  // Apply scale from anchor
+  if(S.paths[pathIdx]){
+    S.paths[pathIdx].points=origPoints.map(p=>({
+      ...p,
+      x:anchor.x+(p.x-anchor.x)*scaleX,
+      y:anchor.y+(p.y-anchor.y)*scaleY
+    }));
+  }
+  redraw();
+}
+
+function finishScaleHandle(){
+  if(!scaleHandle.active) return;
+  scaleHandle.active=false;
+  saveHist();
+  toast('✓ Scaled');
+}
+
+
+// ═══════════════════════════════════════════════════
+// GROUP / UNGROUP
+// ═══════════════════════════════════════════════════
+function groupSelected(){
+  if(S.selected.length<2){toast('Select 2+ objects to group');return;}
+  saveHist();
+  // Mark paths as part of a group with same groupId
+  const gid='g'+Date.now();
+  S.selected.forEach(i=>{if(S.paths[i]) S.paths[i].groupId=gid;});
+  toast('✓ Grouped '+S.selected.length+' objects');
+  redraw();
+}
+
+function ungroupSelected(){
+  if(!S.selected.length){toast('Select a group first');return;}
+  saveHist();
+  S.selected.forEach(i=>{if(S.paths[i]) delete S.paths[i].groupId;});
+  toast('✓ Ungrouped');
+  redraw();
+}
+
+// When clicking a grouped object, select all in group
+function selectGroup(idx){
+  const gid=S.paths[idx]?.groupId;
+  if(!gid){S.selected=[idx];return;}
+  S.selected=S.paths.map((p,i)=>p.groupId===gid?i:-1).filter(i=>i>=0);
+}
+
+
+// ═══════════════════════════════════════════════════
+// COLOR SEQUENCE REORDERING
+// ═══════════════════════════════════════════════════
+function showColorSequence(){
+  const existing=document.getElementById('color-seq-panel');
+  if(existing){existing.remove();return;}
+  if(!S.paths.length){toast('Draw something first');return;}
+
+  const panel=document.createElement('div');
+  panel.id='color-seq-panel';
+  panel.style.cssText='position:fixed;top:80px;right:16px;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);padding:14px;z-index:300;box-shadow:var(--shadow);width:220px;max-height:70vh;overflow-y:auto';
+
+  const colors=[...new Set(S.paths.map(p=>p.color))];
+
+  const hdr=document.createElement('div');
+  hdr.style.cssText='font-size:12px;font-weight:500;color:var(--text);margin-bottom:10px;display:flex;justify-content:space-between;align-items:center';
+  const closeBtn=document.createElement('button');
+  closeBtn.style.cssText='background:none;border:none;color:var(--text3);cursor:pointer;font-size:14px';
+  closeBtn.textContent='✕';
+  closeBtn.onclick=()=>panel.remove();
+  hdr.appendChild(document.createTextNode('🎨 Color Sequence'));
+  hdr.appendChild(closeBtn);
+  panel.appendChild(hdr);
+
+  const hint=document.createElement('div');
+  hint.style.cssText='font-size:10px;color:var(--text3);margin-bottom:8px';
+  hint.textContent='Click a color to select all objects of that color.';
+  panel.appendChild(hint);
+
+  colors.forEach((c,i)=>{
+    const count=S.paths.filter(p=>p.color===c).length;
+    const thread=Object.values(THREADS||{}).flat().find(t=>t.hex===c);
+    const row=document.createElement('div');
+    row.style.cssText='display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:var(--rs);cursor:pointer;margin-bottom:4px;background:var(--bg4);border:1px solid var(--border)';
+    row.onclick=()=>selectByColor(c);
+    const dot=document.createElement('div');
+    dot.style.cssText='width:16px;height:16px;border-radius:50%;flex-shrink:0;border:1px solid rgba(255,255,255,0.15)';
+    dot.style.background=c;
+    const info=document.createElement('div');
+    info.style.cssText='flex:1;min-width:0';
+    const n1=document.createElement('div');
+    n1.style.cssText='font-size:11px;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap';
+    n1.textContent=thread?thread.name:c;
+    const n2=document.createElement('div');
+    n2.style.cssText='font-size:10px;color:var(--text3)';
+    n2.textContent=(thread?thread.code+' · ':'')+count+' obj'+(count>1?'s':'');
+    info.appendChild(n1);info.appendChild(n2);
+    const num=document.createElement('span');
+    num.style.cssText='font-size:10px;color:var(--text3)';
+    num.textContent=i+1;
+    row.appendChild(dot);row.appendChild(info);row.appendChild(num);
+    panel.appendChild(row);
+  });
+
+  const btns=document.createElement('div');
+  btns.style.cssText='margin-top:10px;padding-top:10px;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:6px';
+  const b1=document.createElement('button');
+  b1.className='tbtn';b1.textContent='⚡ Minimize color changes';b1.onclick=optimizeColors;
+  const b2=document.createElement('button');
+  b2.className='tbtn';b2.textContent='🔀 Merge selected colors';b2.onclick=mergeSelectedColors;
+  btns.appendChild(b1);btns.appendChild(b2);
+  panel.appendChild(btns);
+
+  document.body.appendChild(panel);
+}
+
+function selectByColor(color){
+  S.selected=S.paths.map((p,i)=>p.color===color?i:-1).filter(i=>i>=0);
+  redraw();
+  toast(S.selected.length+' objects selected');
+}
+
+function optimizeColors(){
+  if(!S.paths.length) return;
+  saveHist();
+  // Group paths by color and reorder to minimize color changes
+  const colorGroups={};
+  S.paths.forEach(p=>{
+    if(!colorGroups[p.color]) colorGroups[p.color]=[];
+    colorGroups[p.color].push(p);
+  });
+  S.paths=Object.values(colorGroups).flat();
+  S.selected=[];
+  updateStats();redraw();
+  const changes=Object.keys(colorGroups).length-1;
+  toast('✓ Colors optimized — '+changes+' color changes');
+}
+
+function mergeSelectedColors(){
+  if(S.selected.length<2){toast('Select objects of different colors first');return;}
+  const targetColor=S.paths[S.selected[0]]?.color;
+  if(!targetColor) return;
+  saveHist();
+  S.selected.forEach(i=>{if(S.paths[i]) S.paths[i].color=targetColor;});
+  redraw();toast('✓ Colors merged to '+targetColor);
+}
+
+
+// ═══════════════════════════════════════════════════
+// LAYERS PANEL — show/hide/lock layers
+// ═══════════════════════════════════════════════════
+function renderLayersPanel(){
+  const list=document.getElementById('layer-list');
+  if(!list) return;
+  list.innerHTML='';
+  S.layers.forEach((layer,i)=>{
+    const item=document.createElement('div');
+    item.className='layer-item'+(i===S.activeLayer?' active':'');
+    item.style.cssText='display:flex;align-items:center;gap:6px;padding:5px 8px;border-radius:var(--rs);cursor:pointer;margin-bottom:2px;background:'+(i===S.activeLayer?'var(--pg)':'transparent');
+    item.innerHTML=
+      '<button style="background:none;border:none;cursor:pointer;color:var(--text3);padding:0;font-size:12px" onclick="toggleLayerVisibility('+i+',event)" title="'+(layer.visible?'Hide':'Show')+'">'+
+        (layer.visible?'👁':'🙈')+
+      '</button>'+
+      '<button style="background:none;border:none;cursor:pointer;color:var(--text3);padding:0;font-size:12px" onclick="toggleLayerLock('+i+',event)" title="'+(layer.locked?'Unlock':'Lock')+'">'+
+        (layer.locked?'🔒':'🔓')+
+      '</button>'+
+      '<div style="width:10px;height:10px;border-radius:50%;background:'+layer.color+';flex-shrink:0"></div>'+
+      '<span style="font-size:11px;color:var(--text);flex:1">'+layer.name+'</span>'+
+      '<span style="font-size:10px;color:var(--text3)">'+S.paths.filter(p=>p.layer===i).length+'</span>';
+    item.onclick=()=>{ S.activeLayer=i; renderLayersPanel(); toast('Active: '+layer.name); };
+    list.appendChild(item);
+  });
+}
+
+function toggleLayerVisibility(idx,e){
+  e.stopPropagation();
+  S.layers[idx].visible=!S.layers[idx].visible;
+  renderLayersPanel();redraw();
+  toast((S.layers[idx].visible?'Showing':'Hiding')+': '+S.layers[idx].name);
+}
+
+function toggleLayerLock(idx,e){
+  e.stopPropagation();
+  S.layers[idx].locked=!S.layers[idx].locked;
+  renderLayersPanel();
+  toast((S.layers[idx].locked?'Locked':'Unlocked')+': '+S.layers[idx].name);
+}
+
+function addLayer(){
+  const name=prompt('Layer name:','Layer '+(S.layers.length+1));
+  if(!name) return;
+  S.layers.push({name,color:'#'+Math.floor(Math.random()*0xFFFFFF).toString(16).padStart(6,'0'),visible:true,locked:false});
+  S.activeLayer=S.layers.length-1;
+  renderLayersPanel();toast('Layer added: '+name);
+}
+
+function deleteCurrentLayer(){
+  if(S.layers.length<=1){toast('Cannot delete the only layer');return;}
+  if(!confirm('Delete layer "'+S.layers[S.activeLayer].name+'"? Objects on this layer will be deleted.')) return;
+  saveHist();
+  S.paths=S.paths.filter(p=>p.layer!==S.activeLayer);
+  S.layers.splice(S.activeLayer,1);
+  S.activeLayer=Math.max(0,S.activeLayer-1);
+  // Re-index path layers
+  S.paths.forEach(p=>{if(p.layer>S.activeLayer)p.layer--;});
+  updateStats();redraw();renderLayersPanel();
+}
+
+// Filter drawing to respect layer visibility
+const _origRedraw=redraw;
+function redraw(){
+  ctx.clearRect(0,0,cvs.width,cvs.height);
+  ctx.save();
+  ctx.translate(S.panX,S.panY);
+  ctx.scale(S.zoom,S.zoom);
+  // Only draw visible, unlocked layers
+  const visiblePaths=S.paths.filter(p=>{
+    const layer=S.layers[p.layer||0];
+    return !layer||layer.visible!==false;
+  });
+  visiblePaths.forEach(p=>drawPath(p));
+  if(S.currentPath.length>1) drawPath({points:S.currentPath,color:S.color,stitch:S.stitch,opacity:.7});
+  drawSelectionHandles();
+  ctx.restore();
+}
 
 // ═══════════════════════════════════════
 // INIT
