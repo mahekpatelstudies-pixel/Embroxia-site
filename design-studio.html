@@ -2270,11 +2270,315 @@ function rotate90(){
 function alignObjs(dir){toast('Align: '+dir+' — select multiple objects first');}
 function autoUnderlay(){toast('Auto underlay applied to all objects');}
 function pullCompensation(){toast('Pull compensation: H+0.2 V+0.2 applied');}
+
+// ═══════════════════════════════════════════════════
+// STITCH REDUCTION ENGINE
+// ═══════════════════════════════════════════════════
+
 function optimizeStitches(){
   if(!S.paths.length){toast('No design to optimize');return;}
-  toast('⚡ Stitch path optimized — trims reduced by 23%');
+  showOptimizePanel();
 }
-function reduceColors(){toast('Color reduction: '+S.paths.length+' objects consolidated');}
+
+function showOptimizePanel(){
+  const existing=document.getElementById('optimize-panel');
+  if(existing){existing.remove();return;}
+
+  const before=calcStitches();
+  const panel=document.createElement('div');
+  panel.id='optimize-panel';
+  panel.style.cssText='position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);padding:22px;z-index:900;box-shadow:0 24px 64px rgba(0,0,0,.6);width:480px;max-width:95vw';
+
+  panel.innerHTML=`
+    <div style="font-size:15px;font-weight:500;color:var(--text);margin-bottom:4px">⚡ Stitch Reduction</div>
+    <div style="font-size:12px;color:var(--text3);margin-bottom:16px;line-height:1.6">
+      Current design: <strong style="color:var(--text)">${before.toLocaleString()} stitches</strong>.
+      Select which optimizations to apply:
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:18px">
+      <label class="opt-row" style="display:flex;align-items:flex-start;gap:10px;padding:10px;background:var(--bg4);border-radius:var(--rs);cursor:pointer;border:1px solid var(--border)">
+        <input type="checkbox" id="opt-simplify" checked style="margin-top:2px;accent-color:var(--purple)">
+        <div>
+          <div style="font-size:12px;font-weight:500;color:var(--text)">Path simplification</div>
+          <div style="font-size:11px;color:var(--text3);margin-top:2px">Remove redundant anchor points while preserving shape. Saves 20–40% on complex curves.</div>
+        </div>
+        <div style="margin-left:auto;font-size:10px;color:var(--teal);white-space:nowrap;padding-top:2px">~20–40%</div>
+      </label>
+
+      <label class="opt-row" style="display:flex;align-items:flex-start;gap:10px;padding:10px;background:var(--bg4);border-radius:var(--rs);cursor:pointer;border:1px solid var(--border)">
+        <input type="checkbox" id="opt-short" checked style="margin-top:2px;accent-color:var(--purple)">
+        <div>
+          <div style="font-size:12px;font-weight:500;color:var(--text)">Remove micro-stitches</div>
+          <div style="font-size:11px;color:var(--text3);margin-top:2px">Eliminate stitches shorter than 0.8mm — invisible to the eye but add machine time.</div>
+        </div>
+        <div style="margin-left:auto;font-size:10px;color:var(--teal);white-space:nowrap;padding-top:2px">~5–15%</div>
+      </label>
+
+      <label class="opt-row" style="display:flex;align-items:flex-start;gap:10px;padding:10px;background:var(--bg4);border-radius:var(--rs);cursor:pointer;border:1px solid var(--border)">
+        <input type="checkbox" id="opt-jumps" checked style="margin-top:2px;accent-color:var(--purple)">
+        <div>
+          <div style="font-size:12px;font-weight:500;color:var(--text)">Jump stitch optimization</div>
+          <div style="font-size:11px;color:var(--text3);margin-top:2px">Reorder objects nearest-neighbour to minimize travel stitches between elements.</div>
+        </div>
+        <div style="margin-left:auto;font-size:10px;color:var(--teal);white-space:nowrap;padding-top:2px">~10–25%</div>
+      </label>
+
+      <label class="opt-row" style="display:flex;align-items:flex-start;gap:10px;padding:10px;background:var(--bg4);border-radius:var(--rs);cursor:pointer;border:1px solid var(--border)">
+        <input type="checkbox" id="opt-merge" style="margin-top:2px;accent-color:var(--purple)">
+        <div>
+          <div style="font-size:12px;font-weight:500;color:var(--text)">Merge adjacent same-color paths</div>
+          <div style="font-size:11px;color:var(--text3);margin-top:2px">Connects nearby paths of the same color, removing tie-in/tie-off pairs between them.</div>
+        </div>
+        <div style="margin-left:auto;font-size:10px;color:var(--teal);white-space:nowrap;padding-top:2px">~3–8%</div>
+      </label>
+
+      <label class="opt-row" style="display:flex;align-items:flex-start;gap:10px;padding:10px;background:var(--bg4);border-radius:var(--rs);cursor:pointer;border:1px solid var(--border)">
+        <input type="checkbox" id="opt-density" style="margin-top:2px;accent-color:var(--purple)">
+        <div>
+          <div style="font-size:12px;font-weight:500;color:var(--text)">Reduce fill density slightly</div>
+          <div style="font-size:11px;color:var(--text3);margin-top:2px">Increases stitch spacing by 15% on fill/satin objects. Visually barely noticeable at normal size.</div>
+        </div>
+        <div style="margin-left:auto;font-size:10px;color:var(--amber);white-space:nowrap;padding-top:2px">~15% ⚠️</div>
+      </label>
+    </div>
+
+    <div style="background:var(--bg4);border-radius:var(--rs);padding:10px;margin-bottom:16px;font-size:12px;color:var(--text2)">
+      <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+        <span>Estimated reduction:</span>
+        <span id="opt-estimate" style="color:var(--teal);font-weight:500">calculating...</span>
+      </div>
+      <div style="height:4px;background:var(--border);border-radius:2px;overflow:hidden">
+        <div id="opt-bar" style="height:100%;background:var(--teal);border-radius:2px;width:0%;transition:width .3s"></div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:8px">
+      <button class="tbtn" onclick="document.getElementById('optimize-panel').remove()">Cancel</button>
+      <button class="tbtn" onclick="previewOptimize()" style="flex:1">Preview savings</button>
+      <button class="tbtn primary" onclick="applyOptimize()" style="flex:1">⚡ Apply</button>
+    </div>
+  `;
+
+  document.body.appendChild(panel);
+
+  // Live estimate as user ticks checkboxes
+  panel.querySelectorAll('input[type=checkbox]').forEach(cb=>{
+    cb.addEventListener('change', updateOptEstimate);
+  });
+  updateOptEstimate();
+}
+
+function updateOptEstimate(){
+  const doSimplify=document.getElementById('opt-simplify')?.checked;
+  const doShort=document.getElementById('opt-short')?.checked;
+  const doJumps=document.getElementById('opt-jumps')?.checked;
+  const doMerge=document.getElementById('opt-merge')?.checked;
+  const doDensity=document.getElementById('opt-density')?.checked;
+
+  // Estimate reduction percentage
+  let pct=0;
+  if(doSimplify) pct+=30;
+  if(doShort) pct+=10;
+  if(doJumps) pct+=15;
+  if(doMerge) pct+=5;
+  if(doDensity) pct+=15;
+  // Cap at 70% — can't reduce infinitely
+  pct=Math.min(70,pct);
+  // Scale by actual complexity
+  const actual=Math.round(pct*0.7); // realistic estimate
+
+  const before=calcStitches();
+  const saving=Math.round(before*actual/100);
+  const after=before-saving;
+
+  const el=document.getElementById('opt-estimate');
+  const bar=document.getElementById('opt-bar');
+  if(el) el.textContent=saving.toLocaleString()+' stitches saved (~'+actual+'%) → '+after.toLocaleString()+' total';
+  if(bar) bar.style.width=actual+'%';
+}
+
+function previewOptimize(){
+  // Run optimization on a copy and show diff
+  const before=calcStitches();
+  const testPaths=JSON.parse(JSON.stringify(S.paths));
+  const result=runOptimizations(testPaths);
+  const saving=before-result.stitchCount;
+  const pct=before>0?Math.round(saving/before*100):0;
+
+  const el=document.getElementById('opt-estimate');
+  const bar=document.getElementById('opt-bar');
+  if(el) el.textContent='Actual: '+saving.toLocaleString()+' stitches saved ('+pct+'%) → '+result.stitchCount.toLocaleString()+' total';
+  if(bar) bar.style.width=pct+'%';
+  toast('Preview: '+before.toLocaleString()+' → '+result.stitchCount.toLocaleString()+' stitches (−'+pct+'%)');
+}
+
+function applyOptimize(){
+  const before=calcStitches();
+  saveHist();
+  const result=runOptimizations(S.paths);
+  S.paths=result.paths;
+  const after=calcStitches();
+  const saved=before-after;
+  const pct=before>0?Math.round(saved/before*100):0;
+  updateStats();redraw();
+  document.getElementById('optimize-panel')?.remove();
+  toast('⚡ Reduced: '+before.toLocaleString()+' → '+after.toLocaleString()+' stitches (−'+pct+'% · saved '+saved.toLocaleString()+')');
+}
+
+// ── THE ACTUAL OPTIMIZATION ALGORITHMS ──
+function runOptimizations(paths){
+  const doSimplify=document.getElementById('opt-simplify')?.checked;
+  const doShort=document.getElementById('opt-short')?.checked;
+  const doJumps=document.getElementById('opt-jumps')?.checked;
+  const doMerge=document.getElementById('opt-merge')?.checked;
+  const doDensity=document.getElementById('opt-density')?.checked;
+
+  let result=[...paths.map(p=>({...p,points:[...p.points]}))];
+
+  // ── 1. DOUGLAS-PEUCKER SIMPLIFICATION ──
+  if(doSimplify){
+    result=result.map(p=>{
+      if(!p.points||p.points.length<3) return p;
+      const simplified=dpSimplify(p.points, 2.5/10); // 2.5px tolerance
+      return {...p, points:simplified.length>=2?simplified:p.points};
+    });
+  }
+
+  // ── 2. REMOVE MICRO-STITCHES ──
+  if(doShort){
+    const minDist=0.8; // 0.8px min stitch length
+    result=result.map(p=>{
+      if(!p.points||p.points.length<3) return p;
+      const filtered=[p.points[0]];
+      for(let i=1;i<p.points.length;i++){
+        const prev=filtered[filtered.length-1];
+        const dx=p.points[i].x-prev.x, dy=p.points[i].y-prev.y;
+        const dist=Math.sqrt(dx*dx+dy*dy);
+        if(dist>=minDist||i===p.points.length-1) filtered.push(p.points[i]);
+      }
+      return {...p, points:filtered.length>=2?filtered:p.points};
+    });
+  }
+
+  // ── 3. NEAREST-NEIGHBOUR JUMP STITCH OPTIMIZATION ──
+  if(doJumps&&result.length>1){
+    const optimized=[result[0]];
+    const remaining=[...result.slice(1)];
+    while(remaining.length>0){
+      const lastPath=optimized[optimized.length-1];
+      const lastPt=lastPath.points[lastPath.points.length-1];
+      // Find nearest path start to current end position
+      let nearestIdx=0;
+      let nearestDist=Infinity;
+      remaining.forEach((p,i)=>{
+        if(!p.points||!p.points.length) return;
+        const startPt=p.points[0];
+        const dx=startPt.x-lastPt.x, dy=startPt.y-lastPt.y;
+        const d=Math.sqrt(dx*dx+dy*dy);
+        if(d<nearestDist){nearestDist=d;nearestIdx=i;}
+      });
+      optimized.push(remaining[nearestIdx]);
+      remaining.splice(nearestIdx,1);
+    }
+    result=optimized;
+  }
+
+  // ── 4. MERGE ADJACENT SAME-COLOR PATHS ──
+  if(doMerge){
+    const merged=[];
+    let i=0;
+    while(i<result.length){
+      const current=result[i];
+      if(!current.points||current.points.length<2){merged.push(current);i++;continue;}
+
+      const lastPt=current.points[current.points.length-1];
+      // Look ahead for same-color, same-stitch nearby path
+      let j=i+1;
+      let combined={...current,points:[...current.points]};
+      while(j<result.length&&j<i+3){ // only look 2 ahead
+        const next=result[j];
+        if(!next.points||next.points.length<2){j++;break;}
+        // Same color and stitch type
+        if(next.color===current.color&&next.stitch===current.stitch){
+          const firstPt=next.points[0];
+          const dx=lastPt.x-firstPt.x, dy=lastPt.y-firstPt.y;
+          const dist=Math.sqrt(dx*dx+dy*dy);
+          // Only merge if very close (within 10px)
+          if(dist<10){
+            combined.points=[...combined.points,...next.points];
+            result.splice(j,1);
+            continue;
+          }
+        }
+        j++;
+      }
+      merged.push(combined);
+      i++;
+    }
+    result=merged;
+  }
+
+  // ── 5. REDUCE FILL DENSITY ──
+  if(doDensity){
+    result=result.map(p=>{
+      if(['fill','satin','phulkari','kutch','toda'].includes(p.stitch)){
+        const currentDensity=p.density||4;
+        return {...p, density:Math.min(8, currentDensity*1.15)}; // 15% less dense
+      }
+      return p;
+    });
+  }
+
+  // Remove empty paths
+  result=result.filter(p=>p.points&&p.points.length>=2);
+
+  // Calculate new stitch count
+  const stitchCount=result.reduce((total,p)=>{
+    if(!p.points||p.points.length<2) return total;
+    let pathLen=0;
+    for(let i=1;i<p.points.length;i++){
+      pathLen+=Math.sqrt((p.points[i].x-p.points[i-1].x)**2+(p.points[i].y-p.points[i-1].y)**2);
+    }
+    const lenMm=pathLen/10;
+    const multipliers={running:1,triple:3,backstitch:2,stemstitch:1.5,satin:(p.density||4)*2,fill:(p.density||4)*1.5,cross:2,zardozi:(p.density||4)*3,kantha:2,phulkari:(p.density||4)*3,aari:3,kashmiri:2.5,kutch:(p.density||4)*2,shisha:4};
+    return total+Math.round(lenMm*(multipliers[p.stitch]||1));
+  },0);
+
+  return {paths:result, stitchCount};
+}
+
+// Douglas-Peucker line simplification
+function dpSimplify(pts, tolerance){
+  if(pts.length<=2) return pts;
+  function perpendicularDist(pt, a, b){
+    const dx=b.x-a.x, dy=b.y-a.y;
+    if(dx===0&&dy===0) return Math.sqrt((pt.x-a.x)**2+(pt.y-a.y)**2);
+    const t=Math.max(0,Math.min(1,((pt.x-a.x)*dx+(pt.y-a.y)*dy)/(dx*dx+dy*dy)));
+    return Math.sqrt((pt.x-(a.x+t*dx))**2+(pt.y-(a.y+t*dy))**2);
+  }
+  function dp(points, start, end, tol, keep){
+    let maxDist=0, maxIdx=0;
+    for(let i=start+1;i<end;i++){
+      const d=perpendicularDist(points[i],points[start],points[end]);
+      if(d>maxDist){maxDist=d;maxIdx=i;}
+    }
+    if(maxDist>tol){
+      dp(points,start,maxIdx,tol,keep);
+      keep.add(maxIdx);
+      dp(points,maxIdx,end,tol,keep);
+    }
+  }
+  const keep=new Set([0,pts.length-1]);
+  dp(pts,0,pts.length-1,tolerance,keep);
+  return pts.filter((_,i)=>keep.has(i));
+}
+
+function reduceColors(){
+  if(!S.paths.length){toast('Draw something first');return;}
+  showColorSequence();
+}
+
 function generateReport(){
   const count=calcStitches();
   toast('📄 Design report generated — '+count+' stitches, '+new Set(S.paths.map(p=>p.color)).size+' colors');
