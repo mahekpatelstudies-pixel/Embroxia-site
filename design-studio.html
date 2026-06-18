@@ -275,6 +275,44 @@ select.pinput{cursor:pointer;-webkit-appearance:none}
 .photo-btn.primary:hover{background:var(--pl)}
 .photo-btn.secondary{background:var(--bg4);color:var(--text);border:1px solid var(--border2)}
 *{scrollbar-width:thin;scrollbar-color:var(--border2) transparent}
+
+/* ── JOB-WORK COST CALCULATOR ── */
+.cost-modal{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:900;display:none;align-items:center;justify-content:center;backdrop-filter:blur(6px)}
+.cost-modal.show{display:flex}
+.cost-box{background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);padding:0;width:700px;max-width:96vw;max-height:90vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,.6)}
+.cost-header{padding:18px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.cost-header-title{font-size:15px;font-weight:500;color:var(--text)}
+.cost-header-sub{font-size:11px;color:var(--text3);margin-top:2px}
+.cost-body{padding:20px 22px;display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.cost-section{display:flex;flex-direction:column;gap:12px}
+.cost-section-title{font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--text3);margin-bottom:2px}
+.cost-field{display:flex;flex-direction:column;gap:4px}
+.cost-label{font-size:11px;color:var(--text2)}
+.cost-input{background:var(--bg4);border:1px solid var(--border);border-radius:var(--rs);padding:7px 10px;font-size:13px;font-family:var(--font);color:var(--text);outline:none;transition:border-color .15s;width:100%}
+.cost-input:focus{border-color:var(--purple)}
+.cost-select{background:var(--bg4);border:1px solid var(--border);border-radius:var(--rs);padding:7px 10px;font-size:13px;font-family:var(--font);color:var(--text);outline:none;width:100%;cursor:pointer}
+.cost-results{grid-column:1/-1;background:var(--bg4);border-radius:var(--r);padding:16px;border:1px solid var(--border)}
+.cost-results-title{font-size:12px;font-weight:500;color:var(--text);margin-bottom:12px}
+.cost-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.cost-stat{background:var(--bg3);border-radius:var(--rs);padding:12px;text-align:center;border:1px solid var(--border)}
+.cost-stat-num{font-size:20px;font-weight:500;color:var(--purple);margin-bottom:2px}
+.cost-stat-num.gold{color:var(--gold,#EF9F27)}
+.cost-stat-num.teal{color:var(--teal,#1D9E75)}
+.cost-stat-num.red{color:#E24B4A}
+.cost-stat-label{font-size:10px;color:var(--text3)}
+.cost-breakdown{background:var(--bg3);border-radius:var(--rs);padding:12px;margin-top:10px}
+.cost-breakdown-row{display:flex;align-items:center;justify-content:space-between;padding:4px 0;border-bottom:0.5px solid var(--border);font-size:12px}
+.cost-breakdown-row:last-child{border-bottom:none;font-weight:500;padding-top:8px;font-size:13px}
+.cost-breakdown-label{color:var(--text2)}
+.cost-breakdown-value{color:var(--text)}
+.cost-warning{background:rgba(239,159,39,0.1);border:1px solid rgba(239,159,39,0.3);border-radius:var(--rs);padding:8px 12px;font-size:11px;color:#854F0B;margin-top:10px;display:none}
+.cost-warning.show{display:block}
+.cost-footer{padding:14px 22px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end}
+.cost-presets{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+.cost-preset{font-size:10px;padding:3px 10px;border-radius:20px;background:var(--bg4);border:1px solid var(--border);color:var(--text2);cursor:pointer;transition:all .12s}
+.cost-preset:hover{border-color:var(--purple);color:var(--pl)}
+.cost-preset.active{background:var(--purple);color:white;border-color:transparent}
+
 </style>
 </head>
 <body>
@@ -410,6 +448,7 @@ select.pinput{cursor:pointer;-webkit-appearance:none}
     <button class="tbtn" onclick="simulateStitches()">▶ Simulate</button>
     <button class="tbtn" onclick="showGarmentPreview()" style="background:var(--bg3);color:var(--text);">👕 Preview</button>
     <button class="tbtn" onclick="openLibrary()" title="Project Library" style="background:var(--bg4)">📁 Library</button>
+    <button class="tbtn" onclick="showCostCalc()" title="Job-work cost calculator" style="background:var(--bg4)">₹ Cost</button>
     <button class="tbtn" onclick="toggleAI()" id="ai-btn" style="background:linear-gradient(135deg,#534AB7,#1D9E75);color:white;border:none;">✦ AI</button>
     <button class="tbtn primary" onclick="showExportModal()">Export ↗</button>
   </div>
@@ -4664,6 +4703,186 @@ function redraw(){
   ctx.restore();
 }
 
+
+// ═══════════════════════════════════════════════════
+// JOB-WORK COST CALCULATOR
+// ═══════════════════════════════════════════════════
+
+const CURRENCY_SYMBOLS = {INR:'₹', USD:'$', AED:'د.إ', GBP:'£'};
+const CURRENCY_RATES = {INR:1, USD:0.012, AED:0.044, GBP:0.0095}; // approx from INR
+
+const FABRIC_FACTORS = {
+  woven:1.0, synthetic:1.1, knit:1.3, denim:1.4, silk:0.9, cap:1.2
+};
+const FABRIC_PULL_COMP = {
+  woven:'0.5mm',synthetic:'0.8mm',knit:'1.5mm',denim:'1.0mm',silk:'0.3mm',cap:'1.2mm'
+};
+const COMPLEXITY_MULT = {
+  simple:0.7, medium:1.0, complex:1.4, bridal:2.2
+};
+
+function showCostCalc(){
+  // Auto-populate stitch count from current design
+  const sc = calcStitches();
+  const colors = new Set(S.paths.map(p=>p.color)).size;
+  document.getElementById('cc-stitches').value = sc;
+  document.getElementById('cc-colors').value = colors||1;
+  calcCost();
+  document.getElementById('cost-modal').classList.add('show');
+}
+function closeCostCalc(){ document.getElementById('cost-modal').classList.remove('show'); }
+
+function setRate(r){
+  document.getElementById('cc-rate').value=r;
+  document.querySelectorAll('.cost-preset').forEach(p=>{
+    if(p.onclick&&p.onclick.toString().includes('setRate('+r+')')){p.classList.add('active');}
+    else if(p.onclick&&p.onclick.toString().includes('setRate(')) p.classList.remove('active');
+  });
+  calcCost();
+}
+function setQty(q){
+  document.getElementById('cc-qty').value=q;
+  document.querySelectorAll('.cost-preset').forEach(p=>{
+    if(p.onclick&&p.onclick.toString().includes('setQty('+q+')')){p.classList.add('active');}
+    else if(p.onclick&&p.onclick.toString().includes('setQty(')) p.classList.remove('active');
+  });
+  calcCost();
+}
+
+function onFabricChange(){
+  const fabric=document.getElementById('cc-fabric').value;
+  calcCost();
+  // Update pull comp hint
+  const hint=document.getElementById('cc-pull-hint');
+  if(hint) hint.textContent='Recommended pull comp: '+FABRIC_PULL_COMP[fabric];
+}
+
+function calcCost(){
+  const stitches=parseInt(document.getElementById('cc-stitches').value)||0;
+  const colors=parseInt(document.getElementById('cc-colors').value)||1;
+  const fabric=document.getElementById('cc-fabric').value||'woven';
+  const complexity=document.getElementById('cc-complexity').value||'medium';
+  const rpm=parseInt(document.getElementById('cc-rpm').value)||1500;
+  const currency=document.getElementById('cc-currency').value||'INR';
+  const rateRaw=parseFloat(document.getElementById('cc-rate').value)||1.5;
+  const digitizeFee=parseFloat(document.getElementById('cc-digitize').value)||0;
+  const qty=parseInt(document.getElementById('cc-qty').value)||1;
+  const heads=parseInt(document.getElementById('cc-heads').value)||12;
+
+  const sym=CURRENCY_SYMBOLS[currency]||'₹';
+  const toLocal=CURRENCY_RATES[currency]||1;
+
+  // ── CORE CALCULATIONS ──
+  const thousands=stitches/1000;
+  const fabricFactor=FABRIC_FACTORS[fabric]||1;
+  const complexMult=COMPLEXITY_MULT[complexity]||1;
+
+  // Stitch cost per piece
+  const stitchCostINR=thousands*rateRaw*complexMult;
+
+  // Color change surcharge — each change adds ~30 seconds of machine stop time
+  // At ₹1.50/1000 stitches base rate, a color change ≈ ₹2-5 surcharge
+  const colorChanges=Math.max(0,colors-1);
+  const colorSurchargeINR=colorChanges*3; // ₹3 per color change
+
+  // Fabric complexity
+  const fabricCostINR=stitchCostINR*fabricFactor+colorSurchargeINR;
+
+  // Digitizing amortised per piece
+  const digitizePerPiece=digitizeFee/qty;
+
+  // Total per piece in INR
+  const totalPieceINR=fabricCostINR+digitizePerPiece;
+  const totalPieceLoc=totalPieceINR*toLocal;
+  const totalOrderLoc=totalPieceLoc*qty;
+
+  // ── MACHINE TIME ──
+  // At speed RPM, stitching at ~75% efficiency (jumps, trims, color stops)
+  const effectiveRPM=rpm*0.75;
+  // Color change = 30 second stop each
+  const colorChangeSeconds=colorChanges*30;
+  // Time per piece in seconds
+  const stitchSeconds=(stitches/effectiveRPM)*60;
+  const totalSecondsPerPiece=stitchSeconds+colorChangeSeconds;
+  const minsPerPiece=totalSecondsPerPiece/60;
+  // Total machine time (with heads running simultaneously)
+  const totalMachineHours=(minsPerPiece*qty)/(60*heads);
+
+  // ── UPDATE UI ──
+  const fmt=(v,d=2)=>sym+v.toFixed(d);
+  document.getElementById('cc-result-stitches').textContent=stitches.toLocaleString();
+  document.getElementById('cc-result-per-piece').textContent=fmt(totalPieceLoc);
+  document.getElementById('cc-result-total').textContent=fmt(totalOrderLoc);
+  document.getElementById('cc-result-time-piece').textContent=
+    minsPerPiece<1?Math.round(minsPerPiece*60)+'s':minsPerPiece.toFixed(1)+' min';
+  document.getElementById('cc-result-time-total').textContent=
+    totalMachineHours<1?(totalMachineHours*60).toFixed(1)+' min':totalMachineHours.toFixed(1)+' hrs';
+  document.getElementById('cc-result-changes').textContent=colorChanges;
+
+  // Breakdown
+  document.getElementById('ccb-stitch').textContent=fmt(stitchCostINR*toLocal);
+  document.getElementById('ccb-color').textContent=fmt(colorSurchargeINR*toLocal);
+  document.getElementById('ccb-fabric').textContent='×'+fabricFactor.toFixed(1)+' ('+fabric+') × ×'+complexMult.toFixed(1)+' ('+complexity+')';
+  document.getElementById('ccb-digitize').textContent=fmt(digitizePerPiece*toLocal);
+  document.getElementById('ccb-total-piece').textContent=fmt(totalPieceLoc);
+  document.getElementById('ccb-total-order').textContent=fmt(totalOrderLoc);
+
+  // Warnings
+  const warn=document.getElementById('cc-warning');
+  const warnings=[];
+  if(stitches>100000) warnings.push('⚠️ Very high stitch count ('+stitches.toLocaleString()+'). Machine run time will be significant. Consider splitting into multiple hoopings.');
+  if(colorChanges>8) warnings.push('⚠️ '+colorChanges+' color changes will significantly slow production. Consider reducing colors or optimizing color sequence.');
+  if(stitches>0&&stitches<1000) warnings.push('ℹ️ Very low stitch count. Most factories have a minimum charge regardless of stitch count.');
+  if(fabric==='knit'||fabric==='silk') warnings.push('ℹ️ '+fabric+' fabric needs special stabilizer and slower machine speed for best results. Consider running at '+(Math.min(rpm,1200))+' RPM.');
+  warn.textContent=warnings.join(' ');
+  warn.classList.toggle('show',warnings.length>0);
+}
+
+function exportCostSheet(){
+  const stitches=document.getElementById('cc-stitches').value;
+  const perPiece=document.getElementById('cc-result-per-piece').textContent;
+  const total=document.getElementById('cc-result-total').textContent;
+  const time=document.getElementById('cc-result-time-piece').textContent;
+  const totalTime=document.getElementById('cc-result-time-total').textContent;
+  const changes=document.getElementById('cc-result-changes').textContent;
+  const qty=document.getElementById('cc-qty').value;
+  const name=document.getElementById('doc-name')?.value||'Design';
+  const now=new Date().toLocaleDateString('en-IN',{year:'numeric',month:'long',day:'numeric'});
+
+  const html=`<!DOCTYPE html><html><head><title>Job Quote — ${name}</title>
+<style>body{font-family:sans-serif;padding:32px;max-width:600px;margin:0 auto;color:#1a1825}
+h1{font-size:20px;margin-bottom:4px}h2{font-size:13px;color:#999;font-weight:400;margin-bottom:24px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px}
+.stat{background:#f7f5f0;border-radius:8px;padding:14px;text-align:center}
+.num{font-size:22px;font-weight:500;color:#534AB7;margin-bottom:4px}
+.lbl{font-size:11px;color:#999}
+.row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #eee;font-size:13px}
+.row:last-child{border-bottom:none;font-weight:500;font-size:14px}
+.foot{margin-top:24px;font-size:11px;color:#999;border-top:1px solid #eee;padding-top:12px;display:flex;justify-content:space-between}
+</style></head><body>
+<h1>✦ Embroxia — Job-work Quote</h1>
+<h2>${name} · ${now}</h2>
+<div class="grid">
+  <div class="stat"><div class="num">${parseInt(stitches).toLocaleString()}</div><div class="lbl">Total stitches</div></div>
+  <div class="stat"><div class="num">${perPiece}</div><div class="lbl">Cost per piece</div></div>
+  <div class="stat"><div class="num">${total}</div><div class="lbl">Total (${qty} pcs)</div></div>
+</div>
+<div class="row"><span>Machine time per piece</span><span>${time}</span></div>
+<div class="row"><span>Total machine time</span><span>${totalTime}</span></div>
+<div class="row"><span>Color changes</span><span>${changes}</span></div>
+<div class="row"><span>Order quantity</span><span>${qty} pieces</span></div>
+<div class="row"><span>Total order cost</span><span>${total}</span></div>
+<div class="foot"><span>Generated by Embroxia Studio — embroxia.com</span><span>Always verify before finalising</span></div>
+</body></html>`;
+
+  const blob=new Blob([html],{type:'text/html'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=name.replace(/\s+/g,'-').toLowerCase()+'-quote.html';
+  a.click();URL.revokeObjectURL(a.href);
+  toast('✓ Quote exported');
+}
+
 // ═══════════════════════════════════════
 // INIT
 // ═══════════════════════════════════════
@@ -4864,6 +5083,176 @@ toast('✦ Embroxia Studio v2 ready');
     <div class="tour-title" id="tour-title">Welcome to Embroxia Studio</div>
     <div class="tour-desc" id="tour-desc">Let us take a quick tour so you can start designing in under 2 minutes.</div>
     <div class="tour-btns"><button class="tour-skip" onclick="endTour()">Skip tour</button><div class="tour-dots" id="tour-dots"></div><div class="tour-nav"><button class="tour-prev" id="tour-prev" onclick="tourStep(-1)">←</button><button class="tour-next" id="tour-next" onclick="tourStep(1)">Next →</button></div></div>
+  </div>
+</div>
+
+
+<!-- JOB-WORK COST CALCULATOR -->
+<div class="cost-modal" id="cost-modal">
+  <div class="cost-box">
+    <div class="cost-header">
+      <div>
+        <div class="cost-header-title">₹ Job-work Cost Calculator</div>
+        <div class="cost-header-sub">Surat market rates · Stitch-based pricing</div>
+      </div>
+      <button onclick="closeCostCalc()" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:18px">✕</button>
+    </div>
+    <div class="cost-body">
+
+      <!-- LEFT COLUMN: Design info -->
+      <div class="cost-section">
+        <div class="cost-section-title">Design</div>
+
+        <div class="cost-field">
+          <div class="cost-label">Stitch count</div>
+          <input class="cost-input" type="number" id="cc-stitches" value="0" min="0" oninput="calcCost()">
+          <div style="font-size:10px;color:var(--text3);margin-top:2px">From your current design — or enter manually</div>
+        </div>
+
+        <div class="cost-field">
+          <div class="cost-label">Number of colors</div>
+          <input class="cost-input" type="number" id="cc-colors" value="1" min="1" max="50" oninput="calcCost()">
+        </div>
+
+        <div class="cost-field">
+          <div class="cost-label">Fabric type</div>
+          <select class="cost-select" id="cc-fabric" onchange="onFabricChange()">
+            <option value="woven">Woven (saree, dupatta, cotton)</option>
+            <option value="synthetic">Synthetic (polyester, georgette)</option>
+            <option value="knit">Knit / stretch fabric</option>
+            <option value="denim">Denim / heavy fabric</option>
+            <option value="silk">Silk / delicate fabric</option>
+            <option value="cap">Cap / structured item</option>
+          </select>
+        </div>
+
+        <div class="cost-field">
+          <div class="cost-label">Design complexity</div>
+          <select class="cost-select" id="cc-complexity" onchange="calcCost()">
+            <option value="simple">Simple — running/outline only</option>
+            <option value="medium" selected>Medium — mix of satin and fill</option>
+            <option value="complex">Complex — dense fill, Indian stitches</option>
+            <option value="bridal">Bridal — Zardozi/heavy metallic</option>
+          </select>
+        </div>
+
+        <div class="cost-field">
+          <div class="cost-label">Machine speed</div>
+          <select class="cost-select" id="cc-rpm" onchange="calcCost()">
+            <option value="800">800 RPM — slow / delicate fabric</option>
+            <option value="1200">1200 RPM — standard</option>
+            <option value="1500" selected>1500 RPM — commercial</option>
+            <option value="1800">1800 RPM — high-speed (Tajima latest)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- RIGHT COLUMN: Pricing -->
+      <div class="cost-section">
+        <div class="cost-section-title">Pricing</div>
+
+        <div class="cost-field">
+          <div class="cost-label">Currency</div>
+          <select class="cost-select" id="cc-currency" onchange="calcCost()">
+            <option value="INR">₹ Indian Rupee (INR)</option>
+            <option value="USD">$ US Dollar (USD)</option>
+            <option value="AED">د.إ UAE Dirham (AED)</option>
+            <option value="GBP">£ British Pound (GBP)</option>
+          </select>
+        </div>
+
+        <div class="cost-field">
+          <div class="cost-label">Rate per 1,000 stitches</div>
+          <input class="cost-input" type="number" id="cc-rate" value="1.50" min="0.01" step="0.01" oninput="calcCost()">
+          <div class="cost-presets" id="cc-rate-presets">
+            <span class="cost-preset" onclick="setRate(0.75)">₹0.75 budget</span>
+            <span class="cost-preset active" onclick="setRate(1.50)">₹1.50 standard</span>
+            <span class="cost-preset" onclick="setRate(2.50)">₹2.50 premium</span>
+            <span class="cost-preset" onclick="setRate(4.00)">₹4.00 bridal</span>
+          </div>
+        </div>
+
+        <div class="cost-field">
+          <div class="cost-label">Digitizing fee (one-time)</div>
+          <input class="cost-input" type="number" id="cc-digitize" value="500" min="0" oninput="calcCost()">
+          <div style="font-size:10px;color:var(--text3);margin-top:2px">One-time charge to convert design to machine file</div>
+        </div>
+
+        <div class="cost-field">
+          <div class="cost-label">Order quantity (pieces)</div>
+          <input class="cost-input" type="number" id="cc-qty" value="100" min="1" oninput="calcCost()">
+          <div class="cost-presets">
+            <span class="cost-preset" onclick="setQty(1)">1 pc</span>
+            <span class="cost-preset" onclick="setQty(12)">12</span>
+            <span class="cost-preset" onclick="setQty(50)">50</span>
+            <span class="cost-preset active" onclick="setQty(100)">100</span>
+            <span class="cost-preset" onclick="setQty(500)">500</span>
+            <span class="cost-preset" onclick="setQty(1000)">1000</span>
+          </div>
+        </div>
+
+        <div class="cost-field">
+          <div class="cost-label">Machine heads (simultaneous)</div>
+          <select class="cost-select" id="cc-heads" onchange="calcCost()">
+            <option value="1">1 head</option>
+            <option value="4">4 heads</option>
+            <option value="6">6 heads</option>
+            <option value="8">8 heads</option>
+            <option value="12" selected>12 heads</option>
+            <option value="15">15 heads</option>
+            <option value="20">20 heads</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- RESULTS -->
+      <div class="cost-results">
+        <div class="cost-results-title">Results</div>
+
+        <div class="cost-grid">
+          <div class="cost-stat">
+            <div class="cost-stat-num" id="cc-result-stitches">0</div>
+            <div class="cost-stat-label">Total stitches</div>
+          </div>
+          <div class="cost-stat">
+            <div class="cost-stat-num gold" id="cc-result-per-piece">₹0.00</div>
+            <div class="cost-stat-label">Cost per piece</div>
+          </div>
+          <div class="cost-stat">
+            <div class="cost-stat-num teal" id="cc-result-total">₹0.00</div>
+            <div class="cost-stat-label">Total job cost</div>
+          </div>
+          <div class="cost-stat">
+            <div class="cost-stat-num" id="cc-result-time-piece">0 min</div>
+            <div class="cost-stat-label">Time per piece</div>
+          </div>
+          <div class="cost-stat">
+            <div class="cost-stat-num" id="cc-result-time-total">0 hrs</div>
+            <div class="cost-stat-label">Total machine time</div>
+          </div>
+          <div class="cost-stat">
+            <div class="cost-stat-num red" id="cc-result-changes">0</div>
+            <div class="cost-stat-label">Color changes</div>
+          </div>
+        </div>
+
+        <div class="cost-breakdown">
+          <div class="cost-breakdown-row"><span class="cost-breakdown-label">Stitch cost (per piece)</span><span class="cost-breakdown-value" id="ccb-stitch">₹0.00</span></div>
+          <div class="cost-breakdown-row"><span class="cost-breakdown-label">Color change surcharge</span><span class="cost-breakdown-value" id="ccb-color">₹0.00</span></div>
+          <div class="cost-breakdown-row"><span class="cost-breakdown-label">Fabric complexity factor</span><span class="cost-breakdown-value" id="ccb-fabric">×1.0</span></div>
+          <div class="cost-breakdown-row"><span class="cost-breakdown-label">Digitizing fee (÷ qty)</span><span class="cost-breakdown-value" id="ccb-digitize">₹0.00</span></div>
+          <div class="cost-breakdown-row"><span class="cost-breakdown-label">Total per piece</span><span class="cost-breakdown-value" id="ccb-total-piece">₹0.00</span></div>
+          <div class="cost-breakdown-row" style="color:var(--teal)"><span class="cost-breakdown-label" style="font-weight:500">Total order cost</span><span class="cost-breakdown-value" id="ccb-total-order">₹0.00</span></div>
+        </div>
+
+        <div class="cost-warning" id="cc-warning"></div>
+      </div>
+
+    </div>
+    <div class="cost-footer">
+      <button class="tbtn" onclick="exportCostSheet()">↓ Export quote</button>
+      <button class="tbtn primary" onclick="closeCostCalc()">Done</button>
+    </div>
   </div>
 </div>
 
