@@ -3492,7 +3492,327 @@ function shadeColor(hex,pct){
 // PHOTOSTITCH
 // ═══════════════════════════════════════
 let psImageData=null;
-function showPhotoStitch(){document.getElementById('photo-modal').classList.add('show');}
+
+// ═══════════════════════════════════════════════════
+// PHOTOSTITCH — Real photo to embroidery conversion
+// ═══════════════════════════════════════════════════
+
+function showPhotoStitch(){
+  document.getElementById('photo-modal').classList.add('show');
+}
+function closePhotoModal(){
+  document.getElementById('photo-modal').classList.remove('show');
+  psImageData=null;psImageBase64=null;
+  document.getElementById('ps-preview').style.display='none';
+  document.getElementById('ps-convert-btn').disabled=true;
+}
+
+function handlePhotoStitch(e){
+  const file=e.target.files[0];
+  if(!file) return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    const img=document.getElementById('ps-preview');
+    img.src=ev.target.result;
+    img.style.display='block';
+    psImageBase64=ev.target.result.split(',')[1];
+    img.onload=()=>{
+      document.getElementById('ps-convert-btn').disabled=false;
+      toast('✓ Image loaded — ready to convert');
+    };
+  };
+  reader.readAsDataURL(file);
+  e.target.value='';
+}
+
+async function convertPhotoToStitch(){
+  const btn=document.getElementById('ps-convert-btn');
+  if(!psImageBase64){toast('Upload an image first');return;}
+  btn.disabled=true;btn.textContent='Converting...';
+
+  const detail=parseInt(document.getElementById('ps-detail')?.value||5);
+  const stitchPref=document.getElementById('ps-stitch')?.value||'satin';
+  const maxColors=parseInt(document.getElementById('ps-colors')?.value||6);
+
+  try{
+    // STEP 1: Extract colors + regions using Canvas
+    toast('Step 1/3 — Analysing image colors...');
+    const imgEl=document.getElementById('ps-preview');
+    const offCanvas=document.createElement('canvas');
+    const scale=Math.min(1,200/Math.max(imgEl.naturalWidth,imgEl.naturalHeight));
+    offCanvas.width=Math.round(imgEl.naturalWidth*scale);
+    offCanvas.height=Math.round(imgEl.naturalHeight*scale);
+    const offCtx=offCanvas.getContext('2d');
+    offCtx.drawImage(imgEl,0,0,offCanvas.width,offCanvas.height);
+    const imgData=offCtx.getImageData(0,0,offCanvas.width,offCanvas.height);
+
+    // K-means color quantization
+    const palette=quantizeColors(imgData,maxColors);
+    const colorMap=mapPixelsToPalette(imgData,palette);
+
+    // STEP 2: Edge detection + contour tracing
+    toast('Step 2/3 — Tracing edges and regions...');
+    const edges=detectEdges(imgData);
+    const contours=traceContours(edges,offCanvas.width,offCanvas.height,detail);
+
+    // STEP 3: Use Anthropic API to intelligently assign stitch types
+    toast('Step 3/3 — AI assigning stitch types...');
+    let stitchAssignments=null;
+    try{
+      const res=await fetch('https://api.anthropic.com/v1/messages',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({
+          model:'claude-sonnet-4-6',
+          max_tokens:800,
+          messages:[{
+            role:'user',
+            content:[
+              {type:'image',source:{type:'base64',media_type:'image/jpeg',data:psImageBase64}},
+              {type:'text',text:'Analyse this image for embroidery digitizing. Return ONLY valid JSON. Format: {"regions":[{"name":"string","type":"outline/fill/detail","stitchType":"running/satin/fill/cross/backstitch","color":"#hex"}],"dominantStyle":"logo/photo/flat","complexity":"simple/medium/complex"}. Identify up to '+maxColors+' regions. Logos: satin for outlines, fill for areas. Photos: cross stitch or fill.'}
+            ]
+          }]
+        })
+      });
+      const data=await res.json();
+      const raw=data.content?.[0]?.text||'{}';
+      const clean=raw.replace(/```json|```/g,'').trim();
+      stitchAssignments=JSON.parse(clean);
+    }catch(err){
+      // API failed — fall back to pure canvas approach
+      console.log('API unavailable, using canvas only');
+    }
+
+    // STEP 4: Place paths on canvas
+    saveHist();
+    const cx=cvs.width/2/S.zoom-S.panX/S.zoom;
+    const cy=cvs.height/2/S.zoom-S.panY/S.zoom;
+    const targetW=Math.min(300,cvs.width*.5/S.zoom);
+    const targetH=targetW*(offCanvas.height/offCanvas.width);
+    const scaleX=targetW/offCanvas.width;
+    const scaleY=targetH/offCanvas.height;
+    const ox=cx-targetW/2, oy=cy-targetH/2;
+
+    let pathsAdded=0;
+
+    // Place contour paths
+    contours.forEach((contour,ci)=>{
+      if(contour.points.length<3) return;
+      // Get dominant color for this contour
+      const midPt=contour.points[Math.floor(contour.points.length/2)];
+      const px=Math.round(midPt.x);
+      const py=Math.round(midPt.y);
+      const i=(py*offCanvas.width+px)*4;
+      const r=imgData.data[i]||80;
+      const g=imgData.data[i+1]||80;
+      const b=imgData.data[i+2]||80;
+      // Find nearest palette color
+      const nearestColor=findNearestPaletteColor([r,g,b],palette);
+      const hex=rgbToHex(nearestColor[0],nearestColor[1],nearestColor[2]);
+
+      // Determine stitch type
+      let stitch=stitchPref;
+      if(stitchAssignments?.regions){
+        const region=stitchAssignments.regions[ci%stitchAssignments.regions.length];
+        if(region?.stitchType) stitch=region.stitchType;
+      } else {
+        // Heuristic: large contours = fill, small = running
+        const area=contourArea(contour.points);
+        if(area>500) stitch=stitchPref==='satin'?'fill':stitchPref;
+        else stitch='running';
+      }
+
+      const pts=contour.points.map(p=>({
+        x:ox+p.x*scaleX, y:oy+p.y*scaleY,
+        cp1x:ox+p.x*scaleX, cp1y:oy+p.y*scaleY,
+        cp2x:ox+p.x*scaleX, cp2y:oy+p.y*scaleY
+      }));
+
+      if(pts.length>=2){
+        S.paths.push({points:pts,color:hex,stitch,layer:S.activeLayer,name:'Photo region '+(ci+1)});
+        pathsAdded++;
+      }
+    });
+
+    // Add edge outlines on top
+    if(contours.length>0 && detail>=5){
+      const edgePaths=traceEdgePaths(edges,offCanvas.width,offCanvas.height,detail);
+      edgePaths.forEach((ep,ei)=>{
+        if(ep.length<2) return;
+        const pts=ep.map(p=>({
+          x:ox+p.x*scaleX, y:oy+p.y*scaleY,
+          cp1x:ox+p.x*scaleX, cp1y:oy+p.y*scaleY,
+          cp2x:ox+p.x*scaleX, cp2y:oy+p.y*scaleY
+        }));
+        S.paths.push({points:pts,color:'#1a1825',stitch:'running',layer:S.activeLayer,name:'Edge '+ei});
+        pathsAdded++;
+      });
+    }
+
+    document.getElementById('wi').style.opacity='0';
+    updateStats();redraw();
+    closePhotoModal();
+    btn.textContent='Convert to embroidery';
+    btn.disabled=false;
+    toast('✓ PhotoStitch: '+pathsAdded+' paths placed — '+calcStitches().toLocaleString()+' stitches');
+
+  }catch(err){
+    btn.textContent='Convert to embroidery';
+    btn.disabled=false;
+    toast('Error: '+err.message);
+    console.error(err);
+  }
+}
+
+// ── COLOR QUANTIZATION (k-means) ──
+function quantizeColors(imgData, k){
+  const pixels=[];
+  for(let i=0;i<imgData.data.length;i+=4){
+    if(imgData.data[i+3]<128) continue; // skip transparent
+    pixels.push([imgData.data[i],imgData.data[i+1],imgData.data[i+2]]);
+  }
+  // Sample pixels for speed
+  const sampled=pixels.filter((_,i)=>i%10===0);
+  // Init centroids randomly
+  let centroids=sampled.sort(()=>Math.random()-.5).slice(0,k);
+  for(let iter=0;iter<8;iter++){
+    const clusters=Array.from({length:k},()=>[]);
+    sampled.forEach(px=>{
+      let best=0,bestD=Infinity;
+      centroids.forEach((c,i)=>{
+        const d=(px[0]-c[0])**2+(px[1]-c[1])**2+(px[2]-c[2])**2;
+        if(d<bestD){bestD=d;best=i;}
+      });
+      clusters[best].push(px);
+    });
+    centroids=clusters.map(cl=>{
+      if(!cl.length) return [128,128,128];
+      return [
+        Math.round(cl.reduce((a,p)=>a+p[0],0)/cl.length),
+        Math.round(cl.reduce((a,p)=>a+p[1],0)/cl.length),
+        Math.round(cl.reduce((a,p)=>a+p[2],0)/cl.length)
+      ];
+    });
+  }
+  return centroids;
+}
+
+function mapPixelsToPalette(imgData,palette){
+  const map=new Uint8Array(imgData.data.length/4);
+  for(let i=0,j=0;i<imgData.data.length;i+=4,j++){
+    const r=imgData.data[i],g=imgData.data[i+1],b=imgData.data[i+2];
+    let best=0,bestD=Infinity;
+    palette.forEach((c,ci)=>{
+      const d=(r-c[0])**2+(g-c[1])**2+(b-c[2])**2;
+      if(d<bestD){bestD=d;best=ci;}
+    });
+    map[j]=best;
+  }
+  return map;
+}
+
+function findNearestPaletteColor(rgb,palette){
+  let best=palette[0],bestD=Infinity;
+  palette.forEach(c=>{
+    const d=(rgb[0]-c[0])**2+(rgb[1]-c[1])**2+(rgb[2]-c[2])**2;
+    if(d<bestD){bestD=d;best=c;}
+  });
+  return best;
+}
+
+function rgbToHex(r,g,b){
+  return '#'+[r,g,b].map(v=>Math.round(v).toString(16).padStart(2,'0')).join('');
+}
+
+// ── EDGE DETECTION (Sobel) ──
+function detectEdges(imgData){
+  const w=imgData.width,h=imgData.height;
+  const gray=new Float32Array(w*h);
+  for(let i=0,j=0;i<imgData.data.length;i+=4,j++){
+    gray[j]=0.299*imgData.data[i]+0.587*imgData.data[i+1]+0.114*imgData.data[i+2];
+  }
+  const edges=new Float32Array(w*h);
+  for(let y=1;y<h-1;y++){
+    for(let x=1;x<w-1;x++){
+      const gx=(gray[(y-1)*w+(x+1)]+2*gray[y*w+(x+1)]+gray[(y+1)*w+(x+1)])-
+               (gray[(y-1)*w+(x-1)]+2*gray[y*w+(x-1)]+gray[(y+1)*w+(x-1)]);
+      const gy=(gray[(y+1)*w+(x-1)]+2*gray[(y+1)*w+x]+gray[(y+1)*w+(x+1)])-
+               (gray[(y-1)*w+(x-1)]+2*gray[(y-1)*w+x]+gray[(y-1)*w+(x+1)]);
+      edges[y*w+x]=Math.sqrt(gx*gx+gy*gy);
+    }
+  }
+  return {data:edges,width:w,height:h};
+}
+
+// ── CONTOUR TRACING ──
+function traceContours(edges,w,h,detail){
+  const threshold=30*(10-detail+1);
+  const visited=new Uint8Array(w*h);
+  const contours=[];
+  for(let y=2;y<h-2;y+=Math.max(1,Math.round(10/detail))){
+    for(let x=2;x<w-2;x+=Math.max(1,Math.round(10/detail))){
+      const idx=y*w+x;
+      if(edges.data[idx]>threshold&&!visited[idx]){
+        const contour=traceContour(edges,w,h,x,y,visited,threshold);
+        if(contour.points.length>5) contours.push(contour);
+      }
+    }
+  }
+  return contours.slice(0,50); // max 50 contours
+}
+
+function traceContour(edges,w,h,startX,startY,visited,threshold){
+  const points=[{x:startX,y:startY}];
+  const dirs=[[1,0],[1,1],[0,1],[-1,1],[-1,0],[-1,-1],[0,-1],[1,-1]];
+  let x=startX,y=startY;
+  visited[y*w+x]=1;
+  for(let step=0;step<200;step++){
+    let found=false;
+    for(const [dx,dy] of dirs){
+      const nx=x+dx,ny=y+dy;
+      if(nx<0||nx>=w||ny<0||ny>=h) continue;
+      const ni=ny*w+nx;
+      if(edges.data[ni]>threshold&&!visited[ni]){
+        visited[ni]=1;
+        x=nx;y=ny;
+        points.push({x,y});
+        found=true;break;
+      }
+    }
+    if(!found) break;
+  }
+  return {points};
+}
+
+function traceEdgePaths(edges,w,h,detail){
+  const threshold=50*(10-detail+1);
+  const paths=[];
+  const visited=new Uint8Array(w*h);
+  for(let y=1;y<h-1;y+=3){
+    const row=[];
+    for(let x=1;x<w-1;x++){
+      const idx=y*w+x;
+      if(edges.data[idx]>threshold&&!visited[idx]){
+        visited[idx]=1;
+        row.push({x,y});
+      }
+    }
+    if(row.length>3) paths.push(row);
+  }
+  return paths.slice(0,30);
+}
+
+function contourArea(points){
+  if(points.length<3) return 0;
+  let area=0;
+  for(let i=0;i<points.length;i++){
+    const j=(i+1)%points.length;
+    area+=points[i].x*points[j].y;
+    area-=points[j].x*points[i].y;
+  }
+  return Math.abs(area/2);
+}
+
 function closePhotoModal(){document.getElementById('photo-modal').classList.remove('show');}
 
 function handlePhotoStitch(e){
