@@ -1166,9 +1166,16 @@ function redraw(){
 
   // Draw backdrop image first (reference layer)
   if(S.backdrop){
-    ctx.globalAlpha=S.backdropOpacity||0.4;
-    ctx.drawImage(S.backdrop, S.backdropX||0, S.backdropY||0,
-      S.backdropW||(S.backdrop.width), S.backdropH||(S.backdrop.height));
+    ctx.globalAlpha=S.backdropOpacity||0.45;
+    const bx=S.backdropX||(((cvs.width/2-S.panX)/S.zoom)-((S.backdropW||S.backdrop.width)/2));
+    const by=S.backdropY||(((cvs.height/2-S.panY)/S.zoom)-((S.backdropH||S.backdrop.height)/2));
+    const bw=S.backdropW||S.backdrop.width;
+    const bh=S.backdropH||S.backdrop.height;
+    ctx.drawImage(S.backdrop, bx, by, bw, bh);
+    // Subtle border
+    ctx.strokeStyle='rgba(83,74,183,0.3)';
+    ctx.lineWidth=1/S.zoom;
+    ctx.strokeRect(bx,by,bw,bh);
     ctx.globalAlpha=1;
   }
 
@@ -6001,13 +6008,16 @@ function loadBackdrop(){
       const img=new Image();
       img.onload=()=>{
         S.backdrop=img;
-        // Center on canvas coordinate space (origin = center of hoop)
-        const maxW=S.hoopW||500, maxH=S.hoopH||500;
-        const scale=Math.min(1, maxW/img.width, maxH/img.height);
-        S.backdropW=img.width*scale;
-        S.backdropH=img.height*scale;
-        S.backdropX=-S.backdropW/2;
-        S.backdropY=-S.backdropH/2;
+        // Position backdrop centered on current canvas view
+        const maxW=400, maxH=400;
+        const sc=Math.min(1, maxW/img.width, maxH/img.height);
+        S.backdropW=img.width*sc;
+        S.backdropH=img.height*sc;
+        // Center in canvas coordinate space
+        const canvasCX=(cvs.width/2-S.panX)/S.zoom;
+        const canvasCY=(cvs.height/2-S.panY)/S.zoom;
+        S.backdropX=canvasCX-S.backdropW/2;
+        S.backdropY=canvasCY-S.backdropH/2;
         S.backdropOpacity=0.45;
         redraw();
         showBackdropPanel();
