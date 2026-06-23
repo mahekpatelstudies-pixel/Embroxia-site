@@ -331,6 +331,9 @@ select.pinput{cursor:pointer;-webkit-appearance:none}
     <div class="mi" id="m-file" onclick="toggleMenu('m-file',event)">File
       <div class="dd">
         <div class="ddi" onclick="newDoc()">New design<span class="kbd">⌘N</span></div>
+        <div class="ddi" onclick="loadBackdrop()">🖼 Load backdrop image</div>
+        <div class="ddi" onclick="removeBackdrop()">✕ Remove backdrop</div>
+        <div class="dd-sep"></div>
         <div class="ddi" onclick="openLibrary()">Open from library...<span class="kbd">⌘L</span></div>
         <div class="ddi" onclick="saveToLibrary()">Save to library<span class="kbd">⌘S</span></div>
         <div class="dd-sep"></div>
@@ -347,6 +350,8 @@ select.pinput{cursor:pointer;-webkit-appearance:none}
       <div class="dd">
         <div class="ddi" onclick="undo()">Undo<span class="kbd">⌘Z</span></div>
         <div class="ddi" onclick="redo()">Redo<span class="kbd">⌘⇧Z</span></div>
+        <div class="dd-sep"></div>
+        <div class="ddi" onclick="continueDigitizing()">↪ Continue digitizing</div>
         <div class="dd-sep"></div>
         <div class="ddi" onclick="groupSelected()">Group<span class="kbd">⌘G</span></div>
         <div class="ddi" onclick="ungroupSelected()">Ungroup<span class="kbd">⌘⇧G</span></div>
@@ -365,6 +370,8 @@ select.pinput{cursor:pointer;-webkit-appearance:none}
         <div class="ddi" onclick="setZoom(1)">Zoom 100%<span class="kbd">⌘1</span></div>
         <div class="ddi" onclick="setZoom(2)">Zoom 200%<span class="kbd">⌘2</span></div>
         <div class="ddi" onclick="fitScreen()">Fit to screen<span class="kbd">⌘0</span></div>
+        <div class="dd-sep"></div>
+        <div class="ddi" onclick="showHoopSelector()">🔲 Hoop size...</div>
         <div class="dd-sep"></div>
         <div class="ddi" onclick="toggleGrid()">Toggle grid<span class="kbd">⌘G</span></div>
         <div class="ddi" onclick="toggleRulers()">Toggle rulers</div>
@@ -448,6 +455,7 @@ select.pinput{cursor:pointer;-webkit-appearance:none}
     <button class="tbtn" onclick="simulateStitches()">▶ Simulate</button>
     <button class="tbtn" onclick="showGarmentPreview()" style="background:var(--bg3);color:var(--text);">👕 Preview</button>
     <button class="tbtn" onclick="openLibrary()" title="Project Library" style="background:var(--bg4)">📁 Library</button>
+    <button class="tbtn" onclick="showHoopSelector()" title="Hoop size" style="background:var(--bg4)" id="hoop-btn">🔲 Hoop</button>
     <button class="tbtn" onclick="showCostCalc()" title="Job-work cost calculator" style="background:var(--bg4)">₹ Cost</button>
     <button class="tbtn" onclick="toggleAI()" id="ai-btn" style="background:linear-gradient(135deg,#534AB7,#1D9E75);color:white;border:none;">✦ AI</button>
     <button class="tbtn primary" onclick="showExportModal()">Export ↗</button>
@@ -530,7 +538,20 @@ select.pinput{cursor:pointer;-webkit-appearance:none}
     </div>
     <div class="psec">
       <div class="psec-title">Stitch properties</div>
-      <div class="prow"><span class="plabel">Density</span><input class="pinput" type="number" value="40" id="p-density" min="10" max="80"></div>
+      <div class="prow"><span class="plabel">Density</span>
+        <div style="flex:1">
+          <div style="display:flex;align-items:center;gap:6px">
+            <input type="range" min="1" max="12" value="4" id="p-density" style="flex:1;accent-color:var(--purple)" oninput="S.density=+this.value;updateDensityGauge(+this.value);updateSelectedPathProp('density',+this.value)">
+            <span id="p-density-val" style="font-size:10px;color:var(--text3);min-width:14px">4</span>
+          </div>
+          <div style="margin-top:4px">
+            <div style="height:4px;background:var(--border);border-radius:2px;overflow:hidden">
+              <div id="density-gauge-bar" style="height:100%;width:40%;background:var(--teal);border-radius:2px;transition:all .2s"></div>
+            </div>
+            <div id="density-gauge-label" style="font-size:9px;color:var(--teal);margin-top:2px">Good — 0.25mm spacing</div>
+          </div>
+        </div>
+      </div>
       <div class="prow"><span class="plabel">Length</span><input class="pinput" type="number" value="3.5" id="p-length" step=".1" min=".5" max="12"></div>
       <div class="prow"><span class="plabel">Angle</span><input class="pinput" type="number" value="45" id="p-angle" min="0" max="360"></div>
       <div class="prow"><span class="plabel">Spacing</span><input class="pinput" type="number" value="0.5" id="p-spacing" step=".1"></div>
@@ -1139,7 +1160,54 @@ function redraw(){
   ctx.save();
   ctx.translate(S.panX, S.panY);
   ctx.scale(S.zoom, S.zoom);
-  S.paths.forEach(p => drawPath(p));
+
+  // Draw backdrop image first (reference layer)
+  if(S.backdrop){
+    ctx.globalAlpha=S.backdropOpacity||0.4;
+    ctx.drawImage(S.backdrop, S.backdropX||0, S.backdropY||0,
+      S.backdropW||(S.backdrop.width), S.backdropH||(S.backdrop.height));
+    ctx.globalAlpha=1;
+  }
+
+  // Draw hoop boundary
+  if(S.showHoop && S.hoopW && S.hoopH){
+    const hw=S.hoopW/2, hh=S.hoopH/2;
+    // Outer boundary
+    ctx.strokeStyle='rgba(83,74,183,0.5)';
+    ctx.lineWidth=1.5/S.zoom;
+    ctx.setLineDash([4/S.zoom,3/S.zoom]);
+    ctx.strokeRect(-hw,-hh,S.hoopW,S.hoopH);
+    ctx.setLineDash([]);
+    // Hoop label
+    ctx.fillStyle='rgba(83,74,183,0.6)';
+    ctx.font=(10/S.zoom)+'px DM Sans,sans-serif';
+    ctx.textAlign='left';
+    ctx.fillText(S.hoopName||'Hoop',-hw,-hh-4/S.zoom);
+    // Warning overlay if design exceeds hoop
+    const allPts=S.paths.flatMap(p=>p.points||[]);
+    if(allPts.length){
+      const bb2=bbox(allPts);
+      if(bb2.minX<-hw||bb2.maxX>hw||bb2.minY<-hh||bb2.maxY>hh){
+        ctx.fillStyle='rgba(226,75,74,0.08)';
+        ctx.fillRect(-hw,-hh,S.hoopW,S.hoopH);
+        ctx.strokeStyle='rgba(226,75,74,0.6)';
+        ctx.lineWidth=2/S.zoom;
+        ctx.setLineDash([5/S.zoom,3/S.zoom]);
+        ctx.strokeRect(-hw,-hh,S.hoopW,S.hoopH);
+        ctx.setLineDash([]);
+      }
+    }
+  }
+
+  // Draw grid
+  if(S.showGrid) drawGrid();
+
+  // Draw all visible paths
+  const visiblePaths=S.paths.filter(p=>{
+    const layer=S.layers[p.layer||0];
+    return !layer||layer.visible!==false;
+  });
+  visiblePaths.forEach(p=>drawPath(p));
   if(S.currentPath.length>1) drawPath({points:S.currentPath,color:S.color,stitch:S.stitch,opacity:.7});
   drawSelectionHandles();
   ctx.restore();
@@ -2111,18 +2179,8 @@ function handleSelect(pos){
       }
     }
   }
-  // Update props panel with selected path info
-  if(S.selected.length>0){
-    const p=S.paths[S.selected[0]];
-    if(p){
-      const densEl=document.getElementById('p-density');
-      const angleEl=document.getElementById('p-angle');
-      if(densEl&&p.density){densEl.value=p.density;const dv=document.getElementById('p-density-val');if(dv)dv.textContent=p.density;}
-      if(angleEl&&p.angle!==undefined){angleEl.value=p.angle;const av=document.getElementById('p-angle-val');if(av)av.textContent=p.angle+'°';}
-      // Update color display
-      const cc=document.getElementById('g-color');if(cc)cc.value=p.color;
-    }
-  }
+  // Update per-object properties panel
+  updatePropsForSelected();
   redraw();
 }
 
@@ -4948,6 +5006,7 @@ function selectAll(){
 
 function deselectAll(){
   S.selected=[];
+  showGlobalProps();
   redraw();
 }
 
@@ -5893,6 +5952,348 @@ h1{font-size:20px;margin-bottom:4px}h2{font-size:13px;color:#999;font-weight:400
   a.download=name.replace(/\s+/g,'-').toLowerCase()+'-quote.html';
   a.click();URL.revokeObjectURL(a.href);
   toast('✓ Quote exported');
+}
+
+
+// ═══════════════════════════════════════════════════
+// BACKDROP IMAGE LOADER
+// ═══════════════════════════════════════════════════
+function loadBackdrop(){
+  const input=document.createElement('input');
+  input.type='file';input.accept='image/*';
+  input.onchange=e=>{
+    const file=e.target.files[0];
+    if(!file) return;
+    const reader=new FileReader();
+    reader.onload=ev=>{
+      const img=new Image();
+      img.onload=()=>{
+        S.backdrop=img;
+        // Center backdrop on canvas, fit to hoop or reasonable size
+        const maxW=S.hoopW||400, maxH=S.hoopH||400;
+        const scale=Math.min(1, maxW/img.width, maxH/img.height);
+        S.backdropW=img.width*scale;
+        S.backdropH=img.height*scale;
+        S.backdropX=-S.backdropW/2;
+        S.backdropY=-S.backdropH/2;
+        redraw();
+        showBackdropPanel();
+        toast('✓ Backdrop loaded — trace over it to digitize');
+      };
+      img.src=ev.target.result;
+    };
+    reader.readAsDataURL(file);
+  };
+  input.click();
+}
+
+function removeBackdrop(){
+  S.backdrop=null;
+  redraw();
+  document.getElementById('backdrop-panel')?.remove();
+  toast('Backdrop removed');
+}
+
+function showBackdropPanel(){
+  const existing=document.getElementById('backdrop-panel');
+  if(existing) existing.remove();
+
+  const panel=document.createElement('div');
+  panel.id='backdrop-panel';
+  panel.style.cssText='position:fixed;bottom:50px;left:50%;transform:translateX(-50%);background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);padding:12px 16px;z-index:200;box-shadow:var(--shadow);display:flex;align-items:center;gap:12px;font-size:12px';
+
+  panel.innerHTML=`
+    <span style="color:var(--text2)">🖼 Backdrop</span>
+    <label style="display:flex;align-items:center;gap:6px;color:var(--text2)">
+      Opacity
+      <input type="range" min="0.05" max="1" step="0.05" value="${S.backdropOpacity||0.4}"
+        style="width:80px;accent-color:var(--purple)"
+        oninput="S.backdropOpacity=parseFloat(this.value);redraw()">
+    </label>
+    <label style="display:flex;align-items:center;gap:6px;color:var(--text2)">
+      <input type="checkbox" ${S.backdropLock?'checked':''} onchange="S.backdropLock=this.checked" style="accent-color:var(--purple)">
+      Lock position
+    </label>
+    <button class="tbtn" onclick="removeBackdrop()" style="font-size:11px;padding:4px 10px">✕ Remove</button>
+  `;
+  document.body.appendChild(panel);
+}
+
+// Allow dragging backdrop when select tool + alt key
+function moveBackdrop(dx, dy){
+  if(!S.backdrop||S.backdropLock) return;
+  S.backdropX+=dx;S.backdropY+=dy;
+  redraw();
+}
+
+
+// ═══════════════════════════════════════════════════
+// HOOP SIZE SELECTOR
+// ═══════════════════════════════════════════════════
+const HOOP_SIZES = [
+  {name:'60×40mm (Mini)',    w:600,  h:400},
+  {name:'100×100mm (Small)', w:1000, h:1000},
+  {name:'130×180mm (Standard)', w:1300, h:1800},
+  {name:'150×150mm (Square)', w:1500, h:1500},
+  {name:'200×200mm (Medium)', w:2000, h:2000},
+  {name:'260×160mm (Wide)',  w:2600, h:1600},
+  {name:'300×180mm (Large)', w:3000, h:1800},
+  {name:'360×360mm (XL)',    w:3600, h:3600},
+  {name:'500×350mm (Jumbo)', w:5000, h:3500},
+  {name:'No hoop limit',     w:0,    h:0},
+];
+
+function showHoopSelector(){
+  const existing=document.getElementById('hoop-selector');
+  if(existing){existing.remove();return;}
+  const panel=document.createElement('div');
+  panel.id='hoop-selector';
+  panel.style.cssText='position:fixed;top:80px;left:50%;transform:translateX(-50%);background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);padding:16px;z-index:300;box-shadow:var(--shadow);width:320px';
+
+  const title=document.createElement('div');
+  title.style.cssText='font-size:13px;font-weight:500;color:var(--text);margin-bottom:12px;display:flex;justify-content:space-between;align-items:center';
+    title.textContent='🔲 Hoop Size';
+  const closeBtn2=document.createElement('button');
+  closeBtn2.textContent='✕';closeBtn2.style.cssText='background:none;border:none;color:var(--text3);cursor:pointer;font-size:16px';
+  closeBtn2.onclick=()=>panel.remove();
+  title.appendChild(closeBtn2);
+  panel.appendChild(title);
+
+  HOOP_SIZES.forEach(h=>{
+    const btn=document.createElement('button');
+    const isActive=S.hoopName===h.name;
+    btn.style.cssText='width:100%;text-align:left;padding:8px 12px;border-radius:var(--rs);font-size:12px;font-family:var(--font);cursor:pointer;margin-bottom:4px;border:1px solid '+(isActive?'var(--purple)':'var(--border)')+';background:'+(isActive?'var(--pg)':'var(--bg4)')+';color:var(--text);display:flex;justify-content:space-between;align-items:center';
+    btn.innerHTML='<span>'+h.name+'</span>'+(isActive?'<span style="color:var(--purple)">✓ Active</span>':'');
+    btn.onclick=()=>{
+      S.hoopW=h.w;S.hoopH=h.h;S.hoopName=h.name;
+      S.showHoop=h.w>0;
+      // Resize canvas coordinate center
+      redraw();
+      document.getElementById('hoop-selector').remove();
+      toast('Hoop: '+h.name);
+    };
+    panel.appendChild(btn);
+  });
+
+  // Custom size
+  const custom=document.createElement('div');
+  custom.style.cssText='margin-top:8px;padding-top:8px;border-top:1px solid var(--border)';
+  custom.innerHTML='<div style="font-size:11px;color:var(--text3);margin-bottom:6px">Custom size (mm)</div><div style="display:flex;gap:6px"><input class="pinput" type="number" id="hoop-cw" placeholder="Width" style="flex:1"><input class="pinput" type="number" id="hoop-ch" placeholder="Height" style="flex:1"><button class="tbtn primary" onclick="setCustomHoop()" style="white-space:nowrap">Set</button></div>';
+  panel.appendChild(custom);
+  document.body.appendChild(panel);
+}
+
+function setCustomHoop(){
+  const w=parseInt(document.getElementById('hoop-cw')?.value||0);
+  const h=parseInt(document.getElementById('hoop-ch')?.value||0);
+  if(!w||!h){toast('Enter both width and height');return;}
+  S.hoopW=w*10;S.hoopH=h*10;S.hoopName=w+'×'+h+'mm (Custom)';S.showHoop=true;
+  redraw();document.getElementById('hoop-selector')?.remove();
+  toast('Hoop set: '+w+'×'+h+'mm');
+}
+
+
+// ═══════════════════════════════════════════════════
+// PER-OBJECT PROPERTIES
+// Clicking an object shows its specific settings
+// ═══════════════════════════════════════════════════
+function updatePropsForSelected(){
+  if(!S.selected.length){
+    // No selection — show global props
+    showGlobalProps();
+    return;
+  }
+  const idx=S.selected[0];
+  const p=S.paths[idx];
+  if(!p) return;
+
+  // Update stitch type selector to show this object's stitch
+  setStitch(p.stitch||'running', false); // false = don't add to history
+
+  // Update color
+  S.color=p.color||S.color;
+  const gc=document.getElementById('g-color');
+  if(gc) gc.value=S.color;
+
+  // Update density
+  const densEl=document.getElementById('p-density');
+  if(densEl){
+    densEl.value=p.density||4;
+    const dv=document.getElementById('p-density-val');
+    if(dv) dv.textContent=p.density||4;
+  }
+
+  // Update angle
+  const angleEl=document.getElementById('p-angle');
+  if(angleEl){
+    angleEl.value=p.angle||45;
+    const av=document.getElementById('p-angle-val');
+    if(av) av.textContent=(p.angle||45)+'°';
+  }
+
+  // Show object info panel
+  showObjectInfo(idx, p);
+}
+
+function showObjectInfo(idx, p){
+  let panel=document.getElementById('obj-info-panel');
+  if(!panel){
+    panel=document.createElement('div');
+    panel.id='obj-info-panel';
+    panel.style.cssText='position:fixed;bottom:50px;right:16px;background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);padding:14px;z-index:200;box-shadow:var(--shadow);width:220px;font-size:12px';
+    document.body.appendChild(panel);
+  }
+
+  const bb=bbox(p.points||[]);
+  const w=Math.round((bb.maxX-bb.minX)/10);
+  const h=Math.round((bb.maxY-bb.minY)/10);
+
+  // Stitch count for just this object
+  let pathLen=0;
+  const pts=p.points||[];
+  for(let i=1;i<pts.length;i++) pathLen+=Math.sqrt((pts[i].x-pts[i-1].x)**2+(pts[i].y-pts[i-1].y)**2);
+  const lenMm=pathLen/10;
+  const multipliers={running:1,triple:3,backstitch:2,stemstitch:1.5,satin:(p.density||4)*2,fill:(p.density||4)*1.5,cross:2,zardozi:(p.density||4)*3,kantha:2,phulkari:(p.density||4)*3,aari:3,kashmiri:2.5,kutch:(p.density||4)*2,shisha:4};
+  const objStitches=Math.round(lenMm*(multipliers[p.stitch]||1));
+
+  // Density gauge — green/yellow/red
+  const density=p.density||4;
+  const densityMm=(1/density).toFixed(2);
+  const gaugeColor=density<=5?'#1D9E75':density<=7?'#EF9F27':'#E24B4A';
+  const gaugeLabel=density<=5?'Good':'dense';
+  const gaugePct=Math.min(100,density/10*100);
+
+  panel.innerHTML=`
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+      <div style="font-weight:500;color:var(--text)">Object ${idx+1}</div>
+      <button onclick="document.getElementById('obj-info-panel').remove()" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:13px">✕</button>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px">
+      <div style="background:var(--bg4);border-radius:var(--rs);padding:7px;text-align:center">
+        <div style="font-size:15px;font-weight:500;color:var(--purple)">${objStitches.toLocaleString()}</div>
+        <div style="font-size:10px;color:var(--text3)">stitches</div>
+      </div>
+      <div style="background:var(--bg4);border-radius:var(--rs);padding:7px;text-align:center">
+        <div style="font-size:15px;font-weight:500;color:var(--teal)">${w}×${h}mm</div>
+        <div style="font-size:10px;color:var(--text3)">size</div>
+      </div>
+    </div>
+    <div style="margin-bottom:8px">
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text2);margin-bottom:4px">
+        <span>Density: ${density}/mm</span>
+        <span style="color:${gaugeColor}">${gaugeLabel}</span>
+      </div>
+      <div style="height:5px;background:var(--border);border-radius:3px;overflow:hidden">
+        <div style="width:${gaugePct}%;height:100%;background:${gaugeColor};border-radius:3px;transition:width .3s"></div>
+      </div>
+      <div style="font-size:10px;color:var(--text3);margin-top:2px">Spacing: ${densityMm}mm per stitch</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:6px">
+      <div style="display:flex;align-items:center;gap:6px">
+        <span style="font-size:11px;color:var(--text2);width:50px">Stitch</span>
+        <select class="pinput" style="flex:1;font-size:11px" onchange="updateObjProp(${idx},'stitch',this.value)">
+          ${['running','triple','satin','fill','cross','backstitch','stemstitch','applique','puff','redwork','accordion','contour','spiral','radial','wave','zardozi','kantha','phulkari','chikankari','aari','kashmiri','kutch','suf','toda','shisha'].map(s=>`<option value="${s}" ${p.stitch===s?'selected':''}>${s}</option>`).join('')}
+        </select>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px">
+        <span style="font-size:11px;color:var(--text2);width:50px">Color</span>
+        <input type="color" value="${p.color||'#534AB7'}" style="flex:1;height:28px;border-radius:var(--rs);border:1px solid var(--border);cursor:pointer" onchange="updateObjProp(${idx},'color',this.value)">
+      </div>
+      <div style="display:flex;align-items:center;gap:6px">
+        <span style="font-size:11px;color:var(--text2);width:50px">Density</span>
+        <input type="range" min="1" max="12" value="${density}" style="flex:1;accent-color:var(--purple)" oninput="updateObjProp(${idx},'density',parseFloat(this.value));this.nextSibling.textContent=this.value"><span style="font-size:10px;color:var(--text3);min-width:14px">${density}</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px">
+        <span style="font-size:11px;color:var(--text2);width:50px">Angle</span>
+        <input type="range" min="0" max="175" value="${p.angle||45}" style="flex:1;accent-color:var(--purple)" oninput="updateObjProp(${idx},'angle',parseFloat(this.value));this.nextSibling.textContent=this.value+'°'"><span style="font-size:10px;color:var(--text3);min-width:28px">${p.angle||45}°</span>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px">
+      <button class="tbtn" onclick="duplicateSelected()" style="font-size:11px">⊕ Duplicate</button>
+      <button class="tbtn" onclick="deleteSelected()" style="font-size:11px;color:var(--text3)">🗑 Delete</button>
+    </div>
+  `;
+}
+
+function updateObjProp(idx, prop, val){
+  if(!S.paths[idx]) return;
+  S.paths[idx][prop]=val;
+  if(prop==='color') S.color=val;
+  if(prop==='stitch') setStitch(val, false);
+  saveHist();
+  redraw();
+  // Refresh panel
+  showObjectInfo(idx, S.paths[idx]);
+}
+
+function showGlobalProps(){
+  document.getElementById('obj-info-panel')?.remove();
+}
+
+
+// ═══════════════════════════════════════════════════
+// DENSITY VISUAL GAUGE
+// ═══════════════════════════════════════════════════
+function updateDensityGauge(density){
+  const bar=document.getElementById('density-gauge-bar');
+  const label=document.getElementById('density-gauge-label');
+  if(!bar||!label) return;
+  const spacing=(1/density).toFixed(2);
+  const pct=Math.min(100, density/12*100);
+  let color,text;
+  if(density<=4){color='var(--teal,#1D9E75)';text='Good — '+spacing+'mm spacing';}
+  else if(density<=7){color='var(--gold,#EF9F27)';text='Dense — '+spacing+'mm spacing';}
+  else{color='#E24B4A';text='Too dense — may pucker!';}
+  bar.style.width=pct+'%';
+  bar.style.background=color;
+  label.style.color=color;
+  label.textContent=text;
+}
+
+
+// ═══════════════════════════════════════════════════
+// CONTINUE DIGITIZING
+// Extend an existing path from its last point
+// ═══════════════════════════════════════════════════
+function continueDigitizing(){
+  if(!S.selected.length){toast('Select a path first, then continue digitizing');return;}
+  const idx=S.selected[0];
+  const p=S.paths[idx];
+  if(!p||p.points.length<2){toast('Select a path to continue');return;}
+
+  // Remove the path from array, set it as current path being drawn
+  const pathData={...p};
+  S.paths.splice(idx,1);
+  S.selected=[];
+
+  // Continue with pen tool from last point
+  setTool('pen');
+  penPoints=[...p.points.map(pt=>({x:pt.x,y:pt.y}))];
+  penActive=true;
+  S.color=pathData.color||S.color;
+  setStitch(pathData.stitch||S.stitch);
+
+  // Store path data to restore properties on commit
+  S._continuingPath=pathData;
+  redraw();drawPenOverlay();
+  toast('✓ Continuing path — click to add points, Enter to finish');
+}
+
+// Override commitPen to restore path properties when continuing
+const _origCommitPen=commitPen;
+function commitPen(closed){
+  const wasContining=S._continuingPath;
+  _origCommitPen(closed);
+  if(wasContining&&S.paths.length>0){
+    const newPath=S.paths[S.paths.length-1];
+    newPath.stitch=wasContining.stitch||newPath.stitch;
+    newPath.color=wasContining.color||newPath.color;
+    newPath.density=wasContining.density||newPath.density;
+    newPath.angle=wasContining.angle||newPath.angle;
+    newPath.layer=wasContining.layer||newPath.layer;
+    S._continuingPath=null;
+    redraw();
+  }
 }
 
 // ═══════════════════════════════════════
