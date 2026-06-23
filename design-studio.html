@@ -5789,40 +5789,7 @@ function deleteCurrentLayer(){
 
 // Filter drawing to respect layer visibility
 const _origRedraw=redraw;
-function redraw(){
-  ctx.clearRect(0,0,cvs.width,cvs.height);
-  ctx.save();
-  ctx.translate(S.panX,S.panY);
-  ctx.scale(S.zoom,S.zoom);
-  // Only draw visible, unlocked layers
-  const visiblePaths=S.paths.filter(p=>{
-    const layer=S.layers[p.layer||0];
-    return !layer||layer.visible!==false;
-  });
-  visiblePaths.forEach(p=>drawPath(p));
-  if(S.currentPath.length>1) drawPath({points:S.currentPath,color:S.color,stitch:S.stitch,opacity:.7});
-  drawSelectionHandles();
-  ctx.restore();
-}
-
-
-// ═══════════════════════════════════════════════════
-// JOB-WORK COST CALCULATOR
-// ═══════════════════════════════════════════════════
-
-const CURRENCY_SYMBOLS = {INR:'₹', USD:'$', AED:'د.إ', GBP:'£'};
-const CURRENCY_RATES = {INR:1, USD:0.012, AED:0.044, GBP:0.0095}; // approx from INR
-
-const FABRIC_FACTORS = {
-  woven:1.0, synthetic:1.1, knit:1.3, denim:1.4, silk:0.9, cap:1.2
-};
-const FABRIC_PULL_COMP = {
-  woven:'0.5mm',synthetic:'0.8mm',knit:'1.5mm',denim:'1.0mm',silk:'0.3mm',cap:'1.2mm'
-};
-const COMPLEXITY_MULT = {
-  simple:0.7, medium:1.0, complex:1.4, bridal:2.2
-};
-
+// redraw() defined above — handles backdrop, hoop, layers, paths
 function showCostCalc(){
   // Auto-populate stitch count from current design
   const sc = calcStitches();
