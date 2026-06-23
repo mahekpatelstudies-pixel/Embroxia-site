@@ -5983,8 +5983,16 @@ h1{font-size:20px;margin-bottom:4px}h2{font-size:13px;color:#999;font-weight:400
 // BACKDROP IMAGE LOADER
 // ═══════════════════════════════════════════════════
 function loadBackdrop(){
-  const input=document.createElement('input');
-  input.type='file';input.accept='image/*';
+  // Must append to DOM for Safari/Firefox compatibility
+  let input=document.getElementById('backdrop-file-input');
+  if(!input){
+    input=document.createElement('input');
+    input.type='file';input.accept='image/*';
+    input.id='backdrop-file-input';
+    input.style.cssText='position:fixed;top:-9999px;left:-9999px;opacity:0';
+    document.body.appendChild(input);
+  }
+  input.value=''; // reset so same file can be re-picked
   input.onchange=e=>{
     const file=e.target.files[0];
     if(!file) return;
@@ -5993,20 +6001,24 @@ function loadBackdrop(){
       const img=new Image();
       img.onload=()=>{
         S.backdrop=img;
-        // Center backdrop on canvas, fit to hoop or reasonable size
-        const maxW=S.hoopW||400, maxH=S.hoopH||400;
+        // Center on canvas coordinate space (origin = center of hoop)
+        const maxW=S.hoopW||500, maxH=S.hoopH||500;
         const scale=Math.min(1, maxW/img.width, maxH/img.height);
         S.backdropW=img.width*scale;
         S.backdropH=img.height*scale;
         S.backdropX=-S.backdropW/2;
         S.backdropY=-S.backdropH/2;
+        S.backdropOpacity=0.45;
         redraw();
         showBackdropPanel();
         toast('✓ Backdrop loaded — trace over it to digitize');
       };
+      img.onerror=()=>toast('Could not load image');
       img.src=ev.target.result;
     };
+    reader.onerror=()=>toast('Could not read file');
     reader.readAsDataURL(file);
+    input.value='';
   };
   input.click();
 }
