@@ -405,6 +405,8 @@ select.pinput{cursor:pointer;-webkit-appearance:none}
     </div>
     <div class="mi" id="m-tools" onclick="toggleMenu('m-tools',event)">Tools
       <div class="dd">
+        <div class="ddi" onclick="showColABToolbar()">⬟ Column A/B digitizing</div>
+        <div class="dd-sep"></div>
         <div class="ddi" onclick="showAlignPanel()">⊞ Align & distribute</div>
         <div class="ddi" onclick="showPatternLibrary()">🧵 Pattern library</div>
         <div class="ddi" onclick="showShapeLibrary()">⬡ Shape library</div>
@@ -458,6 +460,7 @@ select.pinput{cursor:pointer;-webkit-appearance:none}
     <button class="tbtn" onclick="showHoopSelector()" title="Hoop size" style="background:var(--bg4)" id="hoop-btn">🔲 Hoop</button>
     <button class="tbtn" onclick="showCostCalc()" title="Job-work cost calculator" style="background:var(--bg4)">₹ Cost</button>
     <button class="tbtn" onclick="toggleAI()" id="ai-btn" style="background:linear-gradient(135deg,#534AB7,#1D9E75);color:white;border:none;">✦ AI</button>
+    <button class="tbtn" onclick="shareDesign()" title="Share design" style="background:var(--bg4)">↗ Share</button>
     <button class="tbtn primary" onclick="showExportModal()">Export ↗</button>
   </div>
 </div>
@@ -1859,6 +1862,10 @@ cvs.addEventListener('mousedown', e => {
     redraw();return;
   }
 
+  if(S.tool==='colAB') {
+    startColAB(pos); return;
+  }
+
   if(S.tool==='pen') {
     if(!penActive) { penActive=true; document.getElementById('wi').style.opacity='0'; }
     if(penPoints.length > 2) {
@@ -1921,6 +1928,12 @@ cvs.addEventListener('mousemove', e => {
   // Pen preview
   if(S.tool==='pen') {
     redraw(); drawPenOverlay();
+    return;
+  }
+
+  // Column A/B preview
+  if(S.tool==='colAB') {
+    redraw(); drawColABOverlay();
     return;
   }
 
@@ -2952,8 +2965,16 @@ function showTextPanel() {
           <div style="font-size:11px;color:var(--text2);margin-bottom:4px">Font style</div>
           <select class="pinput" id="tp-font" onchange="updateTextPreview()">
             <option value="block">Block Bold</option>
+            <option value="condensed">Condensed</option>
+            <option value="wide">Wide</option>
             <option value="sans">Sans Clean</option>
+            <option value="italic">Italic</option>
+            <option value="thin">Thin</option>
             <option value="script">Script Elegant</option>
+            <option value="varsity">Varsity / Athletic</option>
+            <option value="outline">Outline</option>
+            <option value="stencil">Stencil</option>
+            <option value="indian_deco">Indian Decorative</option>
           </select>
         </div>
         <div>
@@ -5401,8 +5422,11 @@ document.addEventListener('keydown', e => {
   if(meta&&(e.key==='='||e.key==='+')){e.preventDefault();changeZoom(.2,{x:cvs.width/2,y:cvs.height/2});return;}
   if(meta&&e.key==='-'){e.preventDefault();changeZoom(-.2,{x:cvs.width/2,y:cvs.height/2});return;}
   // Pen/escape
+  if(e.key==='?'&&!meta){showShortcutsCard();return;}
+  if(e.key==='Enter'&&colABActive){commitColAB();return;}
   if(e.key==='Enter'&&penActive){commitPen(false);return;}
   if(e.key==='Escape'){
+    if(colABActive){colABPoints=[];colABActive=false;redraw();toast('Column digitizing cancelled');}
     if(penActive){penPoints=[];penActive=false;redraw();toast('Pen cancelled');}
     S.selected=[];S.drawing=false;S.currentPath=[];redraw();
   }
@@ -6294,6 +6318,446 @@ function commitPen(closed){
     S._continuingPath=null;
     redraw();
   }
+}
+
+
+// ═══════════════════════════════════════════════════
+// COLUMN A/B DIGITIZING — Click-to-fill
+// Draw closed shape over backdrop → auto fills with
+// correct stitch type (satin for narrow, fill for wide)
+// ═══════════════════════════════════════════════════
+let colABPoints = [];
+let colABActive = false;
+let colABMode = 'auto'; // 'satin', 'fill', 'auto'
+
+function setColABMode(mode){
+  colABMode=mode;
+  colABPoints=[];colABActive=false;
+  setTool('colAB');
+  document.querySelectorAll('.cab-btn').forEach(b=>b.classList.remove('active'));
+  const btn=document.getElementById('cab-'+mode);
+  if(btn) btn.classList.add('active');
+  toast('Column digitizing: '+mode+' — click to place points, double-click or click first point to close');
+}
+
+function startColAB(pos){
+  if(!colABActive){colABActive=true;document.getElementById('wi').style.opacity='0';}
+  // Check if closing the shape (near first point)
+  if(colABPoints.length>2){
+    const first=colABPoints[0];
+    const d=Math.sqrt((first.x-pos.x)**2+(first.y-pos.y)**2);
+    if(d<16/S.zoom){commitColAB();return;}
+  }
+  colABPoints.push({x:pos.x,y:pos.y});
+  redraw();drawColABOverlay();
+}
+
+function commitColAB(){
+  if(colABPoints.length<3){colABPoints=[];colABActive=false;return;}
+  // Close the shape
+  const pts=[...colABPoints,{...colABPoints[0]}];
+  // Determine stitch type by shape size
+  const bb=bbox(pts);
+  const w=bb.maxX-bb.minX, h=bb.maxY-bb.minY;
+  const minDim=Math.min(w,h)/10; // in mm
+  let stitch=colABMode;
+  if(stitch==='auto'){
+    if(minDim<8) stitch='satin';     // narrow column → satin
+    else stitch='fill';               // wide area → fill/tatami
+  }
+  // Calculate angle for satin — perpendicular to longest axis
+  let angle=45;
+  if(stitch==='satin'){
+    angle = w>h ? 0 : 90; // horizontal shape → 0°, vertical → 90°
+  }
+  saveHist();
+  const bpts=pts.map(p=>({x:p.x,y:p.y,cp1x:p.x,cp1y:p.y,cp2x:p.x,cp2y:p.y}));
+  // Smooth the shape
+  const smoothed=catmullRomPoints?catmullRomPoints(bpts,0.3):bpts;
+  S.paths.push({
+    points:smoothed,color:S.color,stitch,
+    angle,density:S.density||4,
+    layer:S.activeLayer,name:'Fill region'
+  });
+  colABPoints=[];colABActive=false;
+  updateStats();redraw();
+  toast('✓ '+stitch+' fill placed — '+Math.round(minDim)+'mm × '+Math.round(Math.max(w,h)/10)+'mm');
+}
+
+function drawColABOverlay(){
+  if(!colABPoints.length) return;
+  ctx.save();ctx.translate(S.panX,S.panY);ctx.scale(S.zoom,S.zoom);
+
+  // Draw the shape being built
+  ctx.beginPath();
+  colABPoints.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
+  ctx.strokeStyle='rgba(83,74,183,0.8)';ctx.lineWidth=1.5/S.zoom;
+  ctx.setLineDash([4/S.zoom,3/S.zoom]);ctx.lineCap='round';ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Fill preview
+  if(colABPoints.length>2){
+    ctx.beginPath();
+    colABPoints.forEach((pt,i)=>i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y));
+    ctx.closePath();
+    ctx.fillStyle='rgba(83,74,183,0.12)';ctx.fill();
+  }
+
+  // Preview line to cursor
+  if(colABPoints.length>0){
+    const last=colABPoints[colABPoints.length-1];
+    ctx.beginPath();ctx.moveTo(last.x,last.y);ctx.lineTo(penPreviewPos.x,penPreviewPos.y);
+    ctx.strokeStyle='rgba(83,74,183,0.4)';ctx.lineWidth=1/S.zoom;
+    ctx.setLineDash([3/S.zoom,3/S.zoom]);ctx.stroke();ctx.setLineDash([]);
+  }
+
+  // Draw anchor points
+  colABPoints.forEach((pt,i)=>{
+    const isFirst=i===0;
+    const nearFirst=colABPoints.length>2&&isFirst&&
+      Math.sqrt((penPreviewPos.x-pt.x)**2+(penPreviewPos.y-pt.y)**2)<16/S.zoom;
+    if(nearFirst){
+      ctx.beginPath();ctx.arc(pt.x,pt.y,8/S.zoom,0,Math.PI*2);
+      ctx.fillStyle='rgba(29,158,117,0.25)';ctx.fill();
+    }
+    ctx.beginPath();ctx.arc(pt.x,pt.y,3/S.zoom,0,Math.PI*2);
+    ctx.fillStyle=isFirst?'#1D9E75':'#534AB7';ctx.fill();
+  });
+
+  // Stitch type indicator
+  const bb=colABPoints.length>1?bbox(colABPoints):null;
+  if(bb){
+    const w=(bb.maxX-bb.minX)/10,h=(bb.maxY-bb.minY)/10;
+    const minD=Math.min(w,h);
+    const suggestedStitch=colABMode!=='auto'?colABMode:(minD<8?'satin':'fill');
+    ctx.fillStyle='rgba(83,74,183,0.9)';
+    ctx.font=(10/S.zoom)+'px DM Sans,sans-serif';ctx.textAlign='center';
+    const cx2=(bb.minX+bb.maxX)/2;
+    ctx.fillText(suggestedStitch+' • '+Math.round(w)+'×'+Math.round(h)+'mm',cx2,bb.minY-6/S.zoom);
+  }
+
+  ctx.restore();
+}
+
+// Column A/B floating toolbar
+function showColABToolbar(){
+  const existing=document.getElementById('cab-toolbar');
+  if(existing){existing.remove();setTool('select');return;}
+
+  const bar=document.createElement('div');
+  bar.id='cab-toolbar';
+  bar.style.cssText='position:fixed;top:80px;left:50%;transform:translateX(-50%);background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);padding:10px 14px;z-index:300;box-shadow:var(--shadow);display:flex;align-items:center;gap:10px;font-size:12px';
+
+  bar.innerHTML=`
+    <span style="color:var(--text2);font-size:11px">✦ Column digitizing</span>
+    <div style="display:flex;gap:4px">
+      <button id="cab-auto" class="tbtn cab-btn active" onclick="setColABMode('auto')">Auto</button>
+      <button id="cab-satin" class="tbtn cab-btn" onclick="setColABMode('satin')">Satin</button>
+      <button id="cab-fill" class="tbtn cab-btn" onclick="setColABMode('fill')">Fill</button>
+      <button id="cab-running" class="tbtn cab-btn" onclick="setColABMode('running')">Running</button>
+    </div>
+    <span style="font-size:10px;color:var(--text3)">Click to place · click start point to close</span>
+    <button class="tbtn" onclick="document.getElementById('cab-toolbar').remove();setTool('select')">✕</button>
+  `;
+  document.body.appendChild(bar);
+  setColABMode('auto');
+}
+
+
+// ── ADDITIONAL FONT STYLES ──
+// Condensed, Outline, Varsity, Stencil added to EMB_FONTS
+// Using the same letter coordinate system
+(function addMoreFonts(){
+  if(!window.EMB_FONTS) return;
+
+  // CONDENSED — narrow version of block
+  const condensed={name:'Condensed',capHeight:28,baseline:24,descender:28,charWidth:10,spacing:3,letters:{}};
+  // Copy block letters but scale x by 0.65
+  Object.entries(EMB_FONTS.block.letters).forEach(([ch,strokes])=>{
+    condensed.letters[ch]=strokes.map(s=>({
+      ...s,
+      pts:s.pts.map(([x,y])=>[x*0.65,y])
+    }));
+  });
+  EMB_FONTS.condensed=condensed;
+
+  // OUTLINE — running stitch only, thin outline of letters
+  const outline={name:'Outline',capHeight:28,baseline:24,descender:28,charWidth:16,spacing:4,letters:{}};
+  Object.entries(EMB_FONTS.block.letters).forEach(([ch,strokes])=>{
+    outline.letters[ch]=strokes.map(s=>({pts:s.pts,a:s.a,stitch:'running'}));
+  });
+  EMB_FONTS.outline=outline;
+
+  // WIDE — stretched version
+  const wide={name:'Wide',capHeight:28,baseline:24,descender:28,charWidth:22,spacing:5,letters:{}};
+  Object.entries(EMB_FONTS.block.letters).forEach(([ch,strokes])=>{
+    wide.letters[ch]=strokes.map(s=>({
+      ...s,
+      pts:s.pts.map(([x,y])=>[x*1.3,y])
+    }));
+  });
+  EMB_FONTS.wide=wide;
+
+  // VARSITY / ATHLETIC — block with inner outline for two-color effect
+  const varsity={name:'Varsity',capHeight:28,baseline:24,descender:28,charWidth:18,spacing:4,letters:{}};
+  Object.entries(EMB_FONTS.block.letters).forEach(([ch,strokes])=>{
+    // Outer fill stroke
+    const outer=strokes.map(s=>({pts:s.pts,a:s.a,stitch:'fill'}));
+    // Inner outline (slightly inset — approximate by scaling toward center)
+    const inner=strokes.map(s=>({
+      pts:s.pts.map(([x,y])=>{
+        const cx2=10,cy2=14;
+        return [cx2+(x-cx2)*0.75, cy2+(y-cy2)*0.75];
+      }),
+      a:s.a, stitch:'running'
+    }));
+    varsity.letters[ch]=[...outer,...inner];
+  });
+  EMB_FONTS.varsity=varsity;
+
+  // ITALIC — slanted version of sans
+  const italic={name:'Italic',capHeight:28,baseline:24,descender:28,charWidth:14,spacing:3,letters:{}};
+  Object.entries(EMB_FONTS.sans.letters).forEach(([ch,strokes])=>{
+    italic.letters[ch]=strokes.map(s=>({
+      ...s,
+      pts:s.pts.map(([x,y])=>[x+y*0.3,y]) // slant by 0.3
+    }));
+  });
+  EMB_FONTS.italic=italic;
+
+  // STENCIL — block with gaps in strokes (for stencil effect)
+  const stencil={name:'Stencil',capHeight:28,baseline:24,descender:28,charWidth:16,spacing:4,letters:{}};
+  Object.entries(EMB_FONTS.block.letters).forEach(([ch,strokes])=>{
+    // Add small cuts to each stroke by breaking into segments
+    stencil.letters[ch]=strokes.map(s=>{
+      const pts=s.pts;
+      if(pts.length<4) return {...s,stitch:'running'};
+      // Take first 3/4 and last 3/4, leave gap in middle
+      const mid=Math.floor(pts.length/2);
+      return [{pts:pts.slice(0,mid-1),a:s.a,stitch:'satin'},{pts:pts.slice(mid+1),a:s.a,stitch:'satin'}];
+    }).flat();
+  });
+  EMB_FONTS.stencil=stencil;
+
+  // THIN SANS — 40% thinner strokes
+  const thin={name:'Thin',capHeight:28,baseline:24,descender:28,charWidth:14,spacing:4,letters:{}};
+  Object.entries(EMB_FONTS.sans.letters).forEach(([ch,strokes])=>{
+    thin.letters[ch]=strokes.map(s=>({
+      ...s,
+      stitch:'running',
+      pts:s.pts
+    }));
+  });
+  EMB_FONTS.thin=thin;
+
+  // DECORATIVE INDIAN — block with decorative serifs inspired by Devanagari horizontal bar
+  const indian={name:'Indian Decorative',capHeight:28,baseline:24,descender:28,charWidth:18,spacing:5,letters:{}};
+  Object.entries(EMB_FONTS.block.letters).forEach(([ch,strokes])=>{
+    // Add top bar (shirobindi) across the top
+    const topBar=[{pts:[[0,2],[18,2],[18,4],[0,4]],a:0,stitch:'satin'}];
+    indian.letters[ch]=[...topBar,...strokes];
+  });
+  EMB_FONTS.indian_deco=indian;
+
+  console.log('Additional fonts loaded: condensed, outline, wide, varsity, italic, stencil, thin, indian_deco');
+})();
+
+
+// ═══════════════════════════════════════════════════
+// KEYBOARD SHORTCUTS REFERENCE CARD
+// ═══════════════════════════════════════════════════
+function showShortcutsCard(){
+  const existing=document.getElementById('shortcuts-modal');
+  if(existing){existing.remove();return;}
+
+  const modal=document.createElement('div');
+  modal.id='shortcuts-modal';
+  modal.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:900;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(6px)';
+  modal.onclick=e=>{if(e.target===modal)modal.remove();};
+
+  const shortcuts=[
+    {group:'Tools',items:[
+      {key:'V',desc:'Select tool'},
+      {key:'P',desc:'Pen tool'},
+      {key:'B',desc:'Brush / freehand'},
+      {key:'N',desc:'Node editing'},
+      {key:'R',desc:'Rectangle'},
+      {key:'E',desc:'Ellipse'},
+      {key:'T',desc:'Text'},
+      {key:'X',desc:'Eraser'},
+      {key:'Z',desc:'Zoom'},
+      {key:'H',desc:'Hand / pan'},
+    ]},
+    {group:'Edit',items:[
+      {key:'⌘Z',desc:'Undo'},
+      {key:'⌘Y',desc:'Redo'},
+      {key:'⌘C',desc:'Copy'},
+      {key:'⌘V',desc:'Paste'},
+      {key:'⌘D',desc:'Duplicate'},
+      {key:'Del',desc:'Delete selected'},
+      {key:'⌘A',desc:'Select all'},
+      {key:'⌘G',desc:'Group'},
+      {key:'⌘⇧G',desc:'Ungroup'},
+      {key:'Esc',desc:'Deselect / cancel'},
+    ]},
+    {group:'View',items:[
+      {key:'⌘+',desc:'Zoom in'},
+      {key:'⌘-',desc:'Zoom out'},
+      {key:'⌘0',desc:'Fit to screen'},
+      {key:'⌘G',desc:'Toggle grid'},
+      {key:'Space',desc:'Pan canvas'},
+    ]},
+    {group:'Object ordering',items:[
+      {key:']',desc:'Bring forward'},
+      {key:'[',desc:'Send backward'},
+      {key:'⌘]',desc:'Bring to front'},
+      {key:'⌘[',desc:'Send to back'},
+    ]},
+    {group:'Pen & drawing',items:[
+      {key:'Enter',desc:'Commit pen / colAB path'},
+      {key:'Esc',desc:'Cancel current path'},
+      {key:'↑↓←→',desc:'Nudge selected 1px'},
+      {key:'⇧+arrows',desc:'Nudge 10px'},
+    ]},
+    {group:'Files',items:[
+      {key:'⌘S',desc:'Save to library'},
+      {key:'⌘L',desc:'Open library'},
+      {key:'⌘P',desc:'Stitch simulation'},
+    ]},
+  ];
+
+  const box=document.createElement('div');
+  box.style.cssText='background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);padding:22px;width:680px;max-width:95vw;max-height:85vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,.6)';
+
+  const hdr=document.createElement('div');
+  hdr.style.cssText='display:flex;align-items:center;justify-content:space-between;margin-bottom:16px';
+  hdr.innerHTML='<div style="font-size:15px;font-weight:500;color:var(--text)">⌨ Keyboard Shortcuts</div>';
+  const closeBtn=document.createElement('button');
+  closeBtn.textContent='✕';closeBtn.style.cssText='background:none;border:none;color:var(--text3);cursor:pointer;font-size:16px';
+  closeBtn.onclick=()=>modal.remove();
+  hdr.appendChild(closeBtn);
+  box.appendChild(hdr);
+
+  const grid=document.createElement('div');
+  grid.style.cssText='display:grid;grid-template-columns:1fr 1fr;gap:16px';
+
+  shortcuts.forEach(section=>{
+    const sec=document.createElement('div');
+    const title=document.createElement('div');
+    title.style.cssText='font-size:10px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--text3);margin-bottom:6px;padding-bottom:4px;border-bottom:0.5px solid var(--border)';
+    title.textContent=section.group;
+    sec.appendChild(title);
+    section.items.forEach(item=>{
+      const row=document.createElement('div');
+      row.style.cssText='display:flex;align-items:center;justify-content:space-between;padding:4px 0;border-bottom:0.5px solid var(--border)';
+      row.innerHTML='<span style="font-size:11px;color:var(--text2)">'+item.desc+'</span><kbd style="font-size:10px;padding:2px 7px;background:var(--bg4);border:1px solid var(--border2);border-radius:4px;color:var(--text);font-family:monospace">'+item.key+'</kbd>';
+      sec.appendChild(row);
+    });
+    grid.appendChild(sec);
+  });
+
+  box.appendChild(grid);
+
+  const footer=document.createElement('div');
+  footer.style.cssText='margin-top:14px;padding-top:10px;border-top:1px solid var(--border);font-size:11px;color:var(--text3);text-align:center';
+  footer.textContent='Press ? to toggle this card anytime';
+  box.appendChild(footer);
+
+  modal.appendChild(box);
+  document.body.appendChild(modal);
+}
+
+
+// ═══════════════════════════════════════════════════
+// SHARE DESIGN — WhatsApp / Email
+// ═══════════════════════════════════════════════════
+function shareDesign(){
+  if(!S.paths.length){toast('Draw a design first');return;}
+
+  // Generate thumbnail
+  const offCanvas=document.createElement('canvas');
+  offCanvas.width=400;offCanvas.height=400;
+  const offCtx=offCanvas.getContext('2d');
+  offCtx.fillStyle='#13121f';offCtx.fillRect(0,0,400,400);
+
+  const allPts=S.paths.flatMap(p=>p.points||[]);
+  if(allPts.length){
+    const bb=bbox(allPts);
+    const w=bb.maxX-bb.minX||1,h=bb.maxY-bb.minY||1;
+    const sc=Math.min(360/w,360/h)*0.85;
+    const ox=200-(bb.minX+w/2)*sc,oy=200-(bb.minY+h/2)*sc;
+    S.paths.forEach(p=>{
+      if(!p.points||p.points.length<2) return;
+      offCtx.beginPath();
+      p.points.forEach((pt,i)=>i?offCtx.lineTo(pt.x*sc+ox,pt.y*sc+oy):offCtx.moveTo(pt.x*sc+ox,pt.y*sc+oy));
+      offCtx.strokeStyle=p.color;offCtx.lineWidth=2;offCtx.lineCap='round';offCtx.stroke();
+    });
+  }
+
+  const name=document.getElementById('doc-name')?.value||'Embroxia Design';
+  const stitches=calcStitches().toLocaleString();
+  const colors=new Set(S.paths.map(p=>p.color)).size;
+  const imgUrl=offCanvas.toDataURL('image/png');
+
+  // Show share panel
+  const existing=document.getElementById('share-panel');
+  if(existing){existing.remove();return;}
+  const panel=document.createElement('div');
+  panel.id='share-panel';
+  panel.style.cssText='position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);padding:20px;z-index:900;box-shadow:0 24px 64px rgba(0,0,0,.6);width:340px';
+
+  const img=document.createElement('img');
+  img.src=imgUrl;img.style.cssText='width:100%;border-radius:var(--rs);margin-bottom:12px;border:1px solid var(--border)';
+
+  const info=document.createElement('div');
+  info.style.cssText='font-size:12px;color:var(--text2);margin-bottom:14px;line-height:1.6;background:var(--bg4);padding:10px;border-radius:var(--rs)';
+  info.innerHTML='<strong style="color:var(--text)">'+name+'</strong><br>'+stitches+' stitches · '+colors+' colors<br>Designed with Embroxia Studio — embroxia.com';
+
+  const btns=document.createElement('div');
+  btns.style.cssText='display:flex;flex-direction:column;gap:8px';
+
+  // WhatsApp
+  const waBtn=document.createElement('a');
+    const waText=encodeURIComponent('Embroidery Design: '+name+' | '+stitches+' stitches, '+colors+' colors | Designed with Embroxia Studio embroxia.com');
+  waBtn.href='https://wa.me/?text='+waText;
+  waBtn.target='_blank';
+  waBtn.style.cssText='display:block;padding:10px;background:#25D366;color:white;border-radius:var(--rs);text-align:center;font-size:13px;font-weight:500;text-decoration:none';
+  waBtn.textContent='📱 Share on WhatsApp';
+
+  // Email
+  const emailBtn=document.createElement('a');
+  const emailSubject=encodeURIComponent('Embroidery Design: '+name);
+    const emailBody=encodeURIComponent('Hi, here is the embroidery design: '+name+'. Stitches: '+stitches+'. Colors: '+colors+'. Designed using Embroxia Studio - embroxia.com');
+  emailBtn.href='mailto:?subject='+emailSubject+'&body='+emailBody;
+  emailBtn.style.cssText='display:block;padding:10px;background:var(--bg4);color:var(--text);border:1px solid var(--border2);border-radius:var(--rs);text-align:center;font-size:13px;text-decoration:none';
+  emailBtn.textContent='📧 Send via Email';
+
+  // Download image
+  const dlBtn=document.createElement('button');
+  dlBtn.style.cssText='width:100%;padding:10px;background:var(--purple);color:white;border:none;border-radius:var(--rs);font-size:13px;cursor:pointer;font-family:var(--font)';
+  dlBtn.textContent='↓ Download preview image';
+  dlBtn.onclick=()=>{
+    const a=document.createElement('a');
+    a.href=imgUrl;a.download=name.replace(/\s+/g,'-')+'-preview.png';a.click();
+    toast('✓ Preview image downloaded');
+  };
+
+  const closeBtn=document.createElement('button');
+  closeBtn.style.cssText='width:100%;padding:8px;background:transparent;color:var(--text3);border:1px solid var(--border);border-radius:var(--rs);font-size:12px;cursor:pointer;font-family:var(--font);margin-top:4px';
+  closeBtn.textContent='Close';closeBtn.onclick=()=>panel.remove();
+
+  btns.appendChild(waBtn);btns.appendChild(emailBtn);btns.appendChild(dlBtn);btns.appendChild(closeBtn);
+
+  const title=document.createElement('div');
+  title.style.cssText='font-size:14px;font-weight:500;color:var(--text);margin-bottom:12px;display:flex;justify-content:space-between;align-items:center';
+  title.textContent='Share Design';
+  const x=document.createElement('button');
+  x.textContent='✕';x.style.cssText='background:none;border:none;color:var(--text3);cursor:pointer;font-size:16px';
+  x.onclick=()=>panel.remove();
+  title.appendChild(x);
+
+  panel.appendChild(title);panel.appendChild(img);panel.appendChild(info);panel.appendChild(btns);
+  document.body.appendChild(panel);
 }
 
 // ═══════════════════════════════════════
